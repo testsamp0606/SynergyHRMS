@@ -91,27 +91,27 @@ export default function DashboardPage() {
             </CardHeader>
             <CardContent className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
                 <Button variant="outline" asChild>
-                    <Link href="/dashboard/employees">
+                    <Link href="/hr/employees">
                         <UserPlus className="mr-2 h-4 w-4" /> Add Employee
                     </Link>
                 </Button>
                 <Button variant="outline" asChild>
-                     <Link href="/dashboard/leave">
+                     <Link href="/hr/leave">
                         <FileText className="mr-2 h-4 w-4" /> Approve Leave
                     </Link>
                 </Button>
                 <Button variant="outline" asChild>
-                    <Link href="/dashboard/payroll">
+                    <Link href="/hr/payroll">
                         <PlayCircle className="mr-2 h-4 w-4" /> Run Payroll
                     </Link>
                 </Button>
                 <Button variant="outline" asChild>
-                    <Link href="/dashboard/recruitment">
+                    <Link href="/hr/recruitment">
                         <Briefcase className="mr-2 h-4 w-4" /> Post Job
                     </Link>
                 </Button>
                 <Button variant="outline" asChild>
-                    <Link href="/dashboard/announcements">
+                    <Link href="/hr/announcements">
                         <Megaphone className="mr-2 h-4 w-4" /> Send Announcement
                     </Link>
                 </Button>
@@ -191,7 +191,7 @@ export default function DashboardPage() {
             </CardContent>
              <CardFooter className="border-t p-4">
                 <Button size="sm" variant="outline" className="w-full" asChild>
-                    <Link href="/dashboard/leave">
+                    <Link href="/hr/leave">
                         View All Requests <ArrowUpRight className="ml-2 h-4 w-4" />
                     </Link>
                 </Button>
