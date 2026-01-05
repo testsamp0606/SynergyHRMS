@@ -1,0 +1,84 @@
+/**
+ * This ruleset enforces a security model centered around user ownership and role-based access control (RBAC),
+ * designed for the Synergy HR system.
+ *
+ * Core Philosophy:
+ * The primary security goal is to ensure that users can only access and manage their own data,
+ * while system-level configurations like roles are protected. It defaults to denying access,
+ * explicitly granting permissions only where necessary.
+ *
+ * Data Structure:
+ * - /users/{userId}: Stores individual user profiles. Each user document is strictly owned by the corresponding user.
+ * - /roles/{roleId}: A top-level collection containing role definitions (e.g., Admin, Employee). This collection is read-only for authenticated users to allow client-side logic to understand permissions, but writable only by a future administrative process.
+ *
+ * Key Security Decisions:
+ * - User Data Isolation: All data under `/users/{userId}` is private to that user. A user cannot read or write another user's data.
+ * - User Listing Disabled: To protect user privacy and prevent data scraping, listing documents in the top-level `/users` collection is explicitly forbidden.
+ * - Role Immutability: A user cannot change their own role (`roleId`) after their profile is created. Role assignment must be handled by a secure backend process (e.g., Cloud Function), preventing privilege escalation.
+ * - Read-Only Roles Collection: The `/roles` collection is configured to be read-only for all signed-in users. This allows the application to fetch role details without allowing users to modify critical system permissions. Management of roles is deferred to a trusted server environment.
+ *
+ * Denormalization for Authorization:
+ * The user's `roleId` is denormalized directly onto the `/users/{userId}` document. This allows for simple, fast, and cost-effective authorization checks without needing to perform extra `get()` calls to other collections during rule evaluation.
+ */
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions for reusable logic
+    /**
+     * Checks if the user is authenticated.
+     */
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    /**
+     * Validates if the requesting user is the owner of the document
+     * based on a matching user ID.
+     */
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    /**
+     * Validates if the user is the owner of an existing document.
+     * Used for safe updates and deletes.
+     */
+    function isExistingOwner(userId) {
+      return isOwner(userId) && resource != null;
+    }
+
+    /**
+     * @description This collection stores role definitions for the entire application.
+     * @path /roles/{roleId}
+     * @allow (get) A signed-in user can read the details of the 'Employee' role.
+     * @deny (create) Any user, regardless of role, is denied from creating a new role document.
+     * @principle Protects critical system configuration by making roles read-only from the client. Role management should be handled by a secure backend process.
+     */
+    match /roles/{roleId} {
+      allow get: if isSignedIn();
+      allow list: if isSignedIn();
+      allow create: if false;
+      allow update: if false;
+      allow delete: if false;
+    }
+
+    /**
+     * @description This collection stores user profiles. Access is strictly limited to the document owner.
+     * @path /users/{userId}
+     * @allow (create) A new user with UID 'user_abc' can create their own profile at `/users/user_abc`.
+     * @allow (get) User 'user_abc' can read their own profile document.
+     * @deny (list) No user can get a list of all documents in the `/users` collection.
+     * @deny (update) User 'user_abc' cannot update the profile of user 'user_xyz'.
+     * @deny (update) User 'user_abc' cannot change their own `roleId` field.
+     * @principle Enforces document ownership for all operations and prevents privilege escalation by making the `roleId` and `id` fields immutable.
+     */
+    match /users/{userId} {
+      allow get: if isOwner(userId);
+      allow list: if false;
+      allow create: if isOwner(userId) && request.resource.data.id == userId;
+      allow update: if isExistingOwner(userId) && request.resource.data.id == resource.data.id && request.resource.data.roleId == resource.data.roleId;
+      allow delete: if isExistingOwner(userId);
+    }
+  }
+}
