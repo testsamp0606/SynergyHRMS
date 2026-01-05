@@ -8,6 +8,7 @@ import {
   SidebarMenuItem,
   SidebarFooter,
   SidebarTrigger,
+  SidebarMenuButton,
 } from "@/components/ui/sidebar"
 import {
   LayoutDashboard,
@@ -29,7 +30,6 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from 'next/navigation'
-import { Button } from "../ui/button"
 
 const navItems = [
   { href: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
@@ -74,25 +74,27 @@ export function AppSidebar() {
         <SidebarMenu>
           {navItems.map((item) => (
             <SidebarMenuItem key={item.href}>
-              <Button
+              <SidebarMenuButton
                 asChild
                 variant={pathname === item.href ? "secondary" : "ghost"}
                 className="w-full justify-start"
+                tooltip={item.label}
+                isActive={pathname === item.href}
               >
                 <Link href={item.href}>
-                  <item.icon className="mr-2 h-4 w-4" />
+                  <item.icon />
                   <span>{item.label}</span>
                 </Link>
-              </Button>
+              </SidebarMenuButton>
             </SidebarMenuItem>
           ))}
         </SidebarMenu>
       </SidebarContent>
       <SidebarFooter className="p-2">
-         <Button variant="ghost" className="w-full justify-start">
-            <LifeBuoy className="mr-2 h-4 w-4" />
+         <SidebarMenuButton variant="ghost" className="w-full justify-start" tooltip="Help & Support">
+            <LifeBuoy />
             <span>Help & Support</span>
-         </Button>
+         </SidebarMenuButton>
       </SidebarFooter>
     </Sidebar>
   )
