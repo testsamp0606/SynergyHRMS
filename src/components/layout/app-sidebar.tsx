@@ -47,6 +47,7 @@ const navItems = [
   { href: "/dashboard/users-roles", icon: UsersRound, label: "Users & Roles" },
   { href: "/dashboard/settings", icon: Settings, label: "Settings" },
   { href: "/dashboard/audit-logs", icon: History, label: "Audit Logs" },
+  { href: "/dashboard/help-support", icon: LifeBuoy, label: "Help & Support" },
 ]
 
 export function AppSidebar() {
@@ -92,10 +93,6 @@ export function AppSidebar() {
         </SidebarMenu>
       </SidebarContent>
       <SidebarFooter className="p-2">
-         <SidebarMenuButton variant="ghost" className="w-full justify-start" tooltip="Help & Support">
-            <LifeBuoy />
-            <span>Help & Support</span>
-         </SidebarMenuButton>
       </SidebarFooter>
     </Sidebar>
   )
