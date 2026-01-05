@@ -13,7 +13,8 @@ import { useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Clock, LogIn, LogOut, CalendarPlus, Briefcase, Sun } from 'lucide-react';
 import { addDays, format, isSameDay, isValid } from 'date-fns';
-import { DayContent, DayProps } from 'react-day-picker';
+import { DayProps } from 'react-day-picker';
+import { cn } from '@/lib/utils';
 
 const attendanceData = {
   [format(new Date(), 'yyyy-MM-dd')]: { status: 'Present', checkIn: '09:05 AM', checkOut: '05:55 PM', totalHours: '8h 50m' },
@@ -29,30 +30,36 @@ const holidays = [
 ];
 
 const CustomDay = (props: DayProps) => {
-    const { date } = props;
-    if (!isValid(date)) {
-        return <DayContent {...props} />;
+    const { date, displayMonth } = props;
+    if (!isValid(date) || !displayMonth) {
+        return <div role="gridcell" className="rdp-cell"></div>;
     }
     const dayData = attendanceData[format(date, 'yyyy-MM-dd')];
     let badgeClass = '';
-    if (isSameDay(date, new Date())) {
-        badgeClass = 'bg-blue-500 text-white';
-    } else if (dayData?.status === 'Present') {
-        badgeClass = 'bg-green-500 text-white';
+    if (dayData?.status === 'Present') {
+        badgeClass = 'bg-green-500';
     } else if (dayData?.status === 'Absent') {
-        badgeClass = 'bg-red-500 text-white';
+        badgeClass = 'bg-red-500';
     } else if (dayData?.status === 'On Leave') {
-        badgeClass = 'bg-yellow-500 text-white';
+        badgeClass = 'bg-yellow-500';
     } else if (holidays.some(h => isSameDay(h.date, date))) {
-        badgeClass = 'bg-purple-500 text-white';
+        badgeClass = 'bg-purple-500';
     }
 
     return (
-        <div className="relative flex items-center justify-center h-full w-full">
-            <DayContent {...props} />
-            {badgeClass && (
-                <span className={`absolute bottom-1 right-1 h-2 w-2 rounded-full ${badgeClass}`}></span>
-            )}
+        <div role="gridcell" className={cn("rdp-cell relative", props.className)}>
+            <button
+                {...props.buttonProps}
+                type="button"
+                className={cn("rdp-button_reset rdp-button", props.buttonProps.className)}
+                disabled={props.disabled}
+                tabIndex={props.tabIndex}
+            >
+                {format(date, 'd')}
+                {badgeClass && (
+                    <span className={`absolute bottom-1 right-1 h-2 w-2 rounded-full ${badgeClass}`}></span>
+                )}
+            </button>
         </div>
     );
 };
@@ -62,6 +69,8 @@ export default function EmployeeAttendancePage() {
   const [date, setDate] = useState<Date | undefined>(new Date());
 
   const selectedDayData = date ? attendanceData[format(date, 'yyyy-MM-dd')] : null;
+  const selectedHoliday = date ? holidays.find(h => isSameDay(h.date, date)) : null;
+
 
   return (
     <div className="flex min-h-screen w-full flex-col">
@@ -115,7 +124,11 @@ export default function EmployeeAttendancePage() {
                 <CardContent>
                     {selectedDayData ? (
                         <div>
-                             <Badge variant={selectedDayData.status === 'Present' ? 'default' : 'destructive'} className={selectedDayData.status === 'Present' ? 'bg-green-500' : selectedDayData.status === 'On Leave' ? 'bg-yellow-500' : 'bg-red-500'}>
+                             <Badge variant={selectedDayData.status === 'Present' ? 'default' : 'destructive'} className={cn(
+                                {'bg-green-500': selectedDayData.status === 'Present'},
+                                {'bg-yellow-500': selectedDayData.status === 'On Leave'},
+                                {'bg-red-500': selectedDayData.status === 'Absent'}
+                                )}>
                                 {selectedDayData.status}
                              </Badge>
                              {selectedDayData.checkIn && (
@@ -125,6 +138,11 @@ export default function EmployeeAttendancePage() {
                                     <div className="flex justify-between font-semibold"><span>Total Hours:</span> <span>{selectedDayData.totalHours}</span></div>
                                  </div>
                              )}
+                        </div>
+                    ) : selectedHoliday ? (
+                        <div>
+                            <Badge className="bg-purple-500">Holiday</Badge>
+                            <p className="mt-4 text-sm">{selectedHoliday.name}</p>
                         </div>
                     ) : (
                         <p className="text-sm text-muted-foreground">No data for this day.</p>
@@ -160,8 +178,4 @@ export default function EmployeeAttendancePage() {
       </main>
     </div>
   );
-}
-
-function cn(...inputs: (string | undefined | null | false)[]) {
-  return inputs.filter(Boolean).join(' ');
 }
