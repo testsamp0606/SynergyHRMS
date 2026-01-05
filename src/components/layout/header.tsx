@@ -14,6 +14,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { LogOut, Settings, User } from "lucide-react"
+import { ThemeToggle } from "../theme-toggle"
 
 export function Header({ title }: { title: string }) {
   
@@ -24,6 +25,7 @@ export function Header({ title }: { title: string }) {
         <h1 className="text-xl font-semibold tracking-tight">{title}</h1>
       </div>
       <div className="ml-auto flex items-center gap-4">
+        <ThemeToggle />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="relative h-9 w-9 rounded-full">
