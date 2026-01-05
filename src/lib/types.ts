@@ -34,3 +34,19 @@ export type PayrollRun = {
   status: 'Completed' | 'In Progress' | 'Failed';
   totalAmount: number;
 };
+
+export type Role = {
+    id: string;
+    name: "Admin" | "HR Manager" | "Manager" | "Employee";
+    description: string;
+    permissions: string[];
+}
+
+export type UserProfile = {
+    id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    roleId: string;
+    role?: Role; // Optional: Can be populated after fetching
+}
