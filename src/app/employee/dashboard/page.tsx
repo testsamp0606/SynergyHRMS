@@ -21,6 +21,7 @@ import {
   LogIn,
   LogOut,
   Clock,
+  CircleCheck,
 } from 'lucide-react';
 import { employeeDashboardSummary, recentAnnouncements, employeeTasks } from '@/lib/data';
 import { Badge } from '@/components/ui/badge';
@@ -74,33 +75,28 @@ export default function EmployeeDashboardPage() {
                     </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                    <Button 
-                        className="w-full" 
-                        onClick={handlePunch} 
-                        disabled={!!punchOutTime}
-                        variant={isPunchedIn ? 'outline' : 'default'}
-                    >
-                        {isPunchedIn ? <LogOut className="mr-2 h-4 w-4" /> : <LogIn className="mr-2 h-4 w-4" />}
-                        {isPunchedIn ? 'Punch Out' : 'Punch In'}
-                    </Button>
-                     {punchInTime && (
+                    {punchOutTime ? (
+                        <div className="flex items-center justify-center rounded-md border border-green-500 bg-green-50 p-4 text-green-700 dark:bg-green-900/20 dark:text-green-300">
+                             <CircleCheck className="mr-2 h-5 w-5" />
+                            <span className="font-medium">Present</span>
+                        </div>
+                    ) : (
+                        <Button 
+                            className="w-full" 
+                            onClick={handlePunch} 
+                            disabled={!!punchOutTime}
+                            variant={isPunchedIn ? 'outline' : 'default'}
+                        >
+                            {isPunchedIn ? <LogOut className="mr-2 h-4 w-4" /> : <LogIn className="mr-2 h-4 w-4" />}
+                            {isPunchedIn ? 'Punch Out' : 'Punch In'}
+                        </Button>
+                    )}
+                     {punchInTime && !punchOutTime && (
                         <div className="text-sm text-muted-foreground space-y-2">
                            <div className='flex justify-between'>
                                 <span>Punched In:</span>
                                 <span className='font-medium text-foreground'>{format(punchInTime, 'hh:mm:ss a')}</span>
                            </div>
-                           {punchOutTime && (
-                                <div className='flex justify-between'>
-                                   <span>Punched Out:</span>
-                                   <span className='font-medium text-foreground'>{format(punchOutTime, 'hh:mm:ss a')}</span>
-                               </div>
-                           )}
-                           {punchOutTime && punchInTime && (
-                                <div className='flex justify-between font-semibold'>
-                                   <span>Total Hours:</span>
-                                   <span className='text-primary'>{getTotalHours()}</span>
-                               </div>
-                           )}
                         </div>
                     )}
                 </CardContent>
