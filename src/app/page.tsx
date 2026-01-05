@@ -12,6 +12,9 @@ export default function Home() {
       <Button asChild>
         <Link href="/hr/dashboard">HR Dashboard</Link>
       </Button>
+      <Button asChild>
+        <Link href="/manager/dashboard">Manager Dashboard</Link>
+      </Button>
       <Button asChild variant="outline">
         <Link href="/employee/dashboard">Employee Dashboard</Link>
       </Button>
