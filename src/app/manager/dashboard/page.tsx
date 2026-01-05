@@ -24,6 +24,7 @@ import Link from 'next/link';
 import { Header } from '@/components/layout/header';
 import { employees, leaveRequests } from '@/lib/data';
 import { format } from 'date-fns';
+import { cn } from '@/lib/utils';
 
 // Mock data for manager's team
 const teamMemberIds = ['EMP006', 'EMP005', 'EMP004', 'EMP003'];
