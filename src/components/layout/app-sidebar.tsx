@@ -55,19 +55,23 @@ export function AppSidebar() {
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader className="p-2">
-        <div className="flex h-12 items-center gap-2 px-2">
-           <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 256 256"
-            className="h-8 w-8 shrink-0 text-primary"
-          >
-            <path
-              fill="currentColor"
-              d="M228.4 89.32a20.08 20.08 0 0 0-21.6-21.6l-60.12 17.18L129.5 27.68a20.08 20.08 0 0 0-39 0l-17.18 60.12-60.12-17.18a20.08 20.08 0 0 0-21.6 21.6l17.18 60.12L8 166.5a20.08 20.08 0 0 0 0 39l60.12 17.18L85.32 240a20.08 20.08 0 0 0 21.6 21.6l60.12-17.18L184.22 248a20.08 20.08 0 0 0 39 0l17.18-60.12L248 166.5a20.08 20.08 0 0 0 21.6-21.6l-17.18-60.12ZM128 164a36 36 0 1 1 36-36a36 36 0 0 1-36 36Z"
-            />
-          </svg>
-          <span className="text-xl font-semibold leading-none">Synergy</span>
-          <SidebarTrigger className="ml-auto" />
+        <div className="flex h-12 items-center justify-between">
+            <SidebarTrigger asChild>
+                <div className="flex items-center gap-2 px-2 cursor-pointer">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 256 256"
+                        className="h-8 w-8 shrink-0 text-primary"
+                    >
+                        <path
+                        fill="currentColor"
+                        d="M228.4 89.32a20.08 20.08 0 0 0-21.6-21.6l-60.12 17.18L129.5 27.68a20.08 20.08 0 0 0-39 0l-17.18 60.12-60.12-17.18a20.08 20.08 0 0 0-21.6 21.6l17.18 60.12L8 166.5a20.08 20.08 0 0 0 0 39l60.12 17.18L85.32 240a20.08 20.08 0 0 0 21.6 21.6l60.12-17.18L184.22 248a20.08 20.08 0 0 0 39 0l17.18-60.12L248 166.5a20.08 20.08 0 0 0 21.6-21.6l-17.18-60.12ZM128 164a36 36 0 1 1 36-36a36 36 0 0 1-36 36Z"
+                        />
+                    </svg>
+                    <span className="text-xl font-semibold leading-none">Synergy</span>
+                </div>
+            </SidebarTrigger>
+            <SidebarTrigger className="mr-2" />
         </div>
       </SidebarHeader>
       <SidebarContent className="p-2">
