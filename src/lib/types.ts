@@ -72,3 +72,14 @@ export type Asset = {
   assignedAvatar?: string;
   status: 'Assigned' | 'Unassigned' | 'In Repair' | 'Retired';
 };
+
+export type ExpenseClaim = {
+  id: string;
+  employeeName: string;
+  employeeAvatar: string;
+  category: 'Travel' | 'Food' | 'Supplies' | 'Other';
+  submissionDate: Date;
+  amount: number;
+  status: 'Pending' | 'Approved' | 'Rejected';
+  description: string;
+};

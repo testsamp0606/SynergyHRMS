@@ -1,4 +1,4 @@
-import type { Employee, LeaveRequest, PerformanceReview, PayrollRun, TrainingProgram, Asset } from '@/lib/types';
+import type { Employee, LeaveRequest, PerformanceReview, PayrollRun, TrainingProgram, Asset, ExpenseClaim } from '@/lib/types';
 
 export const employees: Employee[] = [
   { id: 'EMP001', name: 'Alice Johnson', email: 'alice.j@example.com', avatar: 'https://picsum.photos/seed/1/100/100', department: 'Engineering', role: 'Senior Software Engineer', status: 'Active' },
@@ -44,6 +44,14 @@ export const assets: Asset[] = [
     { id: 'AST005', name: 'Herman Miller Aeron', category: 'Other', serialNumber: 'SN-HM-A-11223', purchaseDate: new Date('2022-11-10'), value: 1495, assignedTo: 'Charlie Brown', assignedAvatar: 'https://picsum.photos/seed/3/100/100', status: 'Assigned' },
     { id: 'AST006', name: 'Sony WH-1000XM5', category: 'Headset', serialNumber: 'SN-SONY-H-33445', purchaseDate: new Date('2023-08-01'), value: 399, status: 'In Repair' },
     { id: 'AST007', name: 'MacBook Air M2', category: 'Laptop', serialNumber: 'C02H1234J0L2', purchaseDate: new Date('2024-02-10'), value: 1299, assignedTo: 'Fiona Garcia', assignedAvatar: 'https://picsum.photos/seed/6/100/100', status: 'Assigned' },
+];
+
+export const expenseClaims: ExpenseClaim[] = [
+    { id: 'CLM001', employeeName: 'Alice Johnson', employeeAvatar: 'https://picsum.photos/seed/1/100/100', category: 'Travel', submissionDate: new Date('2024-08-01'), amount: 250.75, status: 'Approved', description: 'Client meeting in SF' },
+    { id: 'CLM002', employeeName: 'Charlie Brown', employeeAvatar: 'https://picsum.photos/seed/3/100/100', category: 'Food', submissionDate: new Date('2024-08-05'), amount: 85.50, status: 'Pending', description: 'Team lunch' },
+    { id: 'CLM003', employeeName: 'Fiona Garcia', employeeAvatar: 'https://picsum.photos/seed/6/100/100', category: 'Supplies', submissionDate: new Date('2024-08-02'), amount: 120.00, status: 'Pending', description: 'Office supplies' },
+    { id: 'CLM004', employeeName: 'Ethan Davis', employeeAvatar: 'https://picsum.photos/seed/5/100/100', category: 'Other', submissionDate: new Date('2024-07-28'), amount: 50.00, status: 'Rejected', description: 'Online course' },
+    { id: 'CLM005', employeeName: 'Alice Johnson', employeeAvatar: 'https://picsum.photos/seed/1/100/100', category: 'Food', submissionDate: new Date('2024-08-10'), amount: 45.30, status: 'Pending', description: 'Dinner with client' },
 ];
 
 export const departmentHeadcount = [
