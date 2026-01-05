@@ -18,49 +18,76 @@ import {
   ChevronRight,
   Megaphone,
   CheckCircle,
+  LogIn,
+  LogOut,
+  Clock,
 } from 'lucide-react';
 import { employeeDashboardSummary, recentAnnouncements, employeeTasks } from '@/lib/data';
 import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
+import { useState, useEffect } from 'react';
 
 export default function EmployeeDashboardPage() {
   const { leaveBalance, upcomingPayslip, pendingExpenses } = employeeDashboardSummary;
+  const [time, setTime] = useState(new Date());
+
+  useEffect(() => {
+    const timerId = setInterval(() => setTime(new Date()), 1000);
+    return () => clearInterval(timerId);
+  }, []);
 
   return (
     <div className="flex min-h-screen w-full flex-col">
       <Header title="My Dashboard" />
       <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
-        <div className="grid gap-4 md:grid-cols-3">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Leave Balance</CardTitle>
-              <CalendarCheck className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{leaveBalance.used} / {leaveBalance.total} days</div>
-              <p className="text-xs text-muted-foreground">Vacation days used this year</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Upcoming Payslip</CardTitle>
-              <Wallet className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{upcomingPayslip.netPay}</div>
-              <p className="text-xs text-muted-foreground">For {upcomingPayslip.period}, on {upcomingPayslip.payDate}</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Pending Expenses</CardTitle>
-              <HandCoins className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{pendingExpenses.count} claims</div>
-              <p className="text-xs text-muted-foreground">Totaling {pendingExpenses.totalAmount}</p>
-            </CardContent>
-          </Card>
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            <Card>
+                <CardHeader>
+                    <CardTitle>Today's Attendance</CardTitle>
+                    <CardDescription className="flex items-center gap-2 pt-1">
+                        <Clock className="h-4 w-4" />
+                        <span>{time.toLocaleTimeString()}</span>
+                    </CardDescription>
+                </CardHeader>
+                <CardContent className="flex gap-2">
+                    <Button className="w-full">
+                        <LogIn className="mr-2 h-4 w-4" /> Punch In
+                    </Button>
+                    <Button variant="outline" className="w-full">
+                        <LogOut className="mr-2 h-4 w-4" /> Punch Out
+                    </Button>
+                </CardContent>
+            </Card>
+             <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Leave Balance</CardTitle>
+                <CalendarCheck className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                <div className="text-2xl font-bold">{leaveBalance.used} / {leaveBalance.total} days</div>
+                <p className="text-xs text-muted-foreground">Vacation days used this year</p>
+                </CardContent>
+            </Card>
+            <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Upcoming Payslip</CardTitle>
+                <Wallet className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                <div className="text-2xl font-bold">{upcomingPayslip.netPay}</div>
+                <p className="text-xs text-muted-foreground">For {upcomingPayslip.period}, on {upcomingPayslip.payDate}</p>
+                </CardContent>
+            </Card>
+            <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Pending Expenses</CardTitle>
+                <HandCoins className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                <div className="text-2xl font-bold">{pendingExpenses.count} claims</div>
+                <p className="text-xs text-muted-foreground">Totaling {pendingExpenses.totalAmount}</p>
+                </CardContent>
+            </Card>
         </div>
 
         <Card>
