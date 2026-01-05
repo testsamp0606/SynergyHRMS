@@ -1,4 +1,4 @@
-import type { Employee, LeaveRequest, PerformanceReview, PayrollRun, TrainingProgram, Asset, ExpenseClaim, Document, Announcement, UserProfile, Role, AuditLog } from '@/lib/types';
+import type { Employee, LeaveRequest, PerformanceReview, PayrollRun, TrainingProgram, Asset, ExpenseClaim, Document, Announcement, UserProfile, Role, AuditLog, EmployeeDashboardSummary, RecentAnnouncement, EmployeeTask } from '@/lib/types';
 
 export const employees: Employee[] = [
   { id: 'EMP001', name: 'Alice Johnson', email: 'alice.j@example.com', avatar: 'https://picsum.photos/seed/1/100/100', department: 'Engineering', role: 'Senior Software Engineer', status: 'Active' },
@@ -113,4 +113,31 @@ export const auditLogs: AuditLog[] = [
   { id: 'LOG003', user: 'Admin User', userAvatar: 'https://picsum.photos/seed/USR001/100/100', action: 'UPDATE_ROLE', details: 'Changed role for Charlie Brown to "Manager"', date: new Date(Date.now() - 1000 * 60 * 60 * 24), ipAddress: '192.168.1.1' },
   { id: 'LOG004', user: 'Admin User', userAvatar: 'https://picsum.photos/seed/USR001/100/100', action: 'RUN_PAYROLL', details: 'Completed payroll run for August 2024', date: new Date(Date.now() - 1000 * 60 * 60 * 48), ipAddress: '192.168.1.1' },
   { id: 'LOG005', user: 'Bob Williams', userAvatar: 'https://picsum.photos/seed/USR002/100/100', action: 'EXPORT_DATA', details: 'Exported employee data (CSV)', date: new Date(Date.now() - 1000 * 60 * 60 * 72), ipAddress: '203.0.113.25' },
+];
+
+export const employeeDashboardSummary: EmployeeDashboardSummary = {
+  leaveBalance: {
+    used: 5,
+    total: 20,
+  },
+  upcomingPayslip: {
+    period: 'August 2024',
+    payDate: 'Aug 31, 2024',
+    netPay: '$4,500.00',
+  },
+  pendingExpenses: {
+    count: 2,
+    totalAmount: '$130.80',
+  }
+};
+
+export const recentAnnouncements: RecentAnnouncement[] = [
+    { id: 'ANN001', title: 'Q3 2024 All-Hands Meeting', date: 'Aug 15, 2024', target: 'Everyone' },
+    { id: 'ANN002', title: 'New Engineering Library: `synergy-ui`', date: 'Aug 10, 2024', target: 'Engineering' },
+];
+
+export const employeeTasks: EmployeeTask[] = [
+    { id: 'TSK001', title: 'Complete performance self-assessment', dueDate: 'Due Aug 25, 2024', status: 'Pending' },
+    { id: 'TSK002', title: 'Finish mandatory cybersecurity training', dueDate: 'Due Sep 01, 2024', status: 'Pending' },
+    { id: 'TSK003', title: 'Update personal contact information', dueDate: 'Completed', status: 'Completed' },
 ];

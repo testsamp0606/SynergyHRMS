@@ -111,3 +111,33 @@ export type AuditLog = {
   date: Date;
   ipAddress: string;
 };
+
+export type EmployeeDashboardSummary = {
+  leaveBalance: {
+    used: number;
+    total: number;
+  };
+  upcomingPayslip: {
+    period: string;
+    payDate: string;
+    netPay: string;
+  };
+  pendingExpenses: {
+    count: number;
+    totalAmount: string;
+  };
+};
+
+export type RecentAnnouncement = {
+  id: string;
+  title: string;
+  date: string;
+  target: 'Everyone' | 'Engineering' | 'HR' | 'Marketing' | 'Sales' | 'Design';
+}
+
+export type EmployeeTask = {
+  id: string;
+  title: string;
+  dueDate: string;
+  status: 'Pending' | 'Completed';
+}
