@@ -27,39 +27,25 @@ import { employeeDashboardSummary, recentAnnouncements, employeeTasks } from '@/
 import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useState, useEffect } from 'react';
-import { format, intervalToDuration } from 'date-fns';
+import { format } from 'date-fns';
+import { useAttendanceStore } from '@/hooks/use-attendance-store';
 
 export default function EmployeeDashboardPage() {
   const { leaveBalance, upcomingPayslip, pendingExpenses } = employeeDashboardSummary;
   const [time, setTime] = useState(new Date());
-  const [punchInTime, setPunchInTime] = useState<Date | null>(null);
-  const [punchOutTime, setPunchOutTime] = useState<Date | null>(null);
-  const [isPunchedIn, setIsPunchedIn] = useState(false);
+
+  const {
+    punchInTime,
+    punchOutTime,
+    isPunchedIn,
+    handlePunch,
+    getElapsedTime,
+  } = useAttendanceStore();
 
   useEffect(() => {
     const timerId = setInterval(() => setTime(new Date()), 1000);
     return () => clearInterval(timerId);
   }, []);
-
-  const handlePunch = () => {
-    const now = new Date();
-    if (!isPunchedIn) {
-      setPunchInTime(now);
-      setIsPunchedIn(true);
-    } else {
-      setPunchOutTime(now);
-      setIsPunchedIn(false);
-    }
-  };
-  
-  const getTotalHours = () => {
-    if (punchInTime && punchOutTime) {
-      const duration = intervalToDuration({ start: punchInTime, end: punchOutTime });
-      return `${duration.hours || 0}h ${duration.minutes || 0}m`;
-    }
-    return null;
-  };
-
 
   return (
     <div className="flex min-h-screen w-full flex-col">
@@ -81,9 +67,9 @@ export default function EmployeeDashboardPage() {
                             <span className="font-medium">Present</span>
                         </div>
                     ) : (
-                        <Button 
-                            className="w-full" 
-                            onClick={handlePunch} 
+                        <Button
+                            className="w-full"
+                            onClick={handlePunch}
                             disabled={!!punchOutTime}
                             variant={isPunchedIn ? 'outline' : 'default'}
                         >
@@ -96,6 +82,10 @@ export default function EmployeeDashboardPage() {
                            <div className='flex justify-between'>
                                 <span>Punched In:</span>
                                 <span className='font-medium text-foreground'>{format(punchInTime, 'hh:mm:ss a')}</span>
+                           </div>
+                           <div className='flex justify-between'>
+                                <span>Time Elapsed:</span>
+                                <span className='font-medium text-foreground'>{getElapsedTime()}</span>
                            </div>
                         </div>
                     )}

@@ -166,3 +166,14 @@ export type HistoricalPerformanceReview = {
     status: 'Completed';
     rating: number; // e.g., 1-5
 };
+
+export type AttendanceRecord = {
+    status: string;
+    checkIn?: string;
+    checkOut?: string;
+    totalHours?: string;
+}
+
+export type AttendanceData = {
+    [key: string]: AttendanceRecord;
+}

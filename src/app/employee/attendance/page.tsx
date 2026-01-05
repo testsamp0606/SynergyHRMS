@@ -15,61 +15,75 @@ import { Clock, LogIn, LogOut, CalendarPlus, Briefcase, Sun } from 'lucide-react
 import { addDays, format, isSameDay, isValid } from 'date-fns';
 import { DayProps } from 'react-day-picker';
 import { cn } from '@/lib/utils';
-
-const attendanceData = {
-  [format(new Date(), 'yyyy-MM-dd')]: { status: 'Present', checkIn: '09:05 AM', checkOut: '05:55 PM', totalHours: '8h 50m' },
-  [format(addDays(new Date(), -1), 'yyyy-MM-dd')]: { status: 'Present', checkIn: '09:00 AM', checkOut: '06:00 PM', totalHours: '9h 0m' },
-  [format(addDays(new Date(), -2), 'yyyy-MM-dd')]: { status: 'Absent' },
-  [format(addDays(new Date(), -3), 'yyyy-MM-dd')]: { status: 'On Leave' },
-  [format(addDays(new Date(), -4), 'yyyy-MM-dd')]: { status: 'Present', checkIn: '09:15 AM', checkOut: '06:05 PM', totalHours: '8h 50m' },
-};
-
-const holidays = [
-    { date: new Date(2024, 7, 15), name: 'Independence Day' },
-    { date: new Date(2024, 9, 31), name: 'Diwali' },
-];
-
-const CustomDay = (props: DayProps) => {
-    const { date, displayMonth } = props;
-    if (!date || !displayMonth) {
-        return <td role="gridcell" className="rdp-cell"></td>;
-    }
-    const dayData = attendanceData[format(date, 'yyyy-MM-dd')];
-    let badgeClass = '';
-    if (dayData?.status === 'Present') {
-        badgeClass = 'bg-green-500';
-    } else if (dayData?.status === 'Absent') {
-        badgeClass = 'bg-red-500';
-    } else if (dayData?.status === 'On Leave') {
-        badgeClass = 'bg-yellow-500';
-    } else if (holidays.some(h => isSameDay(h.date, date))) {
-        badgeClass = 'bg-purple-500';
-    }
-
-    return (
-        <td role="gridcell" className={cn("rdp-cell relative", props.className)}>
-            <button
-                {...props.buttonProps}
-                type="button"
-                className={cn("rdp-button_reset rdp-button", props.buttonProps?.className)}
-                disabled={props.disabled}
-                tabIndex={props.tabIndex}
-            >
-                {format(date, 'd')}
-                {badgeClass && (
-                    <span className={`absolute bottom-1 right-1 h-2 w-2 rounded-full ${badgeClass}`}></span>
-                )}
-            </button>
-        </td>
-    );
-};
+import { useAttendanceStore } from '@/hooks/use-attendance-store';
+import { attendanceData, holidays } from '@/lib/data';
 
 
 export default function EmployeeAttendancePage() {
   const [date, setDate] = useState<Date | undefined>(new Date());
+    const {
+    punchInTime,
+    punchOutTime,
+    isPunchedIn,
+    handlePunch,
+    getElapsedTime,
+  } = useAttendanceStore();
 
   const selectedDayData = date ? attendanceData[format(date, 'yyyy-MM-dd')] : null;
   const selectedHoliday = date ? holidays.find(h => isSameDay(h.date, date)) : null;
+
+  const todayStr = format(new Date(), 'yyyy-MM-dd');
+  const todayData = attendanceData[todayStr] || {};
+  if (isPunchedIn && !punchOutTime) {
+      todayData.status = 'Present (Clocked In)';
+      todayData.checkIn = format(punchInTime!, 'hh:mm a');
+      todayData.checkOut = 'Pending';
+      todayData.totalHours = getElapsedTime();
+  } else if (punchOutTime) {
+      todayData.status = 'Present';
+      todayData.checkIn = format(punchInTime!, 'hh:mm a');
+      todayData.checkOut = format(punchOutTime, 'hh:mm a');
+      todayData.totalHours = getElapsedTime();
+  }
+
+
+    const CustomDay = (props: DayProps) => {
+        const { date, displayMonth } = props;
+        if (!isValid(date) || !displayMonth) {
+            return <td role="gridcell" className="rdp-cell"></td>;
+        }
+
+        const dateStr = format(date, 'yyyy-MM-dd');
+        const dayData = attendanceData[dateStr];
+
+        let badgeClass = '';
+        if (dayData?.status?.startsWith('Present')) {
+            badgeClass = 'bg-green-500';
+        } else if (dayData?.status === 'Absent') {
+            badgeClass = 'bg-red-500';
+        } else if (dayData?.status === 'On Leave') {
+            badgeClass = 'bg-yellow-500';
+        } else if (holidays.some(h => isSameDay(h.date, date))) {
+            badgeClass = 'bg-purple-500';
+        }
+
+        return (
+            <td role="gridcell" className={cn("rdp-cell relative", props.className)}>
+                <button
+                    {...props.buttonProps}
+                    type="button"
+                    className={cn("rdp-button_reset rdp-button", props.buttonProps?.className)}
+                    disabled={props.disabled}
+                    tabIndex={props.tabIndex}
+                >
+                    {format(date, 'd')}
+                    {badgeClass && (
+                        <span className={`absolute bottom-1 right-1 h-2 w-2 rounded-full ${badgeClass}`}></span>
+                    )}
+                </button>
+            </td>
+        );
+    };
 
 
   return (
@@ -85,11 +99,14 @@ export default function EmployeeAttendancePage() {
                     </CardDescription>
                 </div>
                  <div className="flex flex-wrap gap-2">
-                    <Button className="w-full sm:w-auto">
-                        <LogIn className="mr-2 h-4 w-4" /> Check In
-                    </Button>
-                     <Button variant="outline" className="w-full sm:w-auto">
-                        <LogOut className="mr-2 h-4 w-4" /> Check Out
+                     <Button
+                        className="w-full sm:w-auto"
+                        onClick={handlePunch}
+                        disabled={!!punchOutTime}
+                        variant={isPunchedIn ? 'outline' : 'default'}
+                    >
+                        {isPunchedIn ? <LogOut className="mr-2 h-4 w-4" /> : <LogIn className="mr-2 h-4 w-4" />}
+                        {isPunchedIn ? 'Check Out' : 'Check In'}
                     </Button>
                     <Button variant="outline" className="w-full sm:w-auto">
                         <CalendarPlus className="mr-2 h-4 w-4" /> Request Regularization
@@ -122,7 +139,16 @@ export default function EmployeeAttendancePage() {
                     <CardTitle>Details for {date ? format(date, "MMMM d") : 'selected date'}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    {selectedDayData ? (
+                    {date && isSameDay(date, new Date()) && isPunchedIn ? (
+                         <div>
+                            <Badge className='bg-green-500'>Present (Clocked In)</Badge>
+                             <div className="mt-4 space-y-2 text-sm">
+                                <div className="flex justify-between"><span>Check-in:</span> <span>{punchInTime ? format(punchInTime, 'hh:mm a') : '-'}</span></div>
+                                <div className="flex justify-between"><span>Check-out:</span> <span>{punchOutTime ? format(punchOutTime, 'hh:mm a') : 'Pending'}</span></div>
+                                <div className="flex justify-between font-semibold"><span>Total Hours:</span> <span>{getElapsedTime()}</span></div>
+                             </div>
+                        </div>
+                    ) : selectedDayData ? (
                         <div>
                              <Badge variant={selectedDayData.status === 'Present' ? 'default' : 'destructive'} className={cn(
                                 {'bg-green-500': selectedDayData.status === 'Present'},

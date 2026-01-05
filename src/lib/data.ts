@@ -1,4 +1,5 @@
-import type { Employee, LeaveRequest, PerformanceReview, PayrollRun, TrainingProgram, Asset, ExpenseClaim, Document, Announcement, UserProfile, Role, AuditLog, EmployeeDashboardSummary, RecentAnnouncement, EmployeeTask, PerformanceCycle, PerformanceGoal, HistoricalPerformanceReview } from '@/lib/types';
+import { addDays, format } from 'date-fns';
+import type { Employee, LeaveRequest, PerformanceReview, PayrollRun, TrainingProgram, Asset, ExpenseClaim, Document, Announcement, UserProfile, Role, AuditLog, EmployeeDashboardSummary, RecentAnnouncement, EmployeeTask, PerformanceCycle, PerformanceGoal, HistoricalPerformanceReview, AttendanceData } from '@/lib/types';
 
 export const employees: Employee[] = [
   { id: 'EMP001', name: 'Alice Johnson', email: 'alice.j@example.com', avatar: 'https://picsum.photos/seed/1/100/100', department: 'Engineering', role: 'Senior Software Engineer', status: 'Active' },
@@ -160,4 +161,16 @@ export const performanceHistory: HistoricalPerformanceReview[] = [
     { id: 'HIST01', cycleName: 'H1 2024 Performance Review', status: 'Completed', rating: 5 },
     { id: 'HIST02', cycleName: 'H2 2023 Performance Review', status: 'Completed', rating: 4 },
     { id: 'HIST03', cycleName: 'H1 2023 Performance Review', status: 'Completed', rating: 4 },
+];
+
+export const attendanceData: AttendanceData = {
+  [format(addDays(new Date(), -1), 'yyyy-MM-dd')]: { status: 'Present', checkIn: '09:00 AM', checkOut: '06:00 PM', totalHours: '9h 0m' },
+  [format(addDays(new Date(), -2), 'yyyy-MM-dd')]: { status: 'Absent' },
+  [format(addDays(new Date(), -3), 'yyyy-MM-dd')]: { status: 'On Leave' },
+  [format(addDays(new Date(), -4), 'yyyy-MM-dd')]: { status: 'Present', checkIn: '09:15 AM', checkOut: '06:05 PM', totalHours: '8h 50m' },
+};
+
+export const holidays = [
+    { date: new Date(2024, 7, 15), name: 'Independence Day' },
+    { date: new Date(2024, 9, 31), name: 'Diwali' },
 ];
