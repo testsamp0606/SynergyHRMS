@@ -13,7 +13,7 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart"
 import { employeeGrowthData, diversityData } from "@/lib/data"
-import { Bar, BarChart, CartesianGrid, LabelList, Line, LineChart, Pie, PieChart, ResponsiveContainer, XAxis, YAxis } from "recharts"
+import { Line, LineChart, Pie, PieChart, ResponsiveContainer, XAxis, YAxis, CartesianGrid, LabelList } from "recharts"
 import { Header } from "@/components/layout/header"
 
 export default function ReportsPage() {
@@ -48,8 +48,8 @@ export default function ReportsPage() {
                     <CardDescription>Current male to female ratio.</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <p className="text-4xl font-bold">45% / 55%</p>
-                     <p className="text-xs text-muted-foreground">Female / Male</p>
+                    <p className="text-4xl font-bold">55% / 45%</p>
+                     <p className="text-xs text-muted-foreground">Male / Female</p>
                 </CardContent>
             </Card>
         </div>

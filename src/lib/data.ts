@@ -86,7 +86,7 @@ export const employeeGrowthData = [
 ];
 
 export const diversityData = [
-  { name: 'Female', value: 25, fill: 'hsl(var(--chart-1))' },
-  { name: 'Male', value: 22, fill: 'hsl(var(--chart-2))' },
+  { name: 'Female', value: 22, fill: 'hsl(var(--chart-1))' },
+  { name: 'Male', value: 25, fill: 'hsl(var(--chart-2))' },
   { name: 'Other', value: 3, fill: 'hsl(var(--chart-3))' },
 ];
