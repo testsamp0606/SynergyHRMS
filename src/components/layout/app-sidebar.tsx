@@ -6,18 +6,24 @@ import {
   SidebarHeader,
   SidebarMenu,
   SidebarMenuItem,
-  SidebarMenuButton,
   SidebarFooter
 } from "@/components/ui/sidebar"
 import {
-  BarChart3,
-  CalendarClock,
   LayoutDashboard,
   Users,
-  Banknote,
-  TrendingUp,
+  CalendarCheck,
+  Wallet,
   UserPlus,
+  TrendingUp,
+  GraduationCap,
+  Package,
+  Receipt,
+  FileText,
+  Megaphone,
+  BarChart3,
+  UsersRound,
   Settings,
+  History,
   LifeBuoy
 } from "lucide-react"
 import Link from "next/link"
@@ -26,12 +32,20 @@ import { Button } from "../ui/button"
 
 const navItems = [
   { href: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
-  { href: "/dashboard/employees", icon: Users, label: "Employees" },
-  { href: "/dashboard/leave", icon: CalendarClock, label: "Absence Tracker" },
-  { href: "/dashboard/payroll", icon: Banknote, label: "Payroll" },
-  { href: "/dashboard/performance", icon: TrendingUp, label: "Performance" },
+  { href: "/dashboard/employees", icon: Users, label: "Employee Management" },
+  { href: "/dashboard/leave", icon: CalendarCheck, label: "Attendance & Leave" },
+  { href: "/dashboard/payroll", icon: Wallet, label: "Payroll & Compliance" },
   { href: "/dashboard/recruitment", icon: UserPlus, label: "Recruitment" },
-  { href: "/dashboard/reports", icon: BarChart3, label: "Reports" },
+  { href: "/dashboard/performance", icon: TrendingUp, label: "Performance Management" },
+  { href: "/dashboard/training", icon: GraduationCap, label: "Training & Development" },
+  { href: "/dashboard/assets", icon: Package, label: "Assets Management" },
+  { href: "/dashboard/expenses", icon: Receipt, label: "Expenses & Claims" },
+  { href: "/dashboard/documents", icon: FileText, label: "Documents" },
+  { href: "/dashboard/announcements", icon: Megaphone, label: "Announcements" },
+  { href: "/dashboard/reports", icon: BarChart3, label: "Reports & Analytics" },
+  { href: "/dashboard/users-roles", icon: UsersRound, label: "Users & Roles" },
+  { href: "/dashboard/settings", icon: Settings, label: "Settings" },
+  { href: "/dashboard/audit-logs", icon: History, label: "Audit Logs" },
 ]
 
 export function AppSidebar() {
@@ -71,10 +85,6 @@ export function AppSidebar() {
         </SidebarMenu>
       </SidebarContent>
       <SidebarFooter className="p-2">
-         <Button variant="ghost" className="w-full justify-start">
-            <Settings className="mr-2 h-4 w-4" />
-            Settings
-         </Button>
          <Button variant="ghost" className="w-full justify-start">
             <LifeBuoy className="mr-2 h-4 w-4" />
             Help & Support
