@@ -12,7 +12,7 @@ import { Calendar } from '@/components/ui/calendar';
 import { useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Clock, LogIn, LogOut, CalendarPlus, Briefcase, Sun } from 'lucide-react';
-import { addDays, format, isSameDay } from 'date-fns';
+import { addDays, format, isSameDay, isValid } from 'date-fns';
 
 const attendanceData = {
   [format(new Date(), 'yyyy-MM-dd')]: { status: 'Present', checkIn: '09:05 AM', checkOut: '05:55 PM', totalHours: '8h 50m' },
@@ -72,6 +72,10 @@ export default function EmployeeAttendancePage() {
                 className="rounded-md border"
                 components={{
                   Day: ({ date, ...props }) => {
+                    if (!isValid(date)) {
+                        return <div {...props.buttonProps} className={cn('h-9 w-9 p-0 font-normal relative flex items-center justify-center', props.className)}></div>;
+                    }
+
                     const dayData = attendanceData[format(date, 'yyyy-MM-dd')];
                     let badgeClass = '';
                     if (isSameDay(date, new Date())) {
