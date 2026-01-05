@@ -17,8 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useAuth, useFirestore, useUser } from "@/firebase";
-import { setDocumentNonBlocking } from "@/firebase/non-blocking-updates";
+import { useAuth, useFirestore, useUser, setDocumentNonBlocking } from "@/firebase";
 import { useToast } from "@/hooks/use-toast";
 import { doc, collection, getDocs } from "firebase/firestore";
 import { createUserWithEmailAndPassword } from "firebase/auth";
@@ -84,24 +83,22 @@ export default function SignupPage() {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const newUser = userCredential.user;
       
-      if (newUser) {
-          // As soon as the user is created, create their profile in Firestore
-          const userProfileRef = doc(firestore, "users", newUser.uid);
-          setDocumentNonBlocking(userProfileRef, {
-            id: newUser.uid,
-            firstName,
-            lastName,
-            email,
-            roleId,
-          }, { merge: true });
-          
-          toast({
-            title: "Signup Successful",
-            description: "You are now being redirected.",
-          });
+      // As soon as the user is created, create their profile in Firestore
+      const userProfileRef = doc(firestore, "users", newUser.uid);
+      setDocumentNonBlocking(userProfileRef, {
+        id: newUser.uid,
+        firstName,
+        lastName,
+        email,
+        roleId,
+      }, { merge: true });
+      
+      toast({
+        title: "Signup Successful",
+        description: "You are now being redirected.",
+      });
 
-          // The onAuthStateChanged listener in the layout will handle the redirect
-      }
+      // The onAuthStateChanged listener in the layout will handle the redirect
     } catch (error: any) {
       let description = "An unexpected error occurred.";
       if (error.code === 'auth/email-already-in-use') {
