@@ -7,7 +7,7 @@ export default function Home() {
   return (
     <div className="flex h-screen items-center justify-center gap-4">
       <Button asChild>
-        <Link href="/dashboard">Admin Dashboard</Link>
+        <Link href="/dashboard">HR Dashboard</Link>
       </Button>
       <Button asChild variant="outline">
         <Link href="/employee/dashboard">Employee Dashboard</Link>
