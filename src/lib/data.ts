@@ -1,4 +1,4 @@
-import type { Employee, LeaveRequest, PerformanceReview, PayrollRun, TrainingProgram, Asset, ExpenseClaim, Document, Announcement } from '@/lib/types';
+import type { Employee, LeaveRequest, PerformanceReview, PayrollRun, TrainingProgram, Asset, ExpenseClaim, Document, Announcement, UserProfile, Role } from '@/lib/types';
 
 export const employees: Employee[] = [
   { id: 'EMP001', name: 'Alice Johnson', email: 'alice.j@example.com', avatar: 'https://picsum.photos/seed/1/100/100', department: 'Engineering', role: 'Senior Software Engineer', status: 'Active' },
@@ -89,4 +89,20 @@ export const diversityData = [
   { name: 'Female', value: 22, fill: 'hsl(var(--chart-1))' },
   { name: 'Male', value: 25, fill: 'hsl(var(--chart-2))' },
   { name: 'Other', value: 3, fill: 'hsl(var(--chart-3))' },
+];
+
+export const roles: Role[] = [
+  { id: 'R01', name: 'Admin', description: 'Full access to all system features and modules.', permissions: ['manage-users', 'manage-roles', 'run-payroll', 'manage-billing'] },
+  { id: 'R02', name: 'HR Manager', description: 'Manages employees, recruitment, and approvals.', permissions: ['manage-employees', 'manage-recruitment', 'approve-leave', 'view-reports'] },
+  { id: 'R03', name: 'Manager', description: 'Manages their direct reports and team-related approvals.', permissions: ['view-team', 'approve-leave', 'conduct-reviews'] },
+  { id: 'R04', name: 'Employee', description: 'Access to their own profile, leave requests, and documents.', permissions: ['view-profile', 'request-leave', 'view-documents'] },
+];
+
+export const users: UserProfile[] = [
+  { id: 'USR001', firstName: 'Admin', lastName: 'User', email: 'admin@synergy.com', roleId: 'R01' },
+  { id: 'USR002', firstName: 'Bob', lastName: 'Williams', email: 'bob.w@example.com', roleId: 'R02' },
+  { id: 'USR003', firstName: 'Alice', lastName: 'Johnson', email: 'alice.j@example.com', roleId: 'R03' },
+  { id: 'USR004', firstName: 'Charlie', lastName: 'Brown', email: 'charlie.b@example.com', roleId: 'R03' },
+  { id: 'USR005', firstName: 'Fiona', lastName: 'Garcia', email: 'fiona.g@example.com', roleId: 'R04' },
+  { id: 'USR006', firstName: 'Ethan', lastName: 'Davis', email: 'ethan.d@example.com', roleId: 'R04' },
 ];
