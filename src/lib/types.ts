@@ -60,3 +60,15 @@ export type TrainingProgram = {
   assignedTo: number;
   completionRate: number;
 };
+
+export type Asset = {
+  id: string;
+  name: string;
+  category: 'Laptop' | 'Monitor' | 'Keyboard' | 'Mouse' | 'Headset' | 'Other';
+  serialNumber: string;
+  purchaseDate: Date;
+  value: number;
+  assignedTo?: string; // Employee ID
+  assignedAvatar?: string;
+  status: 'Assigned' | 'Unassigned' | 'In Repair' | 'Retired';
+};

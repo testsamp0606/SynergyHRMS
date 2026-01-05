@@ -1,4 +1,4 @@
-import type { Employee, LeaveRequest, PerformanceReview, PayrollRun, TrainingProgram } from '@/lib/types';
+import type { Employee, LeaveRequest, PerformanceReview, PayrollRun, TrainingProgram, Asset } from '@/lib/types';
 
 export const employees: Employee[] = [
   { id: 'EMP001', name: 'Alice Johnson', email: 'alice.j@example.com', avatar: 'https://picsum.photos/seed/1/100/100', department: 'Engineering', role: 'Senior Software Engineer', status: 'Active' },
@@ -34,6 +34,16 @@ export const trainingPrograms: TrainingProgram[] = [
     { id: 'TRN003', title: 'Leadership for New Managers', category: 'Leadership', duration: '6 Weeks', status: 'Active', assignedTo: 15, completionRate: 60 },
     { id: 'TRN004', title: 'Cybersecurity Essentials', category: 'Compliance', duration: '1 Week', status: 'Draft', assignedTo: 0, completionRate: 0 },
     { id: 'TRN005', title: 'Agile Project Management', category: 'Technical', duration: '3 Weeks', status: 'Archived', assignedTo: 50, completionRate: 100 },
+];
+
+export const assets: Asset[] = [
+    { id: 'AST001', name: 'MacBook Pro 16"', category: 'Laptop', serialNumber: 'C02F1234H8J0', purchaseDate: new Date('2023-01-15'), value: 2499, assignedTo: 'Alice Johnson', assignedAvatar: 'https://picsum.photos/seed/1/100/100', status: 'Assigned' },
+    { id: 'AST002', name: 'Dell UltraSharp 27"', category: 'Monitor', serialNumber: 'SN-DELL-27-12345', purchaseDate: new Date('2023-01-15'), value: 599, assignedTo: 'Alice Johnson', assignedAvatar: 'https://picsum.photos/seed/1/100/100', status: 'Assigned' },
+    { id: 'AST003', name: 'Logitech MX Keys', category: 'Keyboard', serialNumber: 'SN-LOGI-K-67890', purchaseDate: new Date('2023-01-15'), value: 119, assignedTo: 'Bob Williams', assignedAvatar: 'https://picsum.photos/seed/2/100/100', status: 'Assigned' },
+    { id: 'AST004', name: 'MacBook Pro 14"', category: 'Laptop', serialNumber: 'C02G5678H9K1', purchaseDate: new Date('2023-05-20'), value: 1999, status: 'Unassigned' },
+    { id: 'AST005', name: 'Herman Miller Aeron', category: 'Other', serialNumber: 'SN-HM-A-11223', purchaseDate: new Date('2022-11-10'), value: 1495, assignedTo: 'Charlie Brown', assignedAvatar: 'https://picsum.photos/seed/3/100/100', status: 'Assigned' },
+    { id: 'AST006', name: 'Sony WH-1000XM5', category: 'Headset', serialNumber: 'SN-SONY-H-33445', purchaseDate: new Date('2023-08-01'), value: 399, status: 'In Repair' },
+    { id: 'AST007', name: 'MacBook Air M2', category: 'Laptop', serialNumber: 'C02H1234J0L2', purchaseDate: new Date('2024-02-10'), value: 1299, assignedTo: 'Fiona Garcia', assignedAvatar: 'https://picsum.photos/seed/6/100/100', status: 'Assigned' },
 ];
 
 export const departmentHeadcount = [
