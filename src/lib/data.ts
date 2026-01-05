@@ -1,4 +1,4 @@
-import type { Employee, LeaveRequest, PerformanceReview, PayrollRun, TrainingProgram, Asset, ExpenseClaim, Document, Announcement, UserProfile, Role } from '@/lib/types';
+import type { Employee, LeaveRequest, PerformanceReview, PayrollRun, TrainingProgram, Asset, ExpenseClaim, Document, Announcement, UserProfile, Role, AuditLog } from '@/lib/types';
 
 export const employees: Employee[] = [
   { id: 'EMP001', name: 'Alice Johnson', email: 'alice.j@example.com', avatar: 'https://picsum.photos/seed/1/100/100', department: 'Engineering', role: 'Senior Software Engineer', status: 'Active' },
@@ -105,4 +105,12 @@ export const users: UserProfile[] = [
   { id: 'USR004', firstName: 'Charlie', lastName: 'Brown', email: 'charlie.b@example.com', roleId: 'R03' },
   { id: 'USR005', firstName: 'Fiona', lastName: 'Garcia', email: 'fiona.g@example.com', roleId: 'R04' },
   { id: 'USR006', firstName: 'Ethan', lastName: 'Davis', email: 'ethan.d@example.com', roleId: 'R04' },
+];
+
+export const auditLogs: AuditLog[] = [
+  { id: 'LOG001', user: 'Admin User', userAvatar: 'https://picsum.photos/seed/USR001/100/100', action: 'USER_LOGIN', details: 'User logged in successfully', date: new Date(Date.now() - 1000 * 60 * 5), ipAddress: '192.168.1.1' },
+  { id: 'LOG002', user: 'Bob Williams', userAvatar: 'https://picsum.photos/seed/USR002/100/100', action: 'CREATE_EMPLOYEE', details: 'Created new employee: Eve Adams (EMP007)', date: new Date(Date.now() - 1000 * 60 * 60 * 2), ipAddress: '203.0.113.25' },
+  { id: 'LOG003', user: 'Admin User', userAvatar: 'https://picsum.photos/seed/USR001/100/100', action: 'UPDATE_ROLE', details: 'Changed role for Charlie Brown to "Manager"', date: new Date(Date.now() - 1000 * 60 * 60 * 24), ipAddress: '192.168.1.1' },
+  { id: 'LOG004', user: 'Admin User', userAvatar: 'https://picsum.photos/seed/USR001/100/100', action: 'RUN_PAYROLL', details: 'Completed payroll run for August 2024', date: new Date(Date.now() - 1000 * 60 * 60 * 48), ipAddress: '192.168.1.1' },
+  { id: 'LOG005', user: 'Bob Williams', userAvatar: 'https://picsum.photos/seed/USR002/100/100', action: 'EXPORT_DATA', details: 'Exported employee data (CSV)', date: new Date(Date.now() - 1000 * 60 * 60 * 72), ipAddress: '203.0.113.25' },
 ];

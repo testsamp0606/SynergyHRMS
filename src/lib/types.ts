@@ -101,3 +101,13 @@ export type Announcement = {
   date: Date;
   target: 'Everyone' | 'Engineering' | 'HR' | 'Marketing' | 'Sales' | 'Design';
 };
+
+export type AuditLog = {
+  id: string;
+  user: string;
+  userAvatar: string;
+  action: 'USER_LOGIN' | 'CREATE_EMPLOYEE' | 'UPDATE_ROLE' | 'RUN_PAYROLL' | 'EXPORT_DATA';
+  details: string;
+  date: Date;
+  ipAddress: string;
+};
