@@ -31,8 +31,8 @@ const holidays = [
 
 const CustomDay = (props: DayProps) => {
     const { date, displayMonth } = props;
-    if (!isValid(date) || !displayMonth) {
-        return <div role="gridcell" className="rdp-cell"></div>;
+    if (!date || !displayMonth) {
+        return <td role="gridcell" className="rdp-cell"></td>;
     }
     const dayData = attendanceData[format(date, 'yyyy-MM-dd')];
     let badgeClass = '';
@@ -47,11 +47,11 @@ const CustomDay = (props: DayProps) => {
     }
 
     return (
-        <div role="gridcell" className={cn("rdp-cell relative", props.className)}>
+        <td role="gridcell" className={cn("rdp-cell relative", props.className)}>
             <button
                 {...props.buttonProps}
                 type="button"
-                className={cn("rdp-button_reset rdp-button", props.buttonProps.className)}
+                className={cn("rdp-button_reset rdp-button", props.buttonProps?.className)}
                 disabled={props.disabled}
                 tabIndex={props.tabIndex}
             >
@@ -60,7 +60,7 @@ const CustomDay = (props: DayProps) => {
                     <span className={`absolute bottom-1 right-1 h-2 w-2 rounded-full ${badgeClass}`}></span>
                 )}
             </button>
-        </div>
+        </td>
     );
 };
 
