@@ -28,11 +28,11 @@ export const payrollRuns: PayrollRun[] = [
 ];
 
 export const departmentHeadcount = [
-  { name: 'Engineering', value: 20 },
-  { name: 'HR', value: 5 },
-  { name: 'Marketing', value: 8 },
-  { name: 'Sales', value: 12 },
-  { name: 'Design', value: 5 },
+    { department: 'Engineering', count: 12 },
+    { department: 'Marketing', count: 6 },
+    { department: 'Sales', count: 8 },
+    { department: 'HR', count: 3 },
+    { department: 'Design', count: 4 },
 ];
 
 export const employeeGrowthData = [

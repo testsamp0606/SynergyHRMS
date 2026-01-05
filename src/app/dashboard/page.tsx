@@ -11,26 +11,16 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableHead,
-  TableHeader,
   TableRow,
 } from "@/components/ui/table"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip } from 'recharts'
-import { ArrowUpRight, Users, CalendarClock, Briefcase } from 'lucide-react'
-import { leaveRequests } from '@/lib/data'
+import { ArrowUpRight, Users, CalendarClock, Briefcase, UserPlus, FileText, Megaphone, PlayCircle } from 'lucide-react'
+import { leaveRequests, departmentHeadcount } from '@/lib/data'
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { Header } from "@/components/layout/header"
-
-const departmentHeadcount = [
-  { department: 'Engineering', count: 12 },
-  { department: 'Marketing', count: 6 },
-  { department: 'Sales', count: 8 },
-  { department: 'HR', count: 3 },
-  { department: 'Design', count: 4 },
-]
 
 export default function DashboardPage() {
   const pendingRequests = leaveRequests.filter(req => req.status === 'Pending');
@@ -93,6 +83,40 @@ export default function DashboardPage() {
             </CardContent>
           </Card>
         </div>
+
+        <Card>
+            <CardHeader>
+                <CardTitle>Quick Actions</CardTitle>
+            </CardHeader>
+            <CardContent className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                <Button variant="outline" asChild>
+                    <Link href="/dashboard/employees">
+                        <UserPlus className="mr-2 h-4 w-4" /> Add Employee
+                    </Link>
+                </Button>
+                <Button variant="outline" asChild>
+                     <Link href="/dashboard/leave">
+                        <FileText className="mr-2 h-4 w-4" /> Approve Leave
+                    </Link>
+                </Button>
+                <Button variant="outline" asChild>
+                    <Link href="/dashboard/payroll">
+                        <PlayCircle className="mr-2 h-4 w-4" /> Run Payroll
+                    </Link>
+                </Button>
+                <Button variant="outline" asChild>
+                    <Link href="/dashboard/recruitment">
+                        <Briefcase className="mr-2 h-4 w-4" /> Post Job
+                    </Link>
+                </Button>
+                <Button variant="outline" asChild>
+                    <Link href="/dashboard/announcements">
+                        <Megaphone className="mr-2 h-4 w-4" /> Send Announcement
+                    </Link>
+                </Button>
+            </CardContent>
+        </Card>
+
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
           <Card className="lg:col-span-4">
             <CardHeader>
