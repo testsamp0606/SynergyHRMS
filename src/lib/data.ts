@@ -1,4 +1,4 @@
-import type { Employee, LeaveRequest, PerformanceReview, PayrollRun, TrainingProgram, Asset, ExpenseClaim } from '@/lib/types';
+import type { Employee, LeaveRequest, PerformanceReview, PayrollRun, TrainingProgram, Asset, ExpenseClaim, Document } from '@/lib/types';
 
 export const employees: Employee[] = [
   { id: 'EMP001', name: 'Alice Johnson', email: 'alice.j@example.com', avatar: 'https://picsum.photos/seed/1/100/100', department: 'Engineering', role: 'Senior Software Engineer', status: 'Active' },
@@ -52,6 +52,14 @@ export const expenseClaims: ExpenseClaim[] = [
     { id: 'CLM003', employeeName: 'Fiona Garcia', employeeAvatar: 'https://picsum.photos/seed/6/100/100', category: 'Supplies', submissionDate: new Date('2024-08-02'), amount: 120.00, status: 'Pending', description: 'Office supplies' },
     { id: 'CLM004', employeeName: 'Ethan Davis', employeeAvatar: 'https://picsum.photos/seed/5/100/100', category: 'Other', submissionDate: new Date('2024-07-28'), amount: 50.00, status: 'Rejected', description: 'Online course' },
     { id: 'CLM005', employeeName: 'Alice Johnson', employeeAvatar: 'https://picsum.photos/seed/1/100/100', category: 'Food', submissionDate: new Date('2024-08-10'), amount: 45.30, status: 'Pending', description: 'Dinner with client' },
+];
+
+export const documents: Document[] = [
+    { id: 'DOC001', title: 'Employee Handbook 2024', category: 'HR Policies', version: '2.1', lastUpdated: new Date('2024-06-15'), uploadedBy: 'Bob Williams' },
+    { id: 'DOC002', title: 'Alice Johnson - Employment Contract', category: 'Contracts', version: '1.0', lastUpdated: new Date('2023-01-15'), uploadedBy: 'Bob Williams' },
+    { id: 'DOC003', title: 'July 2024 Payslip - Charlie Brown', category: 'Payslips', version: '1.0', lastUpdated: new Date('2024-07-31'), uploadedBy: 'System' },
+    { id: 'DOC004', title: 'Work From Home Policy', category: 'HR Policies', version: '1.5', lastUpdated: new Date('2024-05-20'), uploadedBy: 'Bob Williams' },
+    { id: 'DOC005', title: 'Form 16 - FY 2023-24 - Alice Johnson', category: 'Compliance', version: '1.0', lastUpdated: new Date('2024-04-30'), uploadedBy: 'System' },
 ];
 
 export const departmentHeadcount = [

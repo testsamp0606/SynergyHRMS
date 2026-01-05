@@ -83,3 +83,12 @@ export type ExpenseClaim = {
   status: 'Pending' | 'Approved' | 'Rejected';
   description: string;
 };
+
+export type Document = {
+  id: string;
+  title: string;
+  category: 'HR Policies' | 'Contracts' | 'Payslips' | 'Compliance';
+  version: string;
+  lastUpdated: Date;
+  uploadedBy: string;
+};
