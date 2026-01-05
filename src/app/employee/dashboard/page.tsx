@@ -26,15 +26,40 @@ import { employeeDashboardSummary, recentAnnouncements, employeeTasks } from '@/
 import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useState, useEffect } from 'react';
+import { format, intervalToDuration } from 'date-fns';
 
 export default function EmployeeDashboardPage() {
   const { leaveBalance, upcomingPayslip, pendingExpenses } = employeeDashboardSummary;
   const [time, setTime] = useState(new Date());
+  const [punchInTime, setPunchInTime] = useState<Date | null>(null);
+  const [punchOutTime, setPunchOutTime] = useState<Date | null>(null);
+  const [isPunchedIn, setIsPunchedIn] = useState(false);
 
   useEffect(() => {
     const timerId = setInterval(() => setTime(new Date()), 1000);
     return () => clearInterval(timerId);
   }, []);
+
+  const handlePunchIn = () => {
+    const now = new Date();
+    setPunchInTime(now);
+    setIsPunchedIn(true);
+  };
+
+  const handlePunchOut = () => {
+    const now = new Date();
+    setPunchOutTime(now);
+    setIsPunchedIn(false);
+  };
+  
+  const getTotalHours = () => {
+    if (punchInTime && punchOutTime) {
+      const duration = intervalToDuration({ start: punchInTime, end: punchOutTime });
+      return `${duration.hours || 0}h ${duration.minutes || 0}m`;
+    }
+    return null;
+  };
+
 
   return (
     <div className="flex min-h-screen w-full flex-col">
@@ -49,13 +74,35 @@ export default function EmployeeDashboardPage() {
                         <span>{time.toLocaleTimeString()}</span>
                     </CardDescription>
                 </CardHeader>
-                <CardContent className="flex gap-2">
-                    <Button className="w-full">
-                        <LogIn className="mr-2 h-4 w-4" /> Punch In
-                    </Button>
-                    <Button variant="outline" className="w-full">
-                        <LogOut className="mr-2 h-4 w-4" /> Punch Out
-                    </Button>
+                <CardContent className="space-y-4">
+                    <div className="flex gap-2">
+                         <Button className="w-full" onClick={handlePunchIn} disabled={isPunchedIn || !!punchOutTime}>
+                            <LogIn className="mr-2 h-4 w-4" /> Punch In
+                        </Button>
+                        <Button variant="outline" className="w-full" onClick={handlePunchOut} disabled={!isPunchedIn || !!punchOutTime}>
+                            <LogOut className="mr-2 h-4 w-4" /> Punch Out
+                        </Button>
+                    </div>
+                     {punchInTime && (
+                        <div className="text-sm text-muted-foreground space-y-2">
+                           <div className='flex justify-between'>
+                                <span>Punched In:</span>
+                                <span className='font-medium text-foreground'>{format(punchInTime, 'hh:mm:ss a')}</span>
+                           </div>
+                           {punchOutTime && (
+                                <div className='flex justify-between'>
+                                   <span>Punched Out:</span>
+                                   <span className='font-medium text-foreground'>{format(punchOutTime, 'hh:mm:ss a')}</span>
+                               </div>
+                           )}
+                           {punchOutTime && punchInTime && (
+                                <div className='flex justify-between font-semibold'>
+                                   <span>Total Hours:</span>
+                                   <span className='text-primary'>{getTotalHours()}</span>
+                               </div>
+                           )}
+                        </div>
+                    )}
                 </CardContent>
             </Card>
              <Card>
