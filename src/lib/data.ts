@@ -1,4 +1,4 @@
-import type { Employee, LeaveRequest, PerformanceReview, PayrollRun, TrainingProgram, Asset, ExpenseClaim, Document, Announcement, UserProfile, Role, AuditLog, EmployeeDashboardSummary, RecentAnnouncement, EmployeeTask } from '@/lib/types';
+import type { Employee, LeaveRequest, PerformanceReview, PayrollRun, TrainingProgram, Asset, ExpenseClaim, Document, Announcement, UserProfile, Role, AuditLog, EmployeeDashboardSummary, RecentAnnouncement, EmployeeTask, PerformanceCycle, PerformanceGoal, HistoricalPerformanceReview } from '@/lib/types';
 
 export const employees: Employee[] = [
   { id: 'EMP001', name: 'Alice Johnson', email: 'alice.j@example.com', avatar: 'https://picsum.photos/seed/1/100/100', department: 'Engineering', role: 'Senior Software Engineer', status: 'Active' },
@@ -140,4 +140,24 @@ export const employeeTasks: EmployeeTask[] = [
     { id: 'TSK001', title: 'Complete performance self-assessment', dueDate: 'Due Aug 25, 2024', status: 'Pending' },
     { id: 'TSK002', title: 'Finish mandatory cybersecurity training', dueDate: 'Due Sep 01, 2024', status: 'Pending' },
     { id: 'TSK003', title: 'Update personal contact information', dueDate: 'Completed', status: 'Completed' },
+];
+
+export const currentPerformanceCycle: PerformanceCycle = {
+    id: 'CYCLE2024H2',
+    cycleName: 'H2 2024 Performance Review',
+    startDate: new Date('2024-07-01'),
+    endDate: new Date('2024-12-31'),
+    selfAppraisal: "This cycle, I successfully led the 'synergy-ui' component library project, which was adopted by three other teams. I also improved the performance of the main dashboard by 15%. I'd like to focus on mentoring junior developers more in the next cycle.",
+    managerFeedback: '', // Not yet provided
+    goals: [
+        { id: 'GOAL01', title: 'Launch v1 of `synergy-ui` library', description: 'Successfully design, build, and launch the first version of the internal component library.', progress: 100, status: 'Completed' },
+        { id: 'GOAL02', title: 'Improve dashboard load time by 10%', description: 'Optimize front-end assets and API calls to reduce the main dashboard\'s initial load time.', progress: 100, status: 'Completed' },
+        { id: 'GOAL03', title: 'Mentor one junior developer', description: 'Provide regular guidance and support to a junior member of the team.', progress: 75, status: 'In Progress' },
+    ],
+};
+
+export const performanceHistory: HistoricalPerformanceReview[] = [
+    { id: 'HIST01', cycleName: 'H1 2024 Performance Review', status: 'Completed', rating: 5 },
+    { id: 'HIST02', cycleName: 'H2 2023 Performance Review', status: 'Completed', rating: 4 },
+    { id: 'HIST03', cycleName: 'H1 2023 Performance Review', status: 'Completed', rating: 4 },
 ];

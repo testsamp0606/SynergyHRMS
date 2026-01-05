@@ -141,3 +141,28 @@ export type EmployeeTask = {
   dueDate: string;
   status: 'Pending' | 'Completed';
 }
+
+export type PerformanceGoal = {
+    id: string;
+    title: string;
+    description: string;
+    progress: number;
+    status: 'On Track' | 'At Risk' | 'Completed' | 'In Progress';
+};
+
+export type PerformanceCycle = {
+    id: string;
+    cycleName: string;
+    startDate: Date;
+    endDate: Date;
+    goals: PerformanceGoal[];
+    selfAppraisal: string;
+    managerFeedback: string;
+};
+
+export type HistoricalPerformanceReview = {
+    id: string;
+    cycleName: string;
+    status: 'Completed';
+    rating: number; // e.g., 1-5
+};
