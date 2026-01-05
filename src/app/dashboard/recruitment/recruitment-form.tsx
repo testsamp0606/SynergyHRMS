@@ -1,6 +1,7 @@
 "use client"
 
-import { useFormState, useFormStatus } from "react-dom"
+import { useActionState } from "react"
+import { useFormStatus } from "react-dom"
 import { generateDescriptionAction, generateQuestionsAction, GenerationState } from "./actions"
 import {
   Card,
@@ -44,8 +45,8 @@ function SubmitButton({ text, loading }: { text: string; loading: boolean }) {
 }
 
 export function RecruitmentForm() {
-  const [descriptionState, descriptionFormAction] = useFormState(generateDescriptionAction, initialState)
-  const [questionState, questionFormAction] = useFormState(generateQuestionsAction, descriptionState)
+  const [descriptionState, descriptionFormAction] = useActionState(generateDescriptionAction, initialState)
+  const [questionState, questionFormAction] = useActionState(generateQuestionsAction, descriptionState)
 
   const finalState = questionState.interviewQuestions ? questionState : descriptionState;
 
