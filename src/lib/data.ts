@@ -19,6 +19,7 @@ export const performanceReviews: PerformanceReview[] = [
   { id: 'PR001', employeeName: 'Alice Johnson', employeeAvatar: 'https://picsum.photos/seed/1/100/100', reviewer: 'Bob Williams', dueDate: new Date('2024-09-01'), status: 'Upcoming' },
   { id: 'PR002', employeeName: 'Fiona Garcia', employeeAvatar: 'https://picsum.photos/seed/6/100/100', reviewer: 'Alice Johnson', dueDate: new Date('2024-09-15'), status: 'Upcoming' },
   { id: 'PR003', employeeName: 'Charlie Brown', employeeAvatar: 'https://picsum.photos/seed/3/100/100', reviewer: 'Bob Williams', dueDate: new Date('2024-07-30'), status: 'Completed' },
+  { id: 'PR004', employeeName: 'Ethan Davis', employeeAvatar: 'https://picsum.photos/seed/5/100/100', reviewer: 'Bob Williams', dueDate: new Date('2024-08-15'), status: 'In Progress' },
 ];
 
 export const payrollRuns: PayrollRun[] = [
