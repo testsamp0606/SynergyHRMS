@@ -1,4 +1,4 @@
-import type { Employee, LeaveRequest, PerformanceReview, PayrollRun, TrainingProgram, Asset, ExpenseClaim, Document } from '@/lib/types';
+import type { Employee, LeaveRequest, PerformanceReview, PayrollRun, TrainingProgram, Asset, ExpenseClaim, Document, Announcement } from '@/lib/types';
 
 export const employees: Employee[] = [
   { id: 'EMP001', name: 'Alice Johnson', email: 'alice.j@example.com', avatar: 'https://picsum.photos/seed/1/100/100', department: 'Engineering', role: 'Senior Software Engineer', status: 'Active' },
@@ -60,6 +60,12 @@ export const documents: Document[] = [
     { id: 'DOC003', title: 'July 2024 Payslip - Charlie Brown', category: 'Payslips', version: '1.0', lastUpdated: new Date('2024-07-31'), uploadedBy: 'System' },
     { id: 'DOC004', title: 'Work From Home Policy', category: 'HR Policies', version: '1.5', lastUpdated: new Date('2024-05-20'), uploadedBy: 'Bob Williams' },
     { id: 'DOC005', title: 'Form 16 - FY 2023-24 - Alice Johnson', category: 'Compliance', version: '1.0', lastUpdated: new Date('2024-04-30'), uploadedBy: 'System' },
+];
+
+export const announcements: Announcement[] = [
+  { id: 'ANN001', title: 'Q3 2024 All-Hands Meeting', content: 'Join us for the Q3 All-Hands meeting on Friday, August 30th at 10:00 AM PST. We will discuss our quarterly performance and future goals. A calendar invite will follow shortly.', author: 'Bob Williams', date: new Date('2024-08-15'), target: 'Everyone' },
+  { id: 'ANN002', title: 'New Engineering Library: `synergy-ui`', content: 'We are excited to announce the launch of our internal component library, `synergy-ui`. Please start using it for all new frontend projects. Documentation is available on Confluence.', author: 'Alice Johnson', date: new Date('2024-08-10'), target: 'Engineering' },
+  { id: 'ANN003', title: 'Marketing Offsite - September', content: 'The annual marketing team offsite is scheduled for September 12-13. Please RSVP by the end of this week so we can finalize the arrangements.', author: 'Charlie Brown', date: new Date('2024-08-05'), target: 'Marketing' },
 ];
 
 export const departmentHeadcount = [

@@ -92,3 +92,12 @@ export type Document = {
   lastUpdated: Date;
   uploadedBy: string;
 };
+
+export type Announcement = {
+  id: string;
+  title: string;
+  content: string;
+  author: string;
+  date: Date;
+  target: 'Everyone' | 'Engineering' | 'HR' | 'Marketing' | 'Sales' | 'Design';
+};
