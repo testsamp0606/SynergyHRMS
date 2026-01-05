@@ -6,7 +6,8 @@ import {
   SidebarHeader,
   SidebarMenu,
   SidebarMenuItem,
-  SidebarFooter
+  SidebarFooter,
+  SidebarTrigger,
 } from "@/components/ui/sidebar"
 import {
   LayoutDashboard,
@@ -24,7 +25,7 @@ import {
   UsersRound,
   Settings,
   History,
-  LifeBuoy
+  LifeBuoy,
 } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from 'next/navigation'
@@ -52,18 +53,21 @@ export function AppSidebar() {
   const pathname = usePathname()
 
   return (
-    <Sidebar>
-      <SidebarHeader>
-        <div className="flex items-center gap-2 p-2">
-          <svg
+    <Sidebar collapsible="icon">
+      <SidebarHeader className="p-2">
+        <div className="flex h-12 items-center gap-2 px-2">
+           <svg
             xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            className="h-8 w-8 text-primary"
-            fill="currentColor"
+            viewBox="0 0 256 256"
+            className="h-8 w-8 shrink-0 text-primary"
           >
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z" />
+            <path
+              fill="currentColor"
+              d="M228.4 89.32a20.08 20.08 0 0 0-21.6-21.6l-60.12 17.18L129.5 27.68a20.08 20.08 0 0 0-39 0l-17.18 60.12-60.12-17.18a20.08 20.08 0 0 0-21.6 21.6l17.18 60.12L8 166.5a20.08 20.08 0 0 0 0 39l60.12 17.18L85.32 240a20.08 20.08 0 0 0 21.6 21.6l60.12-17.18L184.22 248a20.08 20.08 0 0 0 39 0l17.18-60.12L248 166.5a20.08 20.08 0 0 0 21.6-21.6l-17.18-60.12ZM128 164a36 36 0 1 1 36-36a36 36 0 0 1-36 36Z"
+            />
           </svg>
-          <span className="text-xl font-semibold">Synergy HR</span>
+          <span className="text-xl font-semibold leading-none">Synergy</span>
+          <SidebarTrigger className="ml-auto" />
         </div>
       </SidebarHeader>
       <SidebarContent className="p-2">
@@ -77,7 +81,7 @@ export function AppSidebar() {
               >
                 <Link href={item.href}>
                   <item.icon className="mr-2 h-4 w-4" />
-                  {item.label}
+                  <span>{item.label}</span>
                 </Link>
               </Button>
             </SidebarMenuItem>
@@ -87,7 +91,7 @@ export function AppSidebar() {
       <SidebarFooter className="p-2">
          <Button variant="ghost" className="w-full justify-start">
             <LifeBuoy className="mr-2 h-4 w-4" />
-            Help & Support
+            <span>Help & Support</span>
          </Button>
       </SidebarFooter>
     </Sidebar>
