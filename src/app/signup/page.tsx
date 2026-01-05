@@ -18,10 +18,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useAuth, useFirestore, useUser } from "@/firebase";
-import { initiateEmailSignUp } from "@/firebase/non-blocking-login";
 import { setDocumentNonBlocking } from "@/firebase/non-blocking-updates";
 import { useToast } from "@/hooks/use-toast";
 import { doc, collection, getDocs } from "firebase/firestore";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState, useEffect } from "react";
@@ -48,14 +48,24 @@ export default function SignupPage() {
   
   useEffect(() => {
     const fetchRoles = async () => {
+      if (!firestore) return;
       const rolesCollection = collection(firestore, "roles");
-      const rolesSnapshot = await getDocs(rolesCollection);
-      const rolesList = rolesSnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id } as Role));
-      setRoles(rolesList);
+      try {
+        const rolesSnapshot = await getDocs(rolesCollection);
+        const rolesList = rolesSnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id } as Role));
+        setRoles(rolesList);
+      } catch (error) {
+        console.error("Error fetching roles:", error);
+        toast({
+            variant: "destructive",
+            title: "Error fetching roles",
+            description: "Could not load roles for signup.",
+        });
+      }
     };
 
     fetchRoles();
-  }, [firestore]);
+  }, [firestore, toast]);
 
 
   const handleSignup = async (e: FormEvent) => {
@@ -71,11 +81,10 @@ export default function SignupPage() {
 
     try {
       // First, create the user in Firebase Auth
-      initiateEmailSignUp(auth, email, password);
-
-      // Listen for the user to be created
-      const unsubscribe = auth.onAuthStateChanged(newUser => {
-        if (newUser) {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const newUser = userCredential.user;
+      
+      if (newUser) {
           // As soon as the user is created, create their profile in Firestore
           const userProfileRef = doc(firestore, "users", newUser.uid);
           setDocumentNonBlocking(userProfileRef, {
@@ -90,16 +99,20 @@ export default function SignupPage() {
             title: "Signup Successful",
             description: "You are now being redirected.",
           });
-          
-          // Stop listening for auth changes
-          unsubscribe();
-        }
-      });
+
+          // The onAuthStateChanged listener in the layout will handle the redirect
+      }
     } catch (error: any) {
+      let description = "An unexpected error occurred.";
+      if (error.code === 'auth/email-already-in-use') {
+        description = "This email address is already in use.";
+      } else if (error.code === 'auth/weak-password') {
+        description = "The password is too weak. Please use at least 6 characters.";
+      }
       toast({
         variant: "destructive",
         title: "Signup Failed",
-        description: error.message || "An unexpected error occurred.",
+        description: description,
       });
     }
   };
