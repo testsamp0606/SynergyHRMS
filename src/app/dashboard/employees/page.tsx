@@ -1,3 +1,4 @@
+
 import {
   Table,
   TableBody,
@@ -13,35 +14,88 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { MoreHorizontal, PlusCircle } from "lucide-react"
+import { MoreHorizontal, PlusCircle, Search, Upload, Download } from "lucide-react"
 import { employees } from "@/lib/data"
 import { Header } from "@/components/layout/header"
+import { Input } from "@/components/ui/input"
 
 export default function EmployeesPage() {
   return (
     <div className="flex min-h-screen w-full flex-col">
        <Header title="Employee Management" />
       <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
+        <div className="flex flex-col md:flex-row items-center gap-4">
+            <div className="relative w-full md:w-auto md:flex-grow">
+                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                <Input
+                type="search"
+                placeholder="Search employees by name or ID..."
+                className="pl-8 w-full md:w-80"
+                />
+            </div>
+            <div className="flex gap-2 w-full md:w-auto">
+                <Select>
+                    <SelectTrigger className="w-full md:w-[180px]">
+                        <SelectValue placeholder="Filter by Department" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="engineering">Engineering</SelectItem>
+                        <SelectItem value="hr">HR</SelectItem>
+                        <SelectItem value="marketing">Marketing</SelectItem>
+                        <SelectItem value="sales">Sales</SelectItem>
+                        <SelectItem value="design">Design</SelectItem>
+                    </SelectContent>
+                </Select>
+                 <Select>
+                    <SelectTrigger className="w-full md:w-[180px]">
+                        <SelectValue placeholder="Filter by Status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="active">Active</SelectItem>
+                        <SelectItem value="on-leave">On Leave</SelectItem>
+                        <SelectItem value="inactive">Inactive</SelectItem>
+                    </SelectContent>
+                </Select>
+            </div>
+        </div>
         <Card>
-          <CardHeader className="flex flex-row items-center">
+          <CardHeader className="flex flex-col md:flex-row md:items-center gap-4">
             <div className="grid gap-2">
                 <CardTitle>Employee Directory</CardTitle>
                 <CardDescription>
                 Manage your team. View, edit, or add new employees.
                 </CardDescription>
             </div>
-            <Button asChild size="sm" className="ml-auto gap-1">
-                <a href="#">
-                <PlusCircle className="h-3.5 w-3.5" />
-                <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                    Add Employee
-                </span>
-                </a>
-            </Button>
+            <div className="flex flex-wrap gap-2 md:ml-auto">
+                <Button variant="outline" size="sm">
+                    <Upload className="h-3.5 w-3.5 mr-2" />
+                    Bulk Upload
+                </Button>
+                 <Button variant="outline" size="sm">
+                    <Download className="h-3.5 w-3.5 mr-2" />
+                    Export Data
+                </Button>
+                <Button asChild size="sm" className="gap-1">
+                    <a href="#">
+                    <PlusCircle className="h-3.5 w-3.5" />
+                    <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                        Add Employee
+                    </span>
+                    </a>
+                </Button>
+            </div>
           </CardHeader>
           <CardContent>
             <Table>
@@ -67,7 +121,7 @@ export default function EmployeesPage() {
                         </Avatar>
                         <div className="grid gap-1">
                           <p className="font-medium leading-none">{employee.name}</p>
-                          <p className="text-sm text-muted-foreground md:hidden">{employee.email}</p>
+                          <p className="text-sm text-muted-foreground">{employee.email}</p>
                         </div>
                       </div>
                     </TableCell>
@@ -90,6 +144,7 @@ export default function EmployeesPage() {
                           <DropdownMenuLabel>Actions</DropdownMenuLabel>
                           <DropdownMenuItem>Edit</DropdownMenuItem>
                           <DropdownMenuItem>View Profile</DropdownMenuItem>
+                          <DropdownMenuItem>View History</DropdownMenuItem>
                           <DropdownMenuItem className="text-destructive">Archive</DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
