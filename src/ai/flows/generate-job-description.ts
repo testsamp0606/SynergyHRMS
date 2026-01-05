@@ -43,7 +43,13 @@ const generateJobDescriptionPrompt = ai.definePrompt({
   name: 'generateJobDescriptionPrompt',
   input: {schema: GenerateJobDescriptionInputSchema},
   output: {schema: GenerateJobDescriptionOutputSchema},
-  prompt: `You are an expert HR professional specializing in writing job descriptions. Based on the job title and responsibilities, generate a compelling job description.
+  prompt: `You are an expert HR professional specializing in writing job descriptions. Based on the job title and responsibilities, generate a compelling job description that is formatted in markdown.
+
+Include the following sections:
+- Job Summary
+- Responsibilities
+- Qualifications
+- Company Culture
 
 Job Title: {{{jobTitle}}}
 Responsibilities: {{{responsibilities}}}`,

@@ -55,7 +55,7 @@ export function RecruitmentForm() {
       <Card>
         <form action={descriptionFormAction}>
           <CardHeader>
-            <CardTitle>Job Details</CardTitle>
+            <CardTitle>Job Description Generator</CardTitle>
             <CardDescription>
               Provide the job title and key responsibilities to generate a compelling job description.
             </CardDescription>
@@ -90,7 +90,7 @@ export function RecruitmentForm() {
       {finalState.jobDescription && (
         <Card>
           <CardHeader className="flex flex-row items-center gap-4">
-             <Bot className="h-8 w-8 text-accent" />
+             <Bot className="h-8 w-8 text-primary" />
             <div>
               <CardTitle>Generated Job Description</CardTitle>
               <CardDescription>Review the AI-generated content below. You can now generate interview questions.</CardDescription>
@@ -111,7 +111,7 @@ export function RecruitmentForm() {
       {finalState.interviewQuestions && (
          <Card>
             <CardHeader className="flex flex-row items-center gap-4">
-                <Bot className="h-8 w-8 text-accent" />
+                <Bot className="h-8 w-8 text-primary" />
                 <div>
                     <CardTitle>Generated Interview Questions</CardTitle>
                     <CardDescription>Use these questions to assess candidates effectively.</CardDescription>

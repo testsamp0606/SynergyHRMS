@@ -17,7 +17,7 @@ const GenerateInterviewQuestionsInputSchema = z.object({
 export type GenerateInterviewQuestionsInput = z.infer<typeof GenerateInterviewQuestionsInputSchema>;
 
 const GenerateInterviewQuestionsOutputSchema = z.object({
-  interviewQuestions: z.string().describe('The generated interview questions.'),
+  interviewQuestions: z.string().describe('The generated interview questions formatted in markdown.'),
 });
 export type GenerateInterviewQuestionsOutput = z.infer<typeof GenerateInterviewQuestionsOutputSchema>;
 
@@ -29,7 +29,7 @@ const prompt = ai.definePrompt({
   name: 'generateInterviewQuestionsPrompt',
   input: {schema: GenerateInterviewQuestionsInputSchema},
   output: {schema: GenerateInterviewQuestionsOutputSchema},
-  prompt: `You are an expert recruiter. Generate a list of interview questions based on the following job description: {{{jobDescription}}}.\n\nConsider the skills, experience, and cultural fit required for the role.  Provide a diverse set of questions, including behavioral, situational, and technical questions.`,
+  prompt: `You are an expert recruiter. Generate a list of interview questions based on the following job description: {{{jobDescription}}}.\n\nConsider the skills, experience, and cultural fit required for the role.  Provide a diverse set of questions, including behavioral, situational, and technical questions. Format the output in markdown.`,
 });
 
 const generateInterviewQuestionsFlow = ai.defineFlow(
