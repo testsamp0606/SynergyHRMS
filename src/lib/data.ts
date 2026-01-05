@@ -1,3 +1,4 @@
+
 import { addDays, format } from 'date-fns';
 import type { Employee, LeaveRequest, PerformanceReview, PayrollRun, TrainingProgram, Asset, ExpenseClaim, Document, Announcement, UserProfile, Role, AuditLog, EmployeeDashboardSummary, RecentAnnouncement, EmployeeTask, PerformanceCycle, PerformanceGoal, HistoricalPerformanceReview, AttendanceData } from '@/lib/types';
 
@@ -173,4 +174,23 @@ export const attendanceData: AttendanceData = {
 export const holidays = [
     { date: new Date(2024, 7, 15), name: 'Independence Day' },
     { date: new Date(2024, 9, 31), name: 'Diwali' },
+];
+
+export const leaveTrends = [
+  { month: 'Mar', requests: 10 },
+  { month: 'Apr', requests: 12 },
+  { month: 'May', requests: 15 },
+  { month: 'Jun', requests: 14 },
+  { month: 'Jul', requests: 18 },
+  { month: 'Aug', requests: 20 },
+];
+
+export const latestPayroll = {
+  period: 'August 2024',
+  status: 'Pending',
+};
+
+export const complianceAlerts = [
+  { id: 'CMP01', title: 'Annual Anti-Harassment Training', dueDate: 'Sep 30, 2024' },
+  { id: 'CMP02', title: 'Form I-9 Reverification for 3 employees', dueDate: 'Aug 31, 2024' },
 ];
