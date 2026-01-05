@@ -50,3 +50,13 @@ export type UserProfile = {
     roleId: string;
     role?: Role; // Optional: Can be populated after fetching
 }
+
+export type TrainingProgram = {
+  id: string;
+  title: string;
+  category: 'Technical' | 'Soft Skills' | 'Leadership' | 'Compliance';
+  duration: string;
+  status: 'Active' | 'Draft' | 'Archived';
+  assignedTo: number;
+  completionRate: number;
+};

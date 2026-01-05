@@ -1,4 +1,4 @@
-import type { Employee, LeaveRequest, PerformanceReview, PayrollRun } from '@/lib/types';
+import type { Employee, LeaveRequest, PerformanceReview, PayrollRun, TrainingProgram } from '@/lib/types';
 
 export const employees: Employee[] = [
   { id: 'EMP001', name: 'Alice Johnson', email: 'alice.j@example.com', avatar: 'https://picsum.photos/seed/1/100/100', department: 'Engineering', role: 'Senior Software Engineer', status: 'Active' },
@@ -26,6 +26,14 @@ export const payrollRuns: PayrollRun[] = [
   { id: 'PAY001', period: 'July 2024', runDate: new Date('2024-07-31'), status: 'Completed', totalAmount: 55000.00 },
   { id: 'PAY002', period: 'June 2024', runDate: new Date('2024-06-30'), status: 'Completed', totalAmount: 54500.00 },
   { id: 'PAY003', period: 'May 2024', runDate: new Date('2024-05-31'), status: 'Completed', totalAmount: 54000.00 },
+];
+
+export const trainingPrograms: TrainingProgram[] = [
+    { id: 'TRN001', title: 'Advanced React Development', category: 'Technical', duration: '4 Weeks', status: 'Active', assignedTo: 25, completionRate: 75 },
+    { id: 'TRN002', title: 'Effective Communication', category: 'Soft Skills', duration: '2 Weeks', status: 'Active', assignedTo: 40, completionRate: 90 },
+    { id: 'TRN003', title: 'Leadership for New Managers', category: 'Leadership', duration: '6 Weeks', status: 'Active', assignedTo: 15, completionRate: 60 },
+    { id: 'TRN004', title: 'Cybersecurity Essentials', category: 'Compliance', duration: '1 Week', status: 'Draft', assignedTo: 0, completionRate: 0 },
+    { id: 'TRN005', title: 'Agile Project Management', category: 'Technical', duration: '3 Weeks', status: 'Archived', assignedTo: 50, completionRate: 100 },
 ];
 
 export const departmentHeadcount = [
