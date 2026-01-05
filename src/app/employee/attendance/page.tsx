@@ -13,6 +13,7 @@ import { useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Clock, LogIn, LogOut, CalendarPlus, Briefcase, Sun } from 'lucide-react';
 import { addDays, format, isSameDay, isValid } from 'date-fns';
+import { DayContent, DayProps } from 'react-day-picker';
 
 const attendanceData = {
   [format(new Date(), 'yyyy-MM-dd')]: { status: 'Present', checkIn: '09:05 AM', checkOut: '05:55 PM', totalHours: '8h 50m' },
@@ -26,6 +27,36 @@ const holidays = [
     { date: new Date(2024, 7, 15), name: 'Independence Day' },
     { date: new Date(2024, 9, 31), name: 'Diwali' },
 ];
+
+const CustomDay = (props: DayProps) => {
+    const { date } = props;
+    if (!isValid(date)) {
+        return <DayContent {...props} />;
+    }
+    const dayData = attendanceData[format(date, 'yyyy-MM-dd')];
+    let badgeClass = '';
+    if (isSameDay(date, new Date())) {
+        badgeClass = 'bg-blue-500 text-white';
+    } else if (dayData?.status === 'Present') {
+        badgeClass = 'bg-green-500 text-white';
+    } else if (dayData?.status === 'Absent') {
+        badgeClass = 'bg-red-500 text-white';
+    } else if (dayData?.status === 'On Leave') {
+        badgeClass = 'bg-yellow-500 text-white';
+    } else if (holidays.some(h => isSameDay(h.date, date))) {
+        badgeClass = 'bg-purple-500 text-white';
+    }
+
+    return (
+        <div className="relative flex items-center justify-center h-full w-full">
+            <DayContent {...props} />
+            {badgeClass && (
+                <span className={`absolute bottom-1 right-1 h-2 w-2 rounded-full ${badgeClass}`}></span>
+            )}
+        </div>
+    );
+};
+
 
 export default function EmployeeAttendancePage() {
   const [date, setDate] = useState<Date | undefined>(new Date());
@@ -71,40 +102,7 @@ export default function EmployeeAttendancePage() {
                 onSelect={setDate}
                 className="rounded-md border"
                 components={{
-                  Day: ({ date, ...props }) => {
-                    if (!isValid(date)) {
-                        return <div {...props.buttonProps} className={cn('h-9 w-9 p-0 font-normal relative flex items-center justify-center', props.className)}></div>;
-                    }
-
-                    const dayData = attendanceData[format(date, 'yyyy-MM-dd')];
-                    let badgeClass = '';
-                    if (isSameDay(date, new Date())) {
-                       badgeClass = 'bg-blue-500 text-white';
-                    } else if (dayData?.status === 'Present') {
-                      badgeClass = 'bg-green-500 text-white';
-                    } else if (dayData?.status === 'Absent') {
-                      badgeClass = 'bg-red-500 text-white';
-                    } else if (dayData?.status === 'On Leave') {
-                      badgeClass = 'bg-yellow-500 text-white';
-                    } else if (holidays.some(h => isSameDay(h.date, date))) {
-                        badgeClass = 'bg-purple-500 text-white';
-                    }
-
-                    return (
-                      <div
-                        {...props.buttonProps}
-                        className={cn(
-                          'h-9 w-9 p-0 font-normal relative flex items-center justify-center',
-                          props.className
-                        )}
-                      >
-                        <span>{format(date, 'd')}</span>
-                        {badgeClass && (
-                          <span className={`absolute bottom-1 right-1 h-2 w-2 rounded-full ${badgeClass}`}></span>
-                        )}
-                      </div>
-                    );
-                  },
+                  Day: CustomDay
                 }}
               />
             </CardContent>
