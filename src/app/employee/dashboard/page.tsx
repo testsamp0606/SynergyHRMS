@@ -40,16 +40,15 @@ export default function EmployeeDashboardPage() {
     return () => clearInterval(timerId);
   }, []);
 
-  const handlePunchIn = () => {
+  const handlePunch = () => {
     const now = new Date();
-    setPunchInTime(now);
-    setIsPunchedIn(true);
-  };
-
-  const handlePunchOut = () => {
-    const now = new Date();
-    setPunchOutTime(now);
-    setIsPunchedIn(false);
+    if (!isPunchedIn) {
+      setPunchInTime(now);
+      setIsPunchedIn(true);
+    } else {
+      setPunchOutTime(now);
+      setIsPunchedIn(false);
+    }
   };
   
   const getTotalHours = () => {
@@ -75,14 +74,15 @@ export default function EmployeeDashboardPage() {
                     </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                    <div className="flex gap-2">
-                         <Button className="w-full" onClick={handlePunchIn} disabled={isPunchedIn || !!punchOutTime}>
-                            <LogIn className="mr-2 h-4 w-4" /> Punch In
-                        </Button>
-                        <Button variant="outline" className="w-full" onClick={handlePunchOut} disabled={!isPunchedIn || !!punchOutTime}>
-                            <LogOut className="mr-2 h-4 w-4" /> Punch Out
-                        </Button>
-                    </div>
+                    <Button 
+                        className="w-full" 
+                        onClick={handlePunch} 
+                        disabled={!!punchOutTime}
+                        variant={isPunchedIn ? 'outline' : 'default'}
+                    >
+                        {isPunchedIn ? <LogOut className="mr-2 h-4 w-4" /> : <LogIn className="mr-2 h-4 w-4" />}
+                        {isPunchedIn ? 'Punch Out' : 'Punch In'}
+                    </Button>
                      {punchInTime && (
                         <div className="text-sm text-muted-foreground space-y-2">
                            <div className='flex justify-between'>
