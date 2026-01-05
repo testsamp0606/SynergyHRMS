@@ -69,7 +69,6 @@ export function AppSidebar() {
                 </svg>
                 <span className="text-xl font-semibold leading-none">Synergy</span>
             </div>
-            <SidebarTrigger className="mr-2" />
         </div>
       </SidebarHeader>
       <SidebarContent className="p-2">
