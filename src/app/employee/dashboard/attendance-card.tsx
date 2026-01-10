@@ -1,3 +1,4 @@
+
 'use client';
 import { useState, useEffect } from 'react';
 import { format, intervalToDuration, formatDuration } from 'date-fns';
@@ -29,14 +30,6 @@ export function AttendanceCard() {
           setElapsedTime(formatted);
         }
       }, 1000);
-    } else if (punchInTime && punchOutTime) {
-        const duration = intervalToDuration({ start: punchInTime, end: punchOutTime });
-        const formatted =
-          formatDuration(duration, { format: ['hours', 'minutes', 'seconds'] })
-            .replace(' seconds', 's')
-            .replace(' minutes', 'm')
-            .replace(' hours', 'h') || '0s';
-        setElapsedTime(formatted);
     } else {
         setElapsedTime('0h 0m 0s');
     }
@@ -45,7 +38,7 @@ export function AttendanceCard() {
       clearInterval(timerId);
       if (elapsedTimerId) clearInterval(elapsedTimerId);
     };
-  }, [isPunchedIn, punchInTime, punchOutTime]);
+  }, [isPunchedIn, punchInTime]);
 
   const handlePunch = () => {
     if (!isPunchedIn) {
@@ -89,22 +82,6 @@ export function AttendanceCard() {
             </div>
             <div className="flex justify-between">
               <span>Time Elapsed:</span>
-              <span className="font-medium text-foreground">{elapsedTime}</span>
-            </div>
-          </div>
-        )}
-         {punchInTime && punchOutTime && (
-          <div className="text-sm text-muted-foreground space-y-2">
-            <div className="flex justify-between">
-              <span>Punched In:</span>
-              <span className="font-medium text-foreground">{format(punchInTime, 'hh:mm:ss a')}</span>
-            </div>
-            <div className="flex justify-between">
-              <span>Punched Out:</span>
-              <span className="font-medium text-foreground">{format(punchOutTime, 'hh:mm:ss a')}</span>
-            </div>
-            <div className="flex justify-between">
-              <span>Total Time:</span>
               <span className="font-medium text-foreground">{elapsedTime}</span>
             </div>
           </div>
