@@ -1,3 +1,4 @@
+
 'use client';
 import { Header } from '@/components/layout/header';
 import {
@@ -15,14 +16,35 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
-import { Download, Edit, X } from 'lucide-react';
+import { Download, Edit, X, Camera } from 'lucide-react';
 import { employees } from '@/lib/data';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 
 const user = employees[0]; // Using Alice Johnson as the example user
 
 export default function EmployeeProfilePage() {
   const [isEditing, setIsEditing] = useState(false);
+  const [profileImage, setProfileImage] = useState(user.avatar);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      setProfileImage(URL.createObjectURL(file));
+    }
+  };
+  
+  const handleSave = () => {
+    setIsEditing(false);
+    // Here you would typically handle the form submission,
+    // like sending the data and new image to your backend.
+  };
+
+  const handleCancel = () => {
+    setIsEditing(false);
+    setProfileImage(user.avatar);
+  };
+
 
   return (
     <div className="flex min-h-screen w-full flex-col">
@@ -30,15 +52,36 @@ export default function EmployeeProfilePage() {
       <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
         <Card>
           <CardHeader className="flex flex-col items-center gap-4 text-center md:flex-row md:text-left">
-            <Avatar className="h-24 w-24">
-              <AvatarImage src={user.avatar} alt={user.name} />
-              <AvatarFallback>
-                {user.name
-                  .split(' ')
-                  .map((n) => n[0])
-                  .join('')}
-              </AvatarFallback>
-            </Avatar>
+            <div className="relative">
+                <Avatar className="h-24 w-24">
+                  <AvatarImage src={profileImage} alt={user.name} />
+                  <AvatarFallback>
+                    {user.name
+                      .split(' ')
+                      .map((n) => n[0])
+                      .join('')}
+                  </AvatarFallback>
+                </Avatar>
+                {isEditing && (
+                    <>
+                        <Input
+                            type="file"
+                            className="hidden"
+                            ref={fileInputRef}
+                            onChange={handleImageChange}
+                            accept="image/*"
+                        />
+                        <Button
+                            variant="outline"
+                            size="icon"
+                            className="absolute bottom-1 right-1 h-8 w-8 rounded-full"
+                            onClick={() => fileInputRef.current?.click()}
+                        >
+                            <Camera className="h-4 w-4" />
+                        </Button>
+                    </>
+                )}
+            </div>
             <div className="grid flex-1 gap-1">
               <CardTitle className="text-3xl">{user.name}</CardTitle>
               <CardDescription>{user.role}</CardDescription>
@@ -109,10 +152,10 @@ export default function EmployeeProfilePage() {
               </CardContent>
               {isEditing && (
                <CardFooter className="border-t px-6 py-4 justify-end gap-2">
-                <Button variant="outline" onClick={() => setIsEditing(false)}>
+                <Button variant="outline" onClick={handleCancel}>
                     <X className="mr-2 h-4 w-4" /> Cancel
                 </Button>
-                <Button onClick={() => setIsEditing(false)}>Save Changes</Button>
+                <Button onClick={handleSave}>Save Changes</Button>
               </CardFooter>
               )}
             </Card>
