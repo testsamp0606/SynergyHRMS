@@ -94,6 +94,22 @@ export function AttendanceCard() {
             </div>
           </div>
         )}
+         {punchInTime && punchOutTime && (
+          <div className="text-sm text-muted-foreground space-y-2">
+            <div className="flex justify-between">
+              <span>Punched In:</span>
+              <span className="font-medium text-foreground">{format(punchInTime, 'hh:mm:ss a')}</span>
+            </div>
+            <div className="flex justify-between">
+              <span>Punched Out:</span>
+              <span className="font-medium text-foreground">{format(punchOutTime, 'hh:mm:ss a')}</span>
+            </div>
+            <div className="flex justify-between">
+              <span>Total Time:</span>
+              <span className="font-medium text-foreground">{elapsedTime}</span>
+            </div>
+          </div>
+        )}
       </CardContent>
     </Card>
   );
