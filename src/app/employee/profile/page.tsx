@@ -15,12 +15,15 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
-import { Download, Edit } from 'lucide-react';
+import { Download, Edit, X } from 'lucide-react';
 import { employees } from '@/lib/data';
+import { useState } from 'react';
 
 const user = employees[0]; // Using Alice Johnson as the example user
 
 export default function EmployeeProfilePage() {
+  const [isEditing, setIsEditing] = useState(false);
+
   return (
     <div className="flex min-h-screen w-full flex-col">
       <Header title="My Profile" />
@@ -44,7 +47,7 @@ export default function EmployeeProfilePage() {
                 <span className="text-sm text-muted-foreground">80% Complete</span>
               </div>
             </div>
-             <Button variant="outline">
+             <Button variant="outline" onClick={() => setIsEditing(!isEditing)} disabled={isEditing}>
                 <Edit className="mr-2 h-4 w-4" /> Edit Profile
             </Button>
           </CardHeader>
@@ -75,12 +78,12 @@ export default function EmployeeProfilePage() {
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="phone">Phone Number</Label>
-                            <Input id="phone" defaultValue="+1 (555) 123-4567" />
+                            <Input id="phone" defaultValue="+1 (555) 123-4567" readOnly={!isEditing} />
                         </div>
                     </div>
                      <div className="space-y-2">
                         <Label htmlFor="address">Home Address</Label>
-                        <Input id="address" defaultValue="1234 Maple Street, Springfield, USA" />
+                        <Input id="address" defaultValue="1234 Maple Street, Springfield, USA" readOnly={!isEditing} />
                     </div>
                 </div>
 
@@ -91,22 +94,27 @@ export default function EmployeeProfilePage() {
                      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                         <div className="space-y-2">
                             <Label htmlFor="emergency-name">Full Name</Label>
-                            <Input id="emergency-name" defaultValue="Jane Johnson" />
+                            <Input id="emergency-name" defaultValue="Jane Johnson" readOnly={!isEditing} />
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="emergency-phone">Phone Number</Label>
-                            <Input id="emergency-phone" defaultValue="+1 (555) 987-6543" />
+                            <Input id="emergency-phone" defaultValue="+1 (555) 987-6543" readOnly={!isEditing} />
                         </div>
                          <div className="space-y-2 md:col-span-2">
                             <Label htmlFor="emergency-relation">Relationship</Label>
-                            <Input id="emergency-relation" defaultValue="Spouse" />
+                            <Input id="emergency-relation" defaultValue="Spouse" readOnly={!isEditing} />
                         </div>
                     </div>
                 </div>
               </CardContent>
-               <CardFooter className="border-t px-6 py-4">
-                <Button>Save Changes</Button>
+              {isEditing && (
+               <CardFooter className="border-t px-6 py-4 justify-end gap-2">
+                <Button variant="outline" onClick={() => setIsEditing(false)}>
+                    <X className="mr-2 h-4 w-4" /> Cancel
+                </Button>
+                <Button onClick={() => setIsEditing(false)}>Save Changes</Button>
               </CardFooter>
+              )}
             </Card>
           </TabsContent>
 
