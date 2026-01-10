@@ -16,64 +16,50 @@ import { addDays, format, isSameDay, isValid, intervalToDuration, formatDuration
 import { DayProps } from 'react-day-picker';
 import { cn } from '@/lib/utils';
 import { attendanceData, holidays } from '@/lib/data';
+import { useAttendanceStore } from '@/store/attendance-store';
 
 
 export default function EmployeeAttendancePage() {
   const [date, setDate] = useState<Date | undefined>(new Date());
-    const [punchInTime, setPunchInTime] = useState<Date | null>(null);
-    const [punchOutTime, setPunchOutTime] = useState<Date | null>(null);
-    const [elapsedTime, setElapsedTime] = useState("0h 0m 0s");
+  const { punchInTime, punchOutTime, punchIn, punchOut } = useAttendanceStore();
+  const [elapsedTime, setElapsedTime] = useState("0h 0m 0s");
 
-    const isPunchedIn = punchInTime && !punchOutTime;
+  const isPunchedIn = punchInTime && !punchOutTime;
     
     useEffect(() => {
-        let elapsedTimerId: NodeJS.Timeout;
+        let elapsedTimerId: NodeJS.Timeout | undefined;
         if (isPunchedIn) {
-        elapsedTimerId = setInterval(() => {
-            if (punchInTime) {
-            const duration = intervalToDuration({ start: punchInTime, end: new Date() });
-            const formatted = formatDuration(duration, { format: ['hours', 'minutes', 'seconds'] })
-                .replace(' seconds', 's')
-                .replace(' minutes', 'm')
-                .replace(' hours', 'h');
-            setElapsedTime(formatted || "0s");
-            }
-        }, 1000);
+            elapsedTimerId = setInterval(() => {
+                if (punchInTime) {
+                    const duration = intervalToDuration({ start: punchInTime, end: new Date() });
+                    const formatted = formatDuration(duration, { format: ['hours', 'minutes', 'seconds'] })
+                        .replace(' seconds', 's')
+                        .replace(' minutes', 'm')
+                        .replace(' hours', 'h');
+                    setElapsedTime(formatted || "0s");
+                }
+            }, 1000);
+        } else if (punchInTime && punchOutTime) {
+            const duration = intervalToDuration({ start: punchInTime, end: punchOutTime });
+            const formatted = formatDuration(duration, { format: ['hours', 'minutes'] });
+            setElapsedTime(formatted);
         }
+
 
         return () => {
             if (elapsedTimerId) clearInterval(elapsedTimerId);
         };
-    }, [isPunchedIn, punchInTime]);
+    }, [isPunchedIn, punchInTime, punchOutTime]);
 
 
   const selectedDayData = date ? attendanceData[format(date, 'yyyy-MM-dd')] : null;
   const selectedHoliday = date ? holidays.find(h => isSameDay(h.date, date)) : null;
 
-  const todayStr = format(new Date(), 'yyyy-MM-dd');
-  const todayData = attendanceData[todayStr] || {};
-  if (isPunchedIn && !punchOutTime) {
-      todayData.status = 'Present (Clocked In)';
-      todayData.checkIn = format(punchInTime!, 'hh:mm a');
-      todayData.checkOut = 'Pending';
-      todayData.totalHours = elapsedTime;
-  } else if (punchOutTime) {
-      todayData.status = 'Present';
-      if (punchInTime) {
-          todayData.checkIn = format(punchInTime, 'hh:mm a');
-          todayData.checkOut = format(punchOutTime, 'hh:mm a');
-          const duration = intervalToDuration({ start: punchInTime, end: punchOutTime });
-          todayData.totalHours = formatDuration(duration, { format: ['hours', 'minutes']});
-      }
-  }
-
   const handlePunch = () => {
-    const now = new Date();
     if (!isPunchedIn) {
-      setPunchInTime(now);
-      setPunchOutTime(null);
+      punchIn();
     } else {
-      setPunchOutTime(now);
+      punchOut();
     }
   };
 

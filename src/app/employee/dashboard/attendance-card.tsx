@@ -4,11 +4,11 @@ import { format, intervalToDuration, formatDuration } from 'date-fns';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Clock, LogIn, LogOut, CircleCheck } from 'lucide-react';
+import { useAttendanceStore } from '@/store/attendance-store';
 
 export function AttendanceCard() {
+  const { punchInTime, punchOutTime, punchIn, punchOut } = useAttendanceStore();
   const [time, setTime] = useState(new Date());
-  const [punchInTime, setPunchInTime] = useState<Date | null>(null);
-  const [punchOutTime, setPunchOutTime] = useState<Date | null>(null);
   const [elapsedTime, setElapsedTime] = useState('0h 0m 0s');
 
   const isPunchedIn = punchInTime && !punchOutTime;
@@ -16,7 +16,7 @@ export function AttendanceCard() {
   useEffect(() => {
     const timerId = setInterval(() => setTime(new Date()), 1000);
 
-    let elapsedTimerId: NodeJS.Timeout;
+    let elapsedTimerId: NodeJS.Timeout | undefined;
     if (isPunchedIn) {
       elapsedTimerId = setInterval(() => {
         if (punchInTime) {
@@ -29,30 +29,29 @@ export function AttendanceCard() {
           setElapsedTime(formatted);
         }
       }, 1000);
-    }
-
-    return () => {
-      clearInterval(timerId);
-      if (elapsedTimerId) clearInterval(elapsedTimerId);
-    };
-  }, [isPunchedIn, punchInTime]);
-
-  const handlePunch = () => {
-    const now = new Date();
-    if (!isPunchedIn) {
-      setPunchInTime(now);
-      setPunchOutTime(null);
-    } else {
-      setPunchOutTime(now);
-      if (punchInTime) {
-        const duration = intervalToDuration({ start: punchInTime, end: now });
+    } else if (punchInTime && punchOutTime) {
+        const duration = intervalToDuration({ start: punchInTime, end: punchOutTime });
         const formatted =
           formatDuration(duration, { format: ['hours', 'minutes', 'seconds'] })
             .replace(' seconds', 's')
             .replace(' minutes', 'm')
             .replace(' hours', 'h') || '0s';
         setElapsedTime(formatted);
-      }
+    } else {
+        setElapsedTime('0h 0m 0s');
+    }
+
+    return () => {
+      clearInterval(timerId);
+      if (elapsedTimerId) clearInterval(elapsedTimerId);
+    };
+  }, [isPunchedIn, punchInTime, punchOutTime]);
+
+  const handlePunch = () => {
+    if (!isPunchedIn) {
+      punchIn();
+    } else {
+      punchOut();
     }
   };
 
