@@ -27,25 +27,58 @@ import { employeeDashboardSummary, recentAnnouncements, employeeTasks } from '@/
 import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useState, useEffect } from 'react';
-import { format } from 'date-fns';
-import { useAttendanceStore } from '@/hooks/use-attendance-store';
+import { format, intervalToDuration, formatDuration } from 'date-fns';
 
 export default function EmployeeDashboardPage() {
   const { leaveBalance, upcomingPayslip, pendingExpenses } = employeeDashboardSummary;
   const [time, setTime] = useState(new Date());
 
-  const {
-    punchInTime,
-    punchOutTime,
-    isPunchedIn,
-    handlePunch,
-    getElapsedTime,
-  } = useAttendanceStore();
+  const [punchInTime, setPunchInTime] = useState<Date | null>(null);
+  const [punchOutTime, setPunchOutTime] = useState<Date | null>(null);
+  const [elapsedTime, setElapsedTime] = useState("0h 0m 0s");
+
+  const isPunchedIn = punchInTime && !punchOutTime;
 
   useEffect(() => {
     const timerId = setInterval(() => setTime(new Date()), 1000);
-    return () => clearInterval(timerId);
-  }, []);
+
+    let elapsedTimerId: NodeJS.Timeout;
+    if (isPunchedIn) {
+      elapsedTimerId = setInterval(() => {
+        if (punchInTime) {
+          const duration = intervalToDuration({ start: punchInTime, end: new Date() });
+          const formatted = formatDuration(duration, { format: ['hours', 'minutes', 'seconds'] })
+             .replace(' seconds', 's')
+             .replace(' minutes', 'm')
+             .replace(' hours', 'h');
+          setElapsedTime(formatted || "0s");
+        }
+      }, 1000);
+    }
+
+    return () => {
+      clearInterval(timerId);
+      if (elapsedTimerId) clearInterval(elapsedTimerId);
+    };
+  }, [isPunchedIn, punchInTime]);
+
+  const handlePunch = () => {
+    const now = new Date();
+    if (!isPunchedIn) {
+      setPunchInTime(now);
+      setPunchOutTime(null);
+    } else {
+      setPunchOutTime(now);
+       if (punchInTime) {
+          const duration = intervalToDuration({ start: punchInTime, end: now });
+          const formatted = formatDuration(duration, { format: ['hours', 'minutes', 'seconds'] })
+             .replace(' seconds', 's')
+             .replace(' minutes', 'm')
+             .replace(' hours', 'h');
+          setElapsedTime(formatted || "0s");
+        }
+    }
+  };
 
   return (
     <div className="flex min-h-screen w-full flex-col">
@@ -85,7 +118,7 @@ export default function EmployeeDashboardPage() {
                            </div>
                            <div className='flex justify-between'>
                                 <span>Time Elapsed:</span>
-                                <span className='font-medium text-foreground'>{getElapsedTime()}</span>
+                                <span className='font-medium text-foreground'>{elapsedTime}</span>
                            </div>
                         </div>
                     )}

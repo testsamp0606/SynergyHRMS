@@ -9,25 +9,43 @@ import {
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Clock, LogIn, LogOut, CalendarPlus, Briefcase, Sun } from 'lucide-react';
-import { addDays, format, isSameDay, isValid } from 'date-fns';
+import { addDays, format, isSameDay, isValid, intervalToDuration, formatDuration } from 'date-fns';
 import { DayProps } from 'react-day-picker';
 import { cn } from '@/lib/utils';
-import { useAttendanceStore } from '@/hooks/use-attendance-store';
 import { attendanceData, holidays } from '@/lib/data';
 
 
 export default function EmployeeAttendancePage() {
   const [date, setDate] = useState<Date | undefined>(new Date());
-    const {
-    punchInTime,
-    punchOutTime,
-    isPunchedIn,
-    handlePunch,
-    getElapsedTime,
-  } = useAttendanceStore();
+    const [punchInTime, setPunchInTime] = useState<Date | null>(null);
+    const [punchOutTime, setPunchOutTime] = useState<Date | null>(null);
+    const [elapsedTime, setElapsedTime] = useState("0h 0m 0s");
+
+    const isPunchedIn = punchInTime && !punchOutTime;
+    
+    useEffect(() => {
+        let elapsedTimerId: NodeJS.Timeout;
+        if (isPunchedIn) {
+        elapsedTimerId = setInterval(() => {
+            if (punchInTime) {
+            const duration = intervalToDuration({ start: punchInTime, end: new Date() });
+            const formatted = formatDuration(duration, { format: ['hours', 'minutes', 'seconds'] })
+                .replace(' seconds', 's')
+                .replace(' minutes', 'm')
+                .replace(' hours', 'h');
+            setElapsedTime(formatted || "0s");
+            }
+        }, 1000);
+        }
+
+        return () => {
+            if (elapsedTimerId) clearInterval(elapsedTimerId);
+        };
+    }, [isPunchedIn, punchInTime]);
+
 
   const selectedDayData = date ? attendanceData[format(date, 'yyyy-MM-dd')] : null;
   const selectedHoliday = date ? holidays.find(h => isSameDay(h.date, date)) : null;
@@ -38,13 +56,26 @@ export default function EmployeeAttendancePage() {
       todayData.status = 'Present (Clocked In)';
       todayData.checkIn = format(punchInTime!, 'hh:mm a');
       todayData.checkOut = 'Pending';
-      todayData.totalHours = getElapsedTime();
+      todayData.totalHours = elapsedTime;
   } else if (punchOutTime) {
       todayData.status = 'Present';
-      todayData.checkIn = format(punchInTime!, 'hh:mm a');
-      todayData.checkOut = format(punchOutTime, 'hh:mm a');
-      todayData.totalHours = getElapsedTime();
+      if (punchInTime) {
+          todayData.checkIn = format(punchInTime, 'hh:mm a');
+          todayData.checkOut = format(punchOutTime, 'hh:mm a');
+          const duration = intervalToDuration({ start: punchInTime, end: punchOutTime });
+          todayData.totalHours = formatDuration(duration, { format: ['hours', 'minutes']});
+      }
   }
+
+  const handlePunch = () => {
+    const now = new Date();
+    if (!isPunchedIn) {
+      setPunchInTime(now);
+      setPunchOutTime(null);
+    } else {
+      setPunchOutTime(now);
+    }
+  };
 
 
     const CustomDay = (props: DayProps) => {
@@ -139,13 +170,13 @@ export default function EmployeeAttendancePage() {
                     <CardTitle>Details for {date ? format(date, "MMMM d") : 'selected date'}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    {date && isSameDay(date, new Date()) && isPunchedIn ? (
+                    {date && isSameDay(date, new Date()) && punchInTime ? (
                          <div>
                             <Badge className='bg-green-500'>Present (Clocked In)</Badge>
                              <div className="mt-4 space-y-2 text-sm">
                                 <div className="flex justify-between"><span>Check-in:</span> <span>{punchInTime ? format(punchInTime, 'hh:mm a') : '-'}</span></div>
                                 <div className="flex justify-between"><span>Check-out:</span> <span>{punchOutTime ? format(punchOutTime, 'hh:mm a') : 'Pending'}</span></div>
-                                <div className="flex justify-between font-semibold"><span>Total Hours:</span> <span>{getElapsedTime()}</span></div>
+                                <div className="flex justify-between font-semibold"><span>Total Hours:</span> <span>{elapsedTime}</span></div>
                              </div>
                         </div>
                     ) : selectedDayData ? (
