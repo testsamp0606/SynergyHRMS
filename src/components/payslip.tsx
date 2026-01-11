@@ -9,7 +9,6 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Separator } from './ui/separator';
 
 const payslip = {
     id: 'PSLIP-AUG2024-001',
@@ -45,7 +44,8 @@ export function Payslip() {
         // This is a simple implementation. In a real app, use a library.
         const a = ['','one ','two ','three ','four ', 'five ','six ','seven ','eight ','nine ','ten ','eleven ','twelve ','thirteen ','fourteen ','fifteen ','sixteen ','seventeen ','eighteen ','nineteen '];
         const b = ['', '', 'twenty','thirty','forty','fifty', 'sixty','seventy','eighty','ninety'];
-        const number = parseFloat(num.toFixed(2).toString().replace('.', ''));
+        if (num === 0) return 'ZERO';
+        const number = parseFloat(num.toFixed(2).replace('.', ''));
         if (number.toString().length > 9) return 'overflow';
         const n = ('000000000' + number).substr(-9).match(/^(\d{2})(\d{2})(\d{2})(\d{1})(\d{2})$/);
         if (!n) return '';
@@ -54,11 +54,21 @@ export function Payslip() {
         str += (parseInt(n[2]) != 0) ? (a[Number(n[2])] || b[n[2][0]] + ' ' + a[n[2][1]]) + 'lakh ' : '';
         str += (parseInt(n[3]) != 0) ? (a[Number(n[3])] || b[n[3][0]] + ' ' + a[n[3][1]]) + 'thousand ' : '';
         str += (parseInt(n[4]) != 0) ? (a[Number(n[4])] || b[n[4][0]] + ' ' + a[n[4][1]]) + 'hundred ' : '';
-        str += (parseInt(n[5]) != 0) ? ((str != '') ? 'and ' : '') + (a[Number(n[5])] || b[n[5][0]] + ' ' + a[n[5][1]]) + 'only ' : '';
-        return str.trim().replace(/\s+/g, ' ').toUpperCase();
+        str += (parseInt(n[5]) != 0) ? ((str != '') ? 'and ' : '') + (a[Number(n[5])] || b[n[5][0]] + ' ' + a[n[5][1]]) : '';
+        return (str.trim().replace(/\s+/g, ' ') + ' Only').toUpperCase();
     }
+    
+    const allItems = [
+        ...payslip.earnings.map(e => ({...e, type: 'earning'})),
+        {component: 'Gross Earnings', amount: totalEarnings, type: 'earning-total'},
+        ...payslip.deductions.map(d => ({...d, type: 'deduction'})),
+        {component: 'Total Deductions', amount: totalDeductions, type: 'deduction-total'},
+        {component: 'Net Pay', amount: netPay, type: 'net-total'},
+    ];
+
+
   return (
-    <div className="max-w-4xl mx-auto bg-white text-black font-sans shadow-lg rounded-sm" id="payslip-content">
+    <div className="bg-white text-black font-sans" id="payslip-content">
        <style>{`
         @media print {
             body {
@@ -68,127 +78,72 @@ export function Payslip() {
             .no-print {
                 display: none;
             }
-            body > div:first-child {
-              padding: 0;
-            }
-            #payslip-content {
-              box-shadow: none;
-              border: none;
-            }
         }
       `}</style>
-      <div className='p-4 sm:p-8'>
+      <div className='p-2'>
         <header className="flex justify-between items-center pb-4 border-b">
             <div>
-            <h1 className="text-3xl font-bold">Synergy Corp</h1>
-            <p>123 Innovation Drive, Tech City, 12345</p>
+                <h1 className="text-2xl font-bold">Synergy Corp</h1>
+                <p className="text-xs">123 Innovation Drive, Tech City, 12345</p>
             </div>
             <div className="text-right">
-            <h2 className="text-2xl font-semibold text-gray-700">Payslip</h2>
-            <p className="text-sm">For the month of {new Date(payslip.payPeriod.split(' - ')[0]).toLocaleString('default', { month: 'long', year: 'numeric' })}</p>
+                <h2 className="text-xl font-semibold text-gray-700">Payslip</h2>
+                <p className="text-xs">For {new Date(payslip.payPeriod.split(' - ')[0]).toLocaleString('default', { month: 'long', year: 'numeric' })}</p>
             </div>
         </header>
 
-        <section className="my-6">
-            <h3 className="font-semibold mb-4 text-center text-lg">Employee Summary</h3>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm border p-4 rounded-md">
-            <div>
-                <p className="text-gray-500">Employee Name</p>
-                <p className="font-medium">{payslip.employeeName}</p>
-            </div>
-            <div>
-                <p className="text-gray-500">Employee ID</p>
-                <p className="font-medium">{payslip.employeeId}</p>
-            </div>
-            <div>
-                <p className="text-gray-500">Department</p>
-                <p className="font-medium">{payslip.department}</p>
-            </div>
-            <div>
-                <p className="text-gray-500">Designation</p>
-                <p className="font-medium">{payslip.role}</p>
-            </div>
-            <div>
-                <p className="text-gray-500">Pay Period</p>
-                <p className="font-medium">{payslip.payPeriod}</p>
-            </div>
-            <div>
-                <p className="text-gray-500">Pay Date</p>
-                <p className="font-medium">{payslip.payDate}</p>
-            </div>
+        <section className="my-4">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs border p-2 rounded-md">
+                <div><p className="text-gray-500">Employee Name</p><p className="font-medium">{payslip.employeeName}</p></div>
+                <div><p className="text-gray-500">Employee ID</p><p className="font-medium">{payslip.employeeId}</p></div>
+                <div><p className="text-gray-500">Department</p><p className="font-medium">{payslip.department}</p></div>
+                <div><p className="text-gray-500">Designation</p><p className="font-medium">{payslip.role}</p></div>
             </div>
         </section>
 
-        <section className="my-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div>
-                    <h3 className="font-semibold mb-2 text-center text-lg">Earnings</h3>
-                    <Table>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead className="text-black">Description</TableHead>
-                                <TableHead className="text-right text-black">Amount</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {payslip.earnings.map(item => (
-                                <TableRow key={item.component}>
-                                    <TableCell>{item.component}</TableCell>
-                                    <TableCell className="text-right">{currencyFormatter.format(item.amount)}</TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                        <TableFooter>
-                            <TableRow className="bg-gray-100">
-                                <TableCell className="font-bold">Total Earnings</TableCell>
-                                <TableCell className="text-right font-bold">{currencyFormatter.format(totalEarnings)}</TableCell>
-                            </TableRow>
-                        </TableFooter>
-                    </Table>
-                </div>
-                <div>
-                    <h3 className="font-semibold mb-2 text-center text-lg">Deductions</h3>
-                    <Table>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead className="text-black">Description</TableHead>
-                                <TableHead className="text-right text-black">Amount</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {payslip.deductions.map(item => (
-                                <TableRow key={item.component}>
-                                    <TableCell>{item.component}</TableCell>
-                                    <TableCell className="text-right">{currencyFormatter.format(item.amount)}</TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                        <TableFooter>
-                            <TableRow className="bg-gray-100">
-                                <TableCell className="font-bold">Total Deductions</TableCell>
-                                <TableCell className="text-right font-bold">{currencyFormatter.format(totalDeductions)}</TableCell>
-                            </TableRow>
-                        </TableFooter>
-                    </Table>
-                </div>
-            </div>
+        <section className="my-4">
+            <Table>
+                <TableHeader>
+                    <TableRow>
+                        <TableHead className="text-black font-semibold">Earnings</TableHead>
+                        <TableHead className="text-right text-black font-semibold">Amount</TableHead>
+                        <TableHead className="text-black font-semibold">Deductions</TableHead>
+                        <TableHead className="text-right text-black font-semibold">Amount</TableHead>
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
+                    {Array.from({ length: Math.max(payslip.earnings.length, payslip.deductions.length) }).map((_, index) => (
+                        <TableRow key={index}>
+                            <TableCell>{payslip.earnings[index]?.component || ''}</TableCell>
+                            <TableCell className="text-right">{payslip.earnings[index] ? currencyFormatter.format(payslip.earnings[index].amount) : ''}</TableCell>
+                            <TableCell>{payslip.deductions[index]?.component || ''}</TableCell>
+                            <TableCell className="text-right">{payslip.deductions[index] ? currencyFormatter.format(payslip.deductions[index].amount) : ''}</TableCell>
+                        </TableRow>
+                    ))}
+                </TableBody>
+                <TableFooter>
+                    <TableRow className="bg-gray-100">
+                        <TableCell className="font-bold">Total Earnings</TableCell>
+                        <TableCell className="text-right font-bold">{currencyFormatter.format(totalEarnings)}</TableCell>
+                        <TableCell className="font-bold">Total Deductions</TableCell>
+                        <TableCell className="text-right font-bold">{currencyFormatter.format(totalDeductions)}</TableCell>
+                    </TableRow>
+                </TableFooter>
+            </Table>
         </section>
 
-        <Separator className="my-6" />
-
-        <section className="my-6 bg-gray-100 p-4 rounded-md">
+        <section className="my-4 bg-gray-100 p-2 rounded-md">
             <div className="flex justify-between items-center">
-                <h3 className="font-bold text-lg">Net Pay</h3>
-                <p className="font-bold text-lg">{currencyFormatter.format(netPay)}</p>
+                <h3 className="font-bold text-md">Net Pay (Total Earnings - Total Deductions)</h3>
+                <p className="font-bold text-md">{currencyFormatter.format(netPay)}</p>
             </div>
-            <p className="text-sm text-right mt-1">
-                ( {numberToWords(netPay)} )
+            <p className="text-xs text-right mt-1 font-semibold">
+                (Amount in words: {numberToWords(netPay)})
             </p>
         </section>
 
-        <footer className="mt-8 pt-4 border-t text-center text-xs text-gray-500">
+        <footer className="mt-6 pt-2 border-t text-center text-xs text-gray-500">
             <p>This is a computer-generated document and does not require a signature.</p>
-            <p>Synergy Corp | Email: hr@synergy.com | Phone: 1-800-123-4567</p>
         </footer>
       </div>
     </div>

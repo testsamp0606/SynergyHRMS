@@ -20,14 +20,13 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableHead,
-  TableHeader,
   TableRow,
 } from '@/components/ui/table';
 import { Separator } from '@/components/ui/separator';
-import { Download, BadgeCheck } from 'lucide-react';
-import Link from 'next/link';
+import { Download, BadgeCheck, Eye } from 'lucide-react';
 import React from 'react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from '@/components/ui/dialog';
+import { Payslip } from '@/components/payslip';
 
 const payslipData = {
   'aug-2024': {
@@ -74,6 +73,17 @@ export default function EmployeePayrollPage() {
   const totalEarnings = currentPayslip.earnings.reduce((sum, item) => sum + item.amount, 0);
   const totalDeductions = currentPayslip.deductions.reduce((sum, item) => sum + item.amount, 0);
   const netPay = totalEarnings - totalDeductions;
+  
+  const handlePrint = () => {
+    const printContent = document.getElementById('payslip-content');
+    if (printContent) {
+        const originalContents = document.body.innerHTML;
+        document.body.innerHTML = printContent.innerHTML;
+        window.print();
+        document.body.innerHTML = originalContents;
+        window.location.reload();
+    }
+  };
 
   return (
     <div className="flex min-h-screen w-full flex-col">
@@ -164,11 +174,26 @@ export default function EmployeePayrollPage() {
               </div>
             </CardContent>
             <CardFooter className="border-t px-6 py-4">
-              <Button asChild>
-                <Link href="/employee/payroll/payslip" target="_blank">
-                    <Download className="mr-2 h-4 w-4" /> Download Payslip
-                </Link>
-              </Button>
+               <Dialog>
+                <DialogTrigger asChild>
+                    <Button>
+                        <Eye className="mr-2 h-4 w-4" /> View Payslip
+                    </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-4xl p-0">
+                    <DialogHeader className="p-6 pb-0">
+                        <DialogTitle>Payslip for {currentPayslip.period}</DialogTitle>
+                    </DialogHeader>
+                    <div className="p-6">
+                        <Payslip />
+                    </div>
+                    <DialogFooter className="bg-muted p-4 justify-end">
+                        <Button variant="outline" onClick={handlePrint}>
+                            <Download className="mr-2 h-4 w-4" /> Download PDF
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+               </Dialog>
             </CardFooter>
           </Card>
           
