@@ -26,6 +26,8 @@ import {
 } from '@/components/ui/table';
 import { Separator } from '@/components/ui/separator';
 import { Download, BadgeCheck } from 'lucide-react';
+import Link from 'next/link';
+import React from 'react';
 
 const payslipData = {
   'aug-2024': {
@@ -162,8 +164,10 @@ export default function EmployeePayrollPage() {
               </div>
             </CardContent>
             <CardFooter className="border-t px-6 py-4">
-              <Button>
-                <Download className="mr-2 h-4 w-4" /> Download Payslip
+              <Button asChild>
+                <Link href="/employee/payroll/payslip" target="_blank">
+                    <Download className="mr-2 h-4 w-4" /> Download Payslip
+                </Link>
               </Button>
             </CardFooter>
           </Card>
@@ -201,6 +205,3 @@ export default function EmployeePayrollPage() {
     </div>
   );
 }
-
-// Added React import for useState
-import React from 'react';
