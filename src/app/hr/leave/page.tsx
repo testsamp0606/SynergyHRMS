@@ -32,7 +32,6 @@ import {
   isFuture
 } from 'date-fns';
 import { Check, X, PlusCircle } from "lucide-react"
-import { HrAttendanceCard } from "../dashboard/hr-attendance-card"
 import {
   Select,
   SelectContent,
@@ -132,8 +131,8 @@ export default function LeavePage() {
                 </CardContent>
             </Card>
         </div>
-        <div className="grid gap-4 md:grid-cols-1 lg:grid-cols-7">
-          <Card className="lg:col-span-4">
+        <div className="grid gap-4 md:grid-cols-1">
+          <Card>
             <CardHeader>
               <CardTitle>All Leave Requests</CardTitle>
               <CardDescription>Review and respond to leave requests.</CardDescription>
@@ -184,7 +183,7 @@ export default function LeavePage() {
               </Table>
             </CardContent>
           </Card>
-          <Card className="lg:col-span-3">
+          <Card>
             <CardHeader>
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                   <div>

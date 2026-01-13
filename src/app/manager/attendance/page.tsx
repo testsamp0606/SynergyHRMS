@@ -122,8 +122,8 @@ export default function ManagerAttendancePage() {
             </CardContent>
           </Card>
         </div>
-        <div className="grid gap-4 md:grid-cols-1 lg:grid-cols-7">
-          <Card className="lg:col-span-4">
+        <div className="grid gap-4 md:grid-cols-1">
+          <Card>
             <CardHeader>
               <CardTitle>Pending Requests</CardTitle>
               <CardDescription>
@@ -190,7 +190,7 @@ export default function ManagerAttendancePage() {
               </Table>
             </CardContent>
           </Card>
-          <Card className="lg:col-span-3">
+          <Card>
             <CardHeader>
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <div>
