@@ -33,15 +33,13 @@ import {
   eachWeekOfInterval,
   format,
   getWeek,
-  isSameDay,
-  eachDayOfInterval,
+  isSameMonth,
   parse,
   subMonths,
-  isSameMonth,
 } from 'date-fns';
 import { timesheetData } from '@/lib/data';
 import type { TimesheetEntry } from '@/lib/types';
-import { Save, Send, Clock, Upload } from 'lucide-react';
+import { Save, Send, Upload } from 'lucide-react';
 
 const statusVariant: { [key in TimesheetEntry['status']]: 'default' | 'secondary' | 'outline' | 'destructive' } = {
   'Approved': 'default',
@@ -76,17 +74,18 @@ export default function TimesheetPage() {
   const [entries, setEntries] = useState<TimesheetEntry[]>(timesheetData);
 
   useEffect(() => {
-    setWeeks(getWeeksForMonth(selectedMonth));
-    setSelectedWeek(getWeeksForMonth(selectedMonth)[0]?.value);
+    const newWeeks = getWeeksForMonth(selectedMonth);
+    setWeeks(newWeeks);
+    setSelectedWeek(newWeeks[0]?.value);
   }, [selectedMonth]);
-
+  
   const isCurrentMonth = isSameMonth(selectedMonth, new Date());
 
   const handleTimeChange = (id: string, field: 'loginTime' | 'logoutTime', value: string) => {
     setEntries(prevEntries => {
       const newEntries = prevEntries.map(entry => {
         if (entry.id === id) {
-          const updatedEntry = { ...entry, [field]: value };
+          const updatedEntry = { ...entry, [field]: value, status: 'Draft' as const };
           if (updatedEntry.loginTime && updatedEntry.logoutTime) {
             try {
               const login = parse(updatedEntry.loginTime, 'HH:mm', new Date());
@@ -94,6 +93,8 @@ export default function TimesheetPage() {
               if (logout > login) {
                 const diff = (logout.getTime() - login.getTime()) / (1000 * 60 * 60);
                 updatedEntry.totalHours = `${diff.toFixed(2)}h`;
+              } else {
+                updatedEntry.totalHours = '0h';
               }
             } catch (e) {
                 // handle invalid time format
@@ -110,6 +111,10 @@ export default function TimesheetPage() {
   const getWeekNumber = (date: Date) => getWeek(date, { weekStartsOn: 1 });
 
   const monthOptions = getMonthsForSelection();
+
+  const filteredEntries = entries.filter(entry => 
+    isSameMonth(entry.date, selectedMonth) && getWeekNumber(entry.date) === selectedWeek
+  );
 
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
@@ -159,7 +164,7 @@ export default function TimesheetPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {entries.filter(entry => getWeekNumber(entry.date) === selectedWeek && isSameMonth(entry.date, selectedMonth)).map((entry) => (
+              {filteredEntries.map((entry) => (
                 <TableRow key={entry.id}>
                   <TableCell className="font-medium">{format(entry.date, 'MMM d, yyyy')}</TableCell>
                   <TableCell>{format(entry.date, 'EEEE')}</TableCell>

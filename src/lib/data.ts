@@ -295,19 +295,41 @@ export const regularizationRequests: RegularizationRequest[] = [
     { id: 'REG003', date: subDays(new Date(), 10), reason: 'Overtime', status: 'Rejected', remarks: 'Overtime not pre-approved.' },
 ];
 
-const currentMonthDays = eachDayOfInterval({
-  start: startOfMonth(new Date()),
-  end: endOfMonth(new Date())
-});
+const generateTimesheetForMonth = (month: Date): TimesheetEntry[] => {
+  const days = eachDayOfInterval({
+    start: startOfMonth(month),
+    end: endOfMonth(month)
+  });
 
-export const timesheetData: TimesheetEntry[] = currentMonthDays.map((day, i) => ({
-    id: `TS-${format(day, 'yyyy-MM-dd')}`,
-    date: day,
-    loginTime: '09:00',
-    logoutTime: '17:00',
-    totalHours: '8h 0m',
-    status: i < 7 ? 'Approved' : (i < 14 ? 'Pending' : 'Draft'),
-}));
+  const isCurrentMonth = format(month, 'yyyy-MM') === format(new Date(), 'yyyy-MM');
 
+  return days.map((day, i) => {
+    const dayOfWeek = day.getDay();
+    const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+
+    let status: TimesheetEntry['status'] = 'Draft';
+    if (!isCurrentMonth) {
+        status = i % 10 === 0 ? 'Rejected' : 'Approved';
+    } else {
+        if (i < 7) status = 'Approved';
+        else if (i < 14) status = 'Pending';
+    }
+
+    return {
+        id: `TS-${format(day, 'yyyy-MM-dd')}`,
+        date: day,
+        loginTime: isWeekend ? '' : '09:00',
+        logoutTime: isWeekend ? '' : '17:00',
+        totalHours: isWeekend ? '0h' : '8h 0m',
+        status: isWeekend ? 'Draft' : status,
+    }
+  });
+};
+
+export const timesheetData: TimesheetEntry[] = [
+    ...generateTimesheetForMonth(new Date()),
+    ...generateTimesheetForMonth(subMonths(new Date(), 1)),
+    ...generateTimesheetForMonth(subMonths(new Date(), 2)),
+];
 
 export { type Employee };
