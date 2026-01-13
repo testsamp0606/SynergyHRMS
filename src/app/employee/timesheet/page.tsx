@@ -30,7 +30,7 @@ import {
 import {
   startOfMonth,
   endOfMonth,
-  eachWeek,
+  eachWeekOfInterval,
   format,
   getWeek,
   isSameDay,
@@ -51,7 +51,7 @@ const statusVariant: { [key in TimesheetEntry['status']]: 'default' | 'secondary
 const getWeeksForMonth = (date: Date) => {
   const start = startOfMonth(date);
   const end = endOfMonth(date);
-  const weeks = eachWeek(new Date(start), { weekStartsOn: 1 });
+  const weeks = eachWeekOfInterval({ start, end }, { weekStartsOn: 1 });
   return weeks.map((weekStart, index) => ({
     label: `Week ${index + 1} (${format(weekStart, 'MMM d')})`,
     value: getWeek(weekStart, { weekStartsOn: 1 }),
