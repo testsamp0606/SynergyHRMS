@@ -170,6 +170,9 @@ export const attendanceData: AttendanceData = {
   [format(addDays(new Date(), -2), 'yyyy-MM-dd')]: { status: 'Absent' },
   [format(addDays(new Date(), -3), 'yyyy-MM-dd')]: { status: 'On Leave' },
   [format(addDays(new Date(), -4), 'yyyy-MM-dd')]: { status: 'Present', checkIn: '09:15 AM', checkOut: '06:05 PM', totalHours: '8h 50m' },
+  [format(addDays(new Date(), -9), 'yyyy-MM-dd')]: { status: 'Half Day' },
+  [format(addDays(new Date(), -10), 'yyyy-MM-dd')]: { status: 'Week Off' },
+  [format(addDays(new Date(), -11), 'yyyy-MM-dd')]: { status: 'Week Off' },
 };
 
 export const holidays = [

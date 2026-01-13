@@ -12,8 +12,8 @@ import { Calendar } from '@/components/ui/calendar';
 import { useState, useEffect } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Clock, LogIn, LogOut, CalendarPlus, Briefcase, Sun } from 'lucide-react';
-import { addDays, format, isSameDay, isValid, intervalToDuration, formatDuration } from 'date-fns';
-import { DayProps } from 'react-day-picker';
+import { addDays, format, isSameDay, isValid, intervalToDuration, formatDuration, getDay } from 'date-fns';
+import { DayProps, DayContent, DayContentProps } from 'react-day-picker';
 import { cn } from '@/lib/utils';
 import { attendanceData, holidays } from '@/lib/data';
 import { useAttendanceStore } from '@/store/attendance-store';
@@ -64,41 +64,46 @@ export default function EmployeeAttendancePage() {
   };
 
 
-    const CustomDay = (props: DayProps) => {
-        const { date, displayMonth } = props;
-        if (!isValid(date) || !displayMonth) {
-            return <td role="gridcell" className="rdp-cell"></td>;
-        }
-
+    const CustomDay = (props: DayContentProps) => {
+        const { date, activeModifiers } = props;
         const dateStr = format(date, 'yyyy-MM-dd');
         const dayData = attendanceData[dateStr];
-
-        let badgeClass = '';
-        if (dayData?.status?.startsWith('Present')) {
-            badgeClass = 'bg-green-500';
-        } else if (dayData?.status === 'Absent') {
-            badgeClass = 'bg-red-500';
-        } else if (dayData?.status === 'On Leave') {
-            badgeClass = 'bg-yellow-500';
-        } else if (holidays.some(h => isSameDay(h.date, date))) {
-            badgeClass = 'bg-purple-500';
+        const holiday = holidays.find(h => isSameDay(h.date, date));
+        const dayOfWeek = getDay(date);
+        
+        let status = dayData?.status;
+        let cellClass = '';
+        
+        if (holiday) {
+            status = holiday.name;
+            cellClass = 'bg-blue-50 dark:bg-blue-900/20 text-blue-600';
+        } else if (dayData) {
+             switch (dayData.status) {
+                case 'Present':
+                case 'Half Day':
+                    cellClass = 'bg-green-50 dark:bg-green-900/20 text-green-700';
+                    break;
+                case 'Absent':
+                    cellClass = 'bg-red-50 dark:bg-red-900/20 text-red-700';
+                    break;
+                case 'On Leave':
+                    cellClass = 'bg-yellow-50 dark:bg-yellow-900/20 text-yellow-700';
+                    break;
+                 case 'Week Off':
+                     cellClass = 'bg-gray-100 dark:bg-gray-800 text-gray-500';
+                     break;
+            }
+        } else if (dayOfWeek === 0 || dayOfWeek === 6) {
+             status = "Week Off";
+             cellClass = 'bg-gray-100 dark:bg-gray-800 text-gray-500';
         }
 
+
         return (
-            <td role="gridcell" className={cn("rdp-cell relative", props.className)}>
-                <button
-                    {...props.buttonProps}
-                    type="button"
-                    className={cn("rdp-button_reset rdp-button", props.buttonProps?.className)}
-                    disabled={props.disabled}
-                    tabIndex={props.tabIndex}
-                >
-                    {format(date, 'd')}
-                    {badgeClass && (
-                        <span className={`absolute bottom-1 right-1 h-2 w-2 rounded-full ${badgeClass}`}></span>
-                    )}
-                </button>
-            </td>
+            <div className={cn('flex flex-col justify-between h-full relative p-1', cellClass, {'ring-2 ring-primary ring-inset': activeModifiers.selected })}>
+               <div className="absolute top-1 left-1 text-xs font-semibold">{format(date, 'd')}</div>
+               {status && <div className="text-[10px] font-medium leading-tight mt-4 break-words">{status}</div>}
+            </div>
         );
     };
 
@@ -145,7 +150,7 @@ export default function EmployeeAttendancePage() {
                 onSelect={setDate}
                 className="rounded-md border"
                 components={{
-                  Day: CustomDay
+                  DayContent: CustomDay
                 }}
               />
             </CardContent>
