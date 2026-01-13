@@ -203,7 +203,6 @@ export default function TimesheetPage() {
         </CardContent>
         {isCurrentMonth && (
             <CardFooter className="justify-end gap-2">
-                <Button variant="outline"><Upload className="mr-2 h-4 w-4" /> Submit Sitesheet</Button>
                 <Button variant="outline"><Save className="mr-2 h-4 w-4" /> Save as Draft</Button>
                 <Button><Send className="mr-2 h-4 w-4" /> Submit for Approval</Button>
             </CardFooter>
