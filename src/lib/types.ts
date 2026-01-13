@@ -1,3 +1,4 @@
+
 export type Employee = {
   id: string;
   name: string;
@@ -8,6 +9,13 @@ export type Employee = {
   status: 'Active' | 'On Leave' | 'Inactive';
 };
 
+export type LeaveRequestStatus = 
+  | 'Pending Manager Approval'
+  | 'Manager Approved'
+  | 'Admin Approved'
+  | 'Rejected'
+  | 'Cancelled';
+
 export type LeaveRequest = {
   id: string;
   employeeName: string;
@@ -15,7 +23,7 @@ export type LeaveRequest = {
   leaveType: 'Vacation' | 'Sick' | 'Personal';
   startDate: Date;
   endDate: Date;
-  status: 'Pending' | 'Approved' | 'Rejected';
+  status: LeaveRequestStatus;
 };
 
 export type PerformanceReview = {

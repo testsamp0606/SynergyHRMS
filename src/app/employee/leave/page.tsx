@@ -1,3 +1,4 @@
+
 'use client';
 import { Header } from '@/components/layout/header';
 import {
@@ -47,11 +48,15 @@ import { leaveRequests } from '@/lib/data';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import React from 'react';
+import { LeaveRequestStatus } from '@/lib/types';
 
-const statusVariant: { [key: string]: 'default' | 'secondary' | 'outline' | 'destructive' } = {
-  Approved: 'default',
-  Pending: 'secondary',
-  Rejected: 'destructive',
+
+const statusVariant: { [key in LeaveRequestStatus]: "default" | "secondary" | "outline" | "destructive" } = {
+  'Admin Approved': 'default',
+  'Manager Approved': 'secondary',
+  'Pending Manager Approval': 'outline',
+  'Rejected': 'destructive',
+  'Cancelled': 'destructive'
 };
 
 export default function EmployeeLeavePage() {
@@ -210,7 +215,7 @@ export default function EmployeeLeavePage() {
                       </Badge>
                     </TableCell>
                     <TableCell className="text-right">
-                       {request.status === 'Pending' && (
+                       {request.status === 'Pending Manager Approval' && (
                          <Button variant="ghost" size="icon" className="h-8 w-8">
                             <X className="h-4 w-4" />
                             <span className="sr-only">Cancel</span>

@@ -35,8 +35,8 @@ export default function ManagerAttendancePage() {
               <CardTitle className="text-sm font-medium">Pending Requests</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{leaveRequests.filter(r => r.status === 'Pending').length}</div>
-              <p className="text-xs text-muted-foreground">Leave & attendance regularization</p>
+              <div className="text-2xl font-bold">{leaveRequests.filter(r => r.status === 'Pending Manager Approval').length}</div>
+              <p className="text-xs text-muted-foreground">Leave applications to review</p>
             </CardContent>
           </Card>
           <Card>
@@ -78,7 +78,7 @@ export default function ManagerAttendancePage() {
                 </TableHeader>
                 <TableBody>
                   {leaveRequests
-                    .filter((r) => r.status === 'Pending')
+                    .filter((r) => r.status === 'Pending Manager Approval')
                     .map((request) => (
                       <TableRow key={request.id}>
                         <TableCell>

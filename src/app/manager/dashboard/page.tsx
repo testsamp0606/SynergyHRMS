@@ -47,7 +47,7 @@ const upcomingEvents = [
 ]
 
 export default function ManagerDashboardPage() {
-  const pendingRequests = teamLeaveRequests.filter((req) => req.status === 'Pending').length;
+  const pendingRequests = teamLeaveRequests.filter((req) => req.status === 'Pending Manager Approval').length;
 
   return (
     <div className="flex min-h-screen w-full flex-col">
@@ -106,7 +106,7 @@ export default function ManagerDashboardPage() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {teamLeaveRequests.filter(r => r.status === 'Pending').map((request) => (
+                  {teamLeaveRequests.filter(r => r.status === 'Pending Manager Approval').map((request) => (
                     <TableRow key={request.id}>
                       <TableCell>
                         <div className="flex items-center gap-3">
