@@ -1,4 +1,5 @@
 
+
 export type Employee = {
   id: string;
   name: string;
@@ -224,5 +225,5 @@ export type TimesheetEntry = {
     loginTime: string;
     logoutTime: string;
     totalHours: string;
-    status: 'Draft' | 'Pending' | 'Approved' | 'Rejected';
+    status: 'Draft' | 'Pending' | 'Approved' | 'Rejected' | 'Pending Admin Approval';
 }

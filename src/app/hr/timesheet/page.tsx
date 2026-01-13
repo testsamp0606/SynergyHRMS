@@ -1,5 +1,14 @@
 
 'use client';
+import { useState, useEffect } from 'react';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+  CardFooter,
+} from '@/components/ui/card';
 import {
   Table,
   TableBody,
@@ -8,20 +17,9 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { timesheetData } from '@/lib/data';
-import { format } from 'date-fns';
-import { Check, X, HandCoins, CheckCircle, Ban } from 'lucide-react';
-import type { TimesheetEntry } from '@/lib/types';
+import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
 import {
   Select,
   SelectContent,
@@ -29,110 +27,191 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import {
+  startOfMonth,
+  endOfMonth,
+  eachWeekOfInterval,
+  format,
+  getWeek,
+  isSameMonth,
+  parse,
+  subMonths,
+} from 'date-fns';
+import { timesheetData, employees } from '@/lib/data';
+import type { TimesheetEntry } from '@/lib/types';
+import { Save, Send } from 'lucide-react';
 
 const statusVariant: { [key in TimesheetEntry['status']]: 'default' | 'secondary' | 'outline' | 'destructive' } = {
-    'Approved': 'default',
-    'Pending': 'secondary',
-    'Draft': 'outline',
-    'Rejected': 'destructive',
+  'Approved': 'default',
+  'Pending': 'secondary',
+  'Draft': 'outline',
+  'Rejected': 'destructive',
+  'Pending Admin Approval': 'secondary'
 };
 
-const employeesWithPendingTimesheets = [
-    { name: 'Alice Johnson', avatar: 'https://picsum.photos/seed/1/100/100', week: 'Week 3 (Aug 12)', totalHours: 40 },
-    { name: 'Charlie Brown', avatar: 'https://picsum.photos/seed/3/100/100', week: 'Week 3 (Aug 12)', totalHours: 38.5 },
-];
+const getWeeksForMonth = (date: Date) => {
+  const start = startOfMonth(date);
+  const end = endOfMonth(date);
+  const weeks = eachWeekOfInterval({ start, end }, { weekStartsOn: 1 });
+  return weeks.map((weekStart) => ({
+    label: `Week ${getWeek(weekStart, { weekStartsOn: 1 })} (${format(weekStart, 'MMM d')})`,
+    value: getWeek(weekStart, { weekStartsOn: 1 }),
+  }));
+};
 
+const getMonthsForSelection = () => {
+    const today = new Date();
+    return [
+        { label: format(today, 'MMMM yyyy'), value: today.toISOString() },
+        { label: format(subMonths(today, 1), 'MMMM yyyy'), value: subMonths(today, 1).toISOString() },
+        { label: format(subMonths(today, 2), 'MMMM yyyy'), value: subMonths(today, 2).toISOString() },
+    ];
+};
 
 export default function HrTimesheetPage() {
-    const pendingTimesheets = employeesWithPendingTimesheets.length;
-    const totalApproved = timesheetData.filter(c => c.status === 'Approved').length;
-    const totalRejected = timesheetData.filter(c => c.status === 'Rejected').length;
+  const [selectedEmployee, setSelectedEmployee] = useState<string>(employees[0].id);
+  const [selectedMonth, setSelectedMonth] = useState(new Date());
+  const [weeks, setWeeks] = useState(getWeeksForMonth(selectedMonth));
+  const [selectedWeek, setSelectedWeek] = useState<number>(weeks[0]?.value);
+  const [entries, setEntries] = useState<TimesheetEntry[]>(timesheetData);
+
+  useEffect(() => {
+    const newWeeks = getWeeksForMonth(selectedMonth);
+    setWeeks(newWeeks);
+    setSelectedWeek(newWeeks[0]?.value);
+  }, [selectedMonth]);
+
+  const handleTimeChange = (id: string, field: 'loginTime' | 'logoutTime', value: string) => {
+    setEntries(prevEntries => {
+      return prevEntries.map(entry => {
+        if (entry.id === id) {
+          const updatedEntry = { ...entry, [field]: value, status: 'Draft' as const };
+          
+          if (updatedEntry.loginTime && updatedEntry.logoutTime) {
+            try {
+              const login = parse(updatedEntry.loginTime, 'HH:mm', new Date());
+              const logout = parse(updatedEntry.logoutTime, 'HH:mm', new Date());
+              
+              if (!isNaN(login.getTime()) && !isNaN(logout.getTime()) && logout > login) {
+                const diff = (logout.getTime() - login.getTime()) / (1000 * 60 * 60);
+                const hours = Math.floor(diff);
+                const minutes = Math.round((diff - hours) * 60);
+                updatedEntry.totalHours = `${hours}h ${minutes}m`;
+              } else {
+                updatedEntry.totalHours = '0h 0m';
+              }
+            } catch (e) {
+                console.error("Error parsing time", e);
+                updatedEntry.totalHours = '0h 0m';
+            }
+          }
+          return updatedEntry;
+        }
+        return entry;
+      });
+    });
+  };
+  
+  const getWeekNumber = (date: Date) => getWeek(date, { weekStartsOn: 1 });
+
+  const monthOptions = getMonthsForSelection();
+
+  const filteredEntries = entries.filter(entry => 
+    isSameMonth(entry.date, selectedMonth) && getWeekNumber(entry.date) === selectedWeek
+  );
 
   return (
-      <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
-        <div className="grid gap-4 md:grid-cols-3">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Pending Approvals</CardTitle>
-              <HandCoins className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{pendingTimesheets}</div>
-              <p className="text-xs text-muted-foreground">Timesheets awaiting review</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Approved This Month</CardTitle>
-              <CheckCircle className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{totalApproved}</div>
-              <p className="text-xs text-muted-foreground">Total timesheets approved</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Rejected This Month</CardTitle>
-              <Ban className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{totalRejected}</div>
-              <p className="text-xs text-muted-foreground">Total timesheets rejected</p>
-            </CardContent>
-          </Card>
-        </div>
-
-        <Card>
-          <CardHeader className="flex flex-col md:flex-row md:items-center gap-4">
-            <div className="grid gap-2">
-              <CardTitle>Timesheet Submissions</CardTitle>
-              <CardDescription>Review, approve, or reject employee timesheets.</CardDescription>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Employee</TableHead>
-                  <TableHead>Week</TableHead>
-                  <TableHead>Total Hours</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {employeesWithPendingTimesheets.map((claim) => (
-                  <TableRow key={claim.name}>
-                    <TableCell>
-                      <div className="flex items-center gap-3">
-                        <Avatar className="h-9 w-9">
-                          <AvatarImage src={claim.avatar} alt="Avatar" />
-                          <AvatarFallback>{claim.name.charAt(0)}</AvatarFallback>
-                        </Avatar>
-                        <p className="font-medium">{claim.name}</p>
-                      </div>
-                    </TableCell>
-                    <TableCell>{claim.week}</TableCell>
-                    <TableCell>{claim.totalHours}h</TableCell>
-                    <TableCell className="text-right">
-                       <div className="flex gap-2 justify-end">
-                          <Button variant="outline" size="sm">View Details</Button>
-                          <Button variant="outline" size="icon" className="h-8 w-8">
-                              <Check className="h-4 w-4 text-green-500" />
-                              <span className="sr-only">Approve</span>
-                          </Button>
-                           <Button variant="outline" size="icon" className="h-8 w-8">
-                              <X className="h-4 w-4 text-red-500" />
-                               <span className="sr-only">Reject</span>
-                          </Button>
-                       </div>
-                    </TableCell>
-                  </TableRow>
+    <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
+      <Card>
+        <CardHeader className="flex flex-col md:flex-row items-center justify-between gap-4">
+          <div>
+            <CardTitle>Fill Timesheet</CardTitle>
+            <CardDescription>
+              Select an employee to fill or edit their timesheet.
+            </CardDescription>
+          </div>
+           <div className="flex gap-2 w-full md:w-auto">
+            <Select onValueChange={setSelectedEmployee} defaultValue={selectedEmployee}>
+                <SelectTrigger className="w-full md:w-[200px]">
+                    <SelectValue placeholder="Select an employee" />
+                </SelectTrigger>
+                <SelectContent>
+                    {employees.map(employee => (
+                        <SelectItem key={employee.id} value={employee.id}>{employee.name}</SelectItem>
+                    ))}
+                </SelectContent>
+            </Select>
+            <Select onValueChange={(value) => setSelectedMonth(new Date(value))} defaultValue={selectedMonth.toISOString()}>
+                <SelectTrigger className="w-full md:w-[200px]">
+                    <SelectValue placeholder="Select a month" />
+                </SelectTrigger>
+                <SelectContent>
+                    {monthOptions.map(month => (
+                        <SelectItem key={month.value} value={month.value}>{month.label}</SelectItem>
+                    ))}
+                </SelectContent>
+            </Select>
+            <Select onValueChange={(value) => setSelectedWeek(Number(value))} value={String(selectedWeek)}>
+                <SelectTrigger className="w-full md:w-[280px]">
+                <SelectValue placeholder="Select a week" />
+                </SelectTrigger>
+                <SelectContent>
+                {weeks.map(week => (
+                    <SelectItem key={week.value} value={String(week.value)}>
+                    {week.label}
+                    </SelectItem>
                 ))}
-              </TableBody>
-            </Table>
-          </CardContent>
-        </Card>
-      </main>
+                </SelectContent>
+            </Select>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Date</TableHead>
+                <TableHead>Day</TableHead>
+                <TableHead>Login</TableHead>
+                <TableHead>Logout</TableHead>
+                <TableHead>Hours</TableHead>
+                <TableHead>Status</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {filteredEntries.map((entry) => (
+                <TableRow key={entry.id}>
+                  <TableCell className="font-medium">{format(entry.date, 'MMM d, yyyy')}</TableCell>
+                  <TableCell>{format(entry.date, 'EEEE')}</TableCell>
+                  <TableCell>
+                    <Input
+                        type="time"
+                        value={entry.loginTime}
+                        onChange={(e) => handleTimeChange(entry.id, 'loginTime', e.target.value)}
+                        className="h-8"
+                    />
+                  </TableCell>
+                  <TableCell>
+                      <Input
+                        type="time"
+                        value={entry.logoutTime}
+                        onChange={(e) => handleTimeChange(entry.id, 'logoutTime', e.target.value)}
+                        className="h-8"
+                      />
+                  </TableCell>
+                  <TableCell>{entry.totalHours}</TableCell>
+                  <TableCell>
+                    <Badge variant={statusVariant[entry.status]}>{entry.status}</Badge>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </CardContent>
+        <CardFooter className="justify-end gap-2">
+            <Button variant="outline"><Save className="mr-2 h-4 w-4" /> Save as Draft</Button>
+            <Button><Send className="mr-2 h-4 w-4" /> Submit for Approval</Button>
+        </CardFooter>
+      </Card>
+    </main>
   );
 }
