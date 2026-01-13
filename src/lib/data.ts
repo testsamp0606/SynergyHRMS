@@ -1,5 +1,5 @@
 
-import { addDays, format } from 'date-fns';
+import { addDays, format, subDays, subMonths } from 'date-fns';
 import type { Employee, LeaveRequest, PerformanceReview, PayrollRun, TrainingProgram, Asset, ExpenseClaim, Document, Announcement, UserProfile, Role, AuditLog, EmployeeDashboardSummary, RecentAnnouncement, EmployeeTask, PerformanceCycle, PerformanceGoal, HistoricalPerformanceReview, AttendanceData } from '@/lib/types';
 
 export const employees: Employee[] = [
@@ -9,6 +9,20 @@ export const employees: Employee[] = [
   { id: 'EMP004', name: 'Diana Miller', email: 'diana.m@example.com', avatar: 'https://picsum.photos/seed/4/100/100', department: 'Sales', role: 'Sales Executive', status: 'On Leave' },
   { id: 'EMP005', name: 'Ethan Davis', email: 'ethan.d@example.com', avatar: 'https://picsum.photos/seed/5/100/100', department: 'Design', role: 'UI/UX Designer', status: 'Active' },
   { id: 'EMP006', name: 'Fiona Garcia', email: 'fiona.g@example.com', avatar: 'https://picsum.photos/seed/6/100/100', department: 'Engineering', role: 'Frontend Developer', status: 'Active' },
+  { id: 'EMP007', name: 'George Clark', email: 'george.c@example.com', avatar: 'https://picsum.photos/seed/7/100/100', department: 'Sales', role: 'Sales Manager', status: 'Active' },
+  { id: 'EMP008', name: 'Hannah Lewis', email: 'hannah.l@example.com', avatar: 'https://picsum.photos/seed/8/100/100', department: 'Engineering', role: 'Backend Developer', status: 'Active' },
+  { id: 'EMP009', name: 'Ian Walker', email: 'ian.w@example.com', avatar: 'https://picsum.photos/seed/9/100/100', department: 'Design', role: 'Graphic Designer', status: 'Active' },
+  { id: 'EMP010', name: 'Jane Hall', email: 'jane.h@example.com', avatar: 'https://picsum.photos/seed/10/100/100', department: 'HR', role: 'HR Generalist', status: 'Active' },
+  { id: 'EMP011', name: 'Kyle Young', email: 'kyle.y@example.com', avatar: 'https://picsum.photos/seed/11/100/100', department: 'Marketing', role: 'Content Strategist', status: 'Active' },
+  { id: 'EMP012', name: 'Liam King', email: 'liam.k@example.com', avatar: 'https://picsum.photos/seed/12/100/100', department: 'Engineering', role: 'DevOps Engineer', status: 'Active' },
+  { id: 'EMP013', name: 'Mia Wright', email: 'mia.w@example.com', avatar: 'https://picsum.photos/seed/13/100/100', department: 'Sales', role: 'Account Executive', status: 'Inactive' },
+  { id: 'EMP014', name: 'Noah Scott', email: 'noah.s@example.com', avatar: 'https://picsum.photos/seed/14/100/100', department: 'Engineering', role: 'QA Engineer', status: 'Active' },
+  { id: 'EMP015', name: 'Olivia Green', email: 'olivia.g@example.com', avatar: 'https://picsum.photos/seed/15/100/100', department: 'Design', role: 'Product Designer', status: 'On Leave' },
+  { id: 'EMP016', name: 'Peter Adams', email: 'peter.a@example.com', avatar: 'https://picsum.photos/seed/16/100/100', department: 'Marketing', role: 'SEO Specialist', status: 'Active' },
+  { id: 'EMP017', name: 'Quinn Baker', email: 'quinn.b@example.com', avatar: 'https://picsum.photos/seed/17/100/100', department: 'HR', role: 'Recruiter', status: 'Active' },
+  { id: 'EMP018', name: 'Rachel Carter', email: 'rachel.c@example.com', avatar: 'https://picsum.photos/seed/18/100/100', department: 'Engineering', role: 'Mobile Developer', status: 'Active' },
+  { id: 'EMP019', name: 'Samuel Turner', email: 'samuel.t@example.com', avatar: 'https://picsum.photos/seed/19/100/100', department: 'Sales', role: 'Sales Development Rep', status: 'Active' },
+  { id: 'EMP020', name: 'Tara Phillips', email: 'tara.p@example.com', avatar: 'https://picsum.photos/seed/20/100/100', department: 'Engineering', role: 'Data Scientist', status: 'Active' },
 ];
 
 export const leaveRequests: LeaveRequest[] = [
@@ -40,14 +54,28 @@ export const trainingPrograms: TrainingProgram[] = [
 ];
 
 export const assets: Asset[] = [
-    { id: 'AST001', name: 'MacBook Pro 16"', category: 'Laptop', serialNumber: 'C02F1234H8J0', purchaseDate: new Date('2023-01-15'), value: 2499, assignedTo: 'Alice Johnson', assignedAvatar: 'https://picsum.photos/seed/1/100/100', status: 'Assigned' },
-    { id: 'AST002', name: 'Dell UltraSharp 27"', category: 'Monitor', serialNumber: 'SN-DELL-27-12345', purchaseDate: new Date('2023-01-15'), value: 599, assignedTo: 'Alice Johnson', assignedAvatar: 'https://picsum.photos/seed/1/100/100', status: 'Assigned' },
-    { id: 'AST003', name: 'Logitech MX Keys', category: 'Keyboard', serialNumber: 'SN-LOGI-K-67890', purchaseDate: new Date('2023-01-15'), value: 119, assignedTo: 'Bob Williams', assignedAvatar: 'https://picsum.photos/seed/2/100/100', status: 'Assigned' },
-    { id: 'AST004', name: 'MacBook Pro 14"', category: 'Laptop', serialNumber: 'C02G5678H9K1', purchaseDate: new Date('2023-05-20'), value: 1999, status: 'Unassigned' },
-    { id: 'AST005', name: 'Herman Miller Aeron', category: 'Other', serialNumber: 'SN-HM-A-11223', purchaseDate: new Date('2022-11-10'), value: 1495, assignedTo: 'Charlie Brown', assignedAvatar: 'https://picsum.photos/seed/3/100/100', status: 'Assigned' },
-    { id: 'AST006', name: 'Sony WH-1000XM5', category: 'Headset', serialNumber: 'SN-SONY-H-33445', purchaseDate: new Date('2023-08-01'), value: 399, status: 'In Repair' },
-    { id: 'AST007', name: 'MacBook Air M2', category: 'Laptop', serialNumber: 'C02H1234J0L2', purchaseDate: new Date('2024-02-10'), value: 1299, assignedTo: 'Fiona Garcia', assignedAvatar: 'https://picsum.photos/seed/6/100/100', status: 'Assigned' },
+  { id: 'AST001', name: 'MacBook Pro 16"', category: 'Laptop', serialNumber: 'C02F1234H8J0', purchaseDate: new Date('2023-01-15'), value: 2499, assignedTo: 'Alice Johnson', assignedAvatar: 'https://picsum.photos/seed/1/100/100', status: 'Assigned' },
+  { id: 'AST002', name: 'Dell UltraSharp 27"', category: 'Monitor', serialNumber: 'SN-DELL-27-12345', purchaseDate: new Date('2023-01-15'), value: 599, assignedTo: 'Alice Johnson', assignedAvatar: 'https://picsum.photos/seed/1/100/100', status: 'Assigned' },
+  { id: 'AST003', name: 'Logitech MX Keys', category: 'Keyboard', serialNumber: 'SN-LOGI-K-67890', purchaseDate: new Date('2023-01-15'), value: 119, assignedTo: 'Bob Williams', assignedAvatar: 'https://picsum.photos/seed/2/100/100', status: 'Assigned' },
+  { id: 'AST004', name: 'MacBook Pro 14"', category: 'Laptop', serialNumber: 'C02G5678H9K1', purchaseDate: new Date('2023-05-20'), value: 1999, status: 'Unassigned' },
+  { id: 'AST005', name: 'Herman Miller Aeron', category: 'Other', serialNumber: 'SN-HM-A-11223', purchaseDate: new Date('2022-11-10'), value: 1495, assignedTo: 'Charlie Brown', assignedAvatar: 'https://picsum.photos/seed/3/100/100', status: 'Assigned' },
+  { id: 'AST006', name: 'Sony WH-1000XM5', category: 'Headset', serialNumber: 'SN-SONY-H-33445', purchaseDate: new Date('2023-08-01'), value: 399, status: 'In Repair' },
+  { id: 'AST007', name: 'MacBook Air M2', category: 'Laptop', serialNumber: 'C02H1234J0L2', purchaseDate: new Date('2024-02-10'), value: 1299, assignedTo: 'Fiona Garcia', assignedAvatar: 'https://picsum.photos/seed/6/100/100', status: 'Assigned' },
+  { id: 'AST008', name: 'iPhone 15 Pro', category: 'Other', serialNumber: 'IP15P-54321', purchaseDate: new Date('2024-03-01'), value: 999, assignedTo: 'George Clark', assignedAvatar: 'https://picsum.photos/seed/7/100/100', status: 'Assigned' },
+  { id: 'AST009', name: 'Logitech MX Master 3S', category: 'Mouse', serialNumber: 'SN-LOGI-M-98765', purchaseDate: new Date('2023-09-05'), value: 99, status: 'Unassigned' },
+  { id: 'AST010', name: 'iPad Pro 11"', category: 'Other', serialNumber: 'IPADPRO-11-ABCDE', purchaseDate: new Date('2023-10-10'), value: 799, status: 'Retired' },
+  { id: 'AST011', name: 'Microsoft Surface Laptop 5', category: 'Laptop', serialNumber: 'MS-SL5-13579', purchaseDate: new Date('2024-01-20'), value: 1299, assignedTo: 'Kyle Young', assignedAvatar: 'https://picsum.photos/seed/11/100/100', status: 'Assigned' },
+  { id: 'AST012', name: 'Jabra Evolve 75', category: 'Headset', serialNumber: 'SN-JABRA-H-24680', purchaseDate: new Date('2023-11-15'), value: 279, assignedTo: 'Samuel Turner', assignedAvatar: 'https://picsum.photos/seed/19/100/100', status: 'Assigned' },
+  { id: 'AST013', name: 'Dell 24" Monitor', category: 'Monitor', serialNumber: 'SN-DELL-24-97531', purchaseDate: new Date('2024-02-28'), value: 249, status: 'Unassigned' },
+  { id: 'AST014', name: 'Anker PowerConf C300', category: 'Other', serialNumber: 'SN-ANKER-WC-86420', purchaseDate: new Date('2024-04-05'), value: 129, assignedTo: 'Rachel Carter', assignedAvatar: 'https://picsum.photos/seed/18/100/100', status: 'Assigned' },
+  { id: 'AST015', name: 'Lenovo ThinkPad X1 Carbon', category: 'Laptop', serialNumber: 'LEN-X1C-12345', purchaseDate: new Date('2023-04-12'), value: 1599, assignedTo: 'Tara Phillips', assignedAvatar: 'https://picsum.photos/seed/20/100/100', status: 'Assigned' },
+  { id: 'AST016', name: 'Keychron K2', category: 'Keyboard', serialNumber: 'SN-KEY-K2-54321', purchaseDate: new Date('2023-06-20'), value: 89, assignedTo: 'Ian Walker', assignedAvatar: 'https://picsum.photos/seed/9/100/100', status: 'Assigned' },
+  { id: 'AST017', name: 'Samsung 32" Odyssey G7', category: 'Monitor', serialNumber: 'SN-SAM-32-67890', purchaseDate: new Date('2024-05-01'), value: 699, assignedTo: 'Liam King', assignedAvatar: 'https://picsum.photos/seed/12/100/100', status: 'Assigned' },
+  { id: 'AST018', name: 'Google Pixel 8', category: 'Other', serialNumber: 'GP8-13579', purchaseDate: new Date('2024-03-18'), value: 699, status: 'Unassigned' },
+  { id: 'AST019', name: 'Bose QuietComfort Earbuds II', category: 'Headset', serialNumber: 'SN-BOSE-EB-24680', purchaseDate: new Date('2023-12-22'), value: 299, assignedTo: 'Olivia Green', assignedAvatar: 'https://picsum.photos/seed/15/100/100', status: 'Assigned' },
+  { id: 'AST020', name: 'HP EliteBook 840', category: 'Laptop', serialNumber: 'HP-E840-97531', purchaseDate: new Date('2022-09-30'), value: 1399, status: 'Retired' },
 ];
+
 
 export const expenseClaims: ExpenseClaim[] = [
     { id: 'CLM001', employeeName: 'Alice Johnson', employeeAvatar: 'https://picsum.photos/seed/1/100/100', category: 'Travel', submissionDate: new Date('2024-08-01'), amount: 250.75, status: 'Approved', description: 'Client meeting in SF' },
@@ -57,13 +85,28 @@ export const expenseClaims: ExpenseClaim[] = [
     { id: 'CLM005', employeeName: 'Alice Johnson', employeeAvatar: 'https://picsum.photos/seed/1/100/100', category: 'Food', submissionDate: new Date('2024-08-10'), amount: 45.30, status: 'Pending', description: 'Dinner with client' },
 ];
 
-export const documents: Document[] = [
-    { id: 'DOC001', title: 'Employee Handbook 2024', category: 'HR Policies', version: '2.1', lastUpdated: new Date('2024-06-15'), uploadedBy: 'Bob Williams' },
-    { id: 'DOC002', title: 'Alice Johnson - Employment Contract', category: 'Contracts', version: '1.0', lastUpdated: new Date('2023-01-15'), uploadedBy: 'Bob Williams' },
-    { id: 'DOC003', title: 'July 2024 Payslip - Charlie Brown', category: 'Payslips', version: '1.0', lastUpdated: new Date('2024-07-31'), uploadedBy: 'System' },
-    { id: 'DOC004', title: 'Work From Home Policy', category: 'HR Policies', version: '1.5', lastUpdated: new Date('2024-05-20'), uploadedBy: 'Bob Williams' },
-    { id: 'DOC005', title: 'Form 16 - FY 2023-24 - Alice Johnson', category: 'Compliance', version: '1.0', lastUpdated: new Date('2024-04-30'), uploadedBy: 'System' },
-];
+export const documents: Document[] = Array.from({ length: 25 }, (_, i) => {
+    const categories = ['HR Policies', 'Contracts', 'Payslips', 'Compliance', 'Project Plans'];
+    const users = ['Admin User', 'Bob Williams', 'System'];
+    const employeeNames = ['Alice Johnson', 'Charlie Brown', 'Fiona Garcia', 'Ethan Davis'];
+    const docType = ['Employee Handbook', 'Employment Contract', 'Payslip', 'Work From Home Policy', 'Form 16', 'Project Phoenix Plan', 'Q3 Marketing Strategy'];
+    const randomCategory = categories[i % categories.length];
+    const randomUser = users[i % users.length];
+    let randomTitle = docType[i % docType.length];
+
+    if (randomCategory === 'Contracts' || randomCategory === 'Payslips' || randomCategory === 'Compliance' && i < employeeNames.length) {
+        randomTitle = `${randomTitle} - ${employeeNames[i]}`;
+    }
+
+    return {
+        id: `DOC${String(i + 1).padStart(3, '0')}`,
+        title: `${randomTitle} ${randomCategory === 'Payslips' ? subMonths(new Date(), i).toLocaleString('default', { month: 'long', year: 'numeric' }) : ''}`,
+        category: randomCategory as 'HR Policies' | 'Contracts' | 'Payslips' | 'Compliance',
+        version: `1.${i % 4}`,
+        lastUpdated: subDays(new Date(), i * 5),
+        uploadedBy: randomUser,
+    };
+});
 
 export const announcements: Announcement[] = [
   { id: 'ANN001', title: 'Q3 2024 All-Hands Meeting', content: 'Join us for the Q3 All-Hands meeting on Friday, August 30th at 10:00 AM PST. We will discuss our quarterly performance and future goals. A calendar invite will follow shortly.', author: 'Bob Williams', date: new Date('2024-08-15'), target: 'Everyone' },
@@ -101,22 +144,45 @@ export const roles: Role[] = [
   { id: 'R04', name: 'Employee', description: 'Access to their own profile, leave requests, and documents.', permissions: ['view-profile', 'request-leave', 'view-documents'] },
 ];
 
-export const users: UserProfile[] = [
-  { id: 'USR001', firstName: 'Admin', lastName: 'User', email: 'admin@synergy.com', roleId: 'R01' },
-  { id: 'USR002', firstName: 'Bob', lastName: 'Williams', email: 'bob.w@example.com', roleId: 'R02' },
-  { id: 'USR003', firstName: 'Alice', lastName: 'Johnson', email: 'alice.j@example.com', roleId: 'R03' },
-  { id: 'USR004', firstName: 'Charlie', lastName: 'Brown', email: 'charlie.b@example.com', roleId: 'R03' },
-  { id: 'USR005', firstName: 'Fiona', lastName: 'Garcia', email: 'fiona.g@example.com', roleId: 'R04' },
-  { id: 'USR006', firstName: 'Ethan', lastName: 'Davis', email: 'ethan.d@example.com', roleId: 'R04' },
-];
+export const users: UserProfile[] = employees.map((emp, index) => {
+    let roleId = 'R04'; // Default to Employee
+    if (emp.role === 'HR Manager') roleId = 'R02';
+    else if (emp.role.includes('Manager') || emp.role.includes('Lead')) roleId = 'R03';
+    else if (emp.email === 'admin@synergy.com') roleId = 'R01';
 
-export const auditLogs: AuditLog[] = [
-  { id: 'LOG001', user: 'Admin User', userAvatar: 'https://picsum.photos/seed/USR001/100/100', action: 'USER_LOGIN', details: 'User logged in successfully', date: new Date(Date.now() - 1000 * 60 * 5), ipAddress: '192.168.1.1' },
-  { id: 'LOG002', user: 'Bob Williams', userAvatar: 'https://picsum.photos/seed/USR002/100/100', action: 'CREATE_EMPLOYEE', details: 'Created new employee: Eve Adams (EMP007)', date: new Date(Date.now() - 1000 * 60 * 60 * 2), ipAddress: '203.0.113.25' },
-  { id: 'LOG003', user: 'Admin User', userAvatar: 'https://picsum.photos/seed/USR001/100/100', action: 'UPDATE_ROLE', details: 'Changed role for Charlie Brown to "Manager"', date: new Date(Date.now() - 1000 * 60 * 60 * 24), ipAddress: '192.168.1.1' },
-  { id: 'LOG004', user: 'Admin User', userAvatar: 'https://picsum.photos/seed/USR001/100/100', action: 'RUN_PAYROLL', details: 'Completed payroll run for August 2024', date: new Date(Date.now() - 1000 * 60 * 60 * 48), ipAddress: '192.168.1.1' },
-  { id: 'LOG005', user: 'Bob Williams', userAvatar: 'https://picsum.photos/seed/USR002/100/100', action: 'EXPORT_DATA', details: 'Exported employee data (CSV)', date: new Date(Date.now() - 1000 * 60 * 60 * 72), ipAddress: '203.0.113.25' },
-];
+    return {
+        id: `USR${String(index + 1).padStart(3, '0')}`,
+        firstName: emp.name.split(' ')[0],
+        lastName: emp.name.split(' ').slice(1).join(' '),
+        email: emp.email,
+        roleId: roleId,
+    };
+});
+
+export const auditLogs: AuditLog[] = Array.from({ length: 30 }, (_, i) => {
+    const actions: AuditLog['action'][] = ['USER_LOGIN', 'CREATE_EMPLOYEE', 'UPDATE_ROLE', 'RUN_PAYROLL', 'EXPORT_DATA'];
+    const randomUser = users[i % users.length];
+    const employee = employees.find(e => e.email === randomUser.email);
+    const action = actions[i % actions.length];
+
+    let details = 'Action performed successfully.';
+    if (action === 'USER_LOGIN') details = 'User logged in successfully.';
+    if (action === 'CREATE_EMPLOYEE') details = `Created new employee: ${employees[(i + 1) % employees.length].name}`;
+    if (action === 'UPDATE_ROLE') details = `Changed role for ${employees[(i + 2) % employees.length].name}`;
+    if (action === 'RUN_PAYROLL') details = `Completed payroll run for ${format(subMonths(new Date(), i), 'MMMM yyyy')}`;
+    if (action === 'EXPORT_DATA') details = 'Exported employee data (CSV)';
+
+    return {
+        id: `LOG${String(i + 1).padStart(3, '0')}`,
+        user: `${randomUser.firstName} ${randomUser.lastName}`,
+        userAvatar: employee?.avatar || 'https://picsum.photos/seed/default/100/100',
+        action: action,
+        details: details,
+        date: subDays(new Date(), i),
+        ipAddress: `192.168.1.${i + 10}`,
+    };
+});
+
 
 export const employeeDashboardSummary: EmployeeDashboardSummary = {
   leaveBalance: {
@@ -195,6 +261,9 @@ export const holidays = [
     { date: new Date(2024, 9, 31), name: 'Diwali' },
     { date: new Date(2026, 0, 1), name: "New Year's Day" },
     { date: new Date(2026, 0, 19), name: 'Martin Luther King, Jr. Day' },
+    { date: new Date(2026, 4, 25), name: 'Memorial Day'},
+    { date: new Date(2026, 6, 3), name: 'Independence Day'},
+    { date: new Date(2026, 8, 7), name: 'Labor Day'},
 ];
 
 export const leaveTrends = [

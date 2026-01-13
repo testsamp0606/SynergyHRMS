@@ -1,5 +1,7 @@
 
+
 'use client';
+import { useState } from 'react';
 import {
   Table,
   TableBody,
@@ -14,6 +16,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
+  CardFooter
 } from '@/components/ui/card';
 import {
   Select,
@@ -37,6 +40,8 @@ import { MoreHorizontal, PlusCircle, Search, DollarSign, Laptop, Users } from 'l
 import { assets } from '@/lib/data';
 import { format } from 'date-fns';
 
+const ITEMS_PER_PAGE = 10;
+
 const statusVariant: { [key: string]: 'default' | 'secondary' | 'outline' | 'destructive' } = {
   Assigned: 'default',
   Unassigned: 'secondary',
@@ -45,6 +50,22 @@ const statusVariant: { [key: string]: 'default' | 'secondary' | 'outline' | 'des
 };
 
 export default function AssetsPage() {
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = Math.ceil(assets.length / ITEMS_PER_PAGE);
+
+  const paginatedAssets = assets.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
+  
+  const handlePreviousPage = () => {
+    setCurrentPage((prev) => Math.max(prev - 1, 1));
+  };
+
+  const handleNextPage = () => {
+    setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+  };
+
   const totalValue = assets.reduce((sum, asset) => sum + asset.value, 0);
   const assignedAssets = assets.filter((a) => a.status === 'Assigned').length;
   const unassignedAssets = assets.filter((a) => a.status === 'Unassigned').length;
@@ -157,7 +178,7 @@ export default function AssetsPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {assets.map((asset) => (
+            {paginatedAssets.map((asset) => (
               <TableRow key={asset.id}>
                 <TableCell>
                   <div className="font-medium">{asset.name}</div>
@@ -205,6 +226,29 @@ export default function AssetsPage() {
           </TableBody>
         </Table>
       </CardContent>
+       <CardFooter>
+        <div className="text-xs text-muted-foreground">
+          Page {currentPage} of {totalPages}
+        </div>
+        <div className="ml-auto flex items-center gap-2">
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={handlePreviousPage}
+            disabled={currentPage === 1}
+          >
+            Previous
+          </Button>
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={handleNextPage}
+            disabled={currentPage === totalPages}
+          >
+            Next
+          </Button>
+        </div>
+      </CardFooter>
     </Card>
   </main>
   );

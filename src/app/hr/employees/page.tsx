@@ -1,4 +1,7 @@
 
+
+'use client';
+import { useState } from 'react';
 import {
   Table,
   TableBody,
@@ -13,6 +16,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
+  CardFooter
 } from "@/components/ui/card"
 import {
   Select,
@@ -30,7 +34,25 @@ import { MoreHorizontal, PlusCircle, Search, Upload, Download } from "lucide-rea
 import { employees } from "@/lib/data"
 import { Input } from "@/components/ui/input"
 
+const ITEMS_PER_PAGE = 10;
+
 export default function EmployeesPage() {
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = Math.ceil(employees.length / ITEMS_PER_PAGE);
+
+  const paginatedEmployees = employees.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
+  
+  const handlePreviousPage = () => {
+    setCurrentPage((prev) => Math.max(prev - 1, 1));
+  };
+
+  const handleNextPage = () => {
+    setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+  };
+
   return (
       <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
         <div className="flex flex-col md:flex-row items-center gap-4">
@@ -108,7 +130,7 @@ export default function EmployeesPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {employees.map((employee) => (
+                {paginatedEmployees.map((employee) => (
                   <TableRow key={employee.id}>
                     <TableCell>
                       <div className="flex items-center gap-3">
@@ -151,6 +173,29 @@ export default function EmployeesPage() {
               </TableBody>
             </Table>
           </CardContent>
+            <CardFooter>
+                <div className="text-xs text-muted-foreground">
+                    Page {currentPage} of {totalPages}
+                </div>
+                <div className="ml-auto flex items-center gap-2">
+                <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={handlePreviousPage}
+                    disabled={currentPage === 1}
+                >
+                    Previous
+                </Button>
+                <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={handleNextPage}
+                    disabled={currentPage === totalPages}
+                >
+                    Next
+                </Button>
+                </div>
+            </CardFooter>
         </Card>
       </main>
   )

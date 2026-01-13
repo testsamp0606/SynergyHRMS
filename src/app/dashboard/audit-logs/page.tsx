@@ -1,5 +1,6 @@
 
 'use client';
+import { useState } from 'react';
 import {
   Table,
   TableBody,
@@ -14,6 +15,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
+  CardFooter
 } from '@/components/ui/card';
 import {
   Select,
@@ -32,8 +34,26 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Calendar } from '@/components/ui/calendar';
 import { cn } from '@/lib/utils';
 
+const ITEMS_PER_PAGE = 10;
 
 export default function AuditLogsPage() {
+    const [currentPage, setCurrentPage] = useState(1);
+    const totalPages = Math.ceil(auditLogs.length / ITEMS_PER_PAGE);
+
+    const paginatedLogs = auditLogs.slice(
+        (currentPage - 1) * ITEMS_PER_PAGE,
+        currentPage * ITEMS_PER_PAGE
+    );
+
+    const handlePreviousPage = () => {
+        setCurrentPage((prev) => Math.max(prev - 1, 1));
+    };
+
+    const handleNextPage = () => {
+        setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+    };
+
+
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
     <div className="flex flex-col md:flex-row items-center gap-4">
@@ -104,7 +124,7 @@ export default function AuditLogsPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {auditLogs.map((log) => (
+            {paginatedLogs.map((log) => (
               <TableRow key={log.id}>
                 <TableCell>
                   <div className="flex items-center gap-3">
@@ -128,6 +148,29 @@ export default function AuditLogsPage() {
           </TableBody>
         </Table>
       </CardContent>
+       <CardFooter>
+        <div className="text-xs text-muted-foreground">
+          Page {currentPage} of {totalPages}
+        </div>
+        <div className="ml-auto flex items-center gap-2">
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={handlePreviousPage}
+            disabled={currentPage === 1}
+          >
+            Previous
+          </Button>
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={handleNextPage}
+            disabled={currentPage === totalPages}
+          >
+            Next
+          </Button>
+        </div>
+      </CardFooter>
     </Card>
   </main>
   );
