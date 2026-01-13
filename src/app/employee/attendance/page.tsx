@@ -19,6 +19,7 @@ import {
   eachDayOfInterval,
   getDay,
   getDate,
+  isToday,
 } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { attendanceData, holidays } from '@/lib/data';
@@ -29,13 +30,28 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
+const years = Array.from({ length: 5 }, (_, i) => new Date().getFullYear() - i);
+const months = Array.from({ length: 12 }, (_, i) => ({
+  value: i,
+  label: format(new Date(0, i), 'MMMM'),
+}));
 
 export default function EmployeeAttendancePage() {
-  const [currentMonth, setCurrentMonth] = useState(new Date());
+  const [currentDate, setCurrentDate] = useState(new Date());
 
-  const firstDayOfMonth = startOfMonth(currentMonth);
-  const lastDayOfMonth = endOfMonth(currentMonth);
+  const currentMonth = currentDate.getMonth();
+  const currentYear = currentDate.getFullYear();
+  
+  const firstDayOfMonth = startOfMonth(currentDate);
+  const lastDayOfMonth = endOfMonth(currentDate);
 
   const daysInMonth = eachDayOfInterval({
     start: firstDayOfMonth,
@@ -76,8 +92,40 @@ export default function EmployeeAttendancePage() {
     <div className="grid gap-4 md:grid-cols-1 lg:grid-cols-3">
       <Card className="lg:col-span-2">
         <CardHeader>
-          <CardTitle>Attendance for {format(currentMonth, 'MMMM yyyy')}</CardTitle>
-          <CardDescription>A summary of your attendance for the current month.</CardDescription>
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+                <CardTitle>Attendance for {format(currentDate, 'MMMM yyyy')}</CardTitle>
+                <CardDescription>A summary of your attendance for the selected month.</CardDescription>
+            </div>
+            <div className="flex gap-2">
+                <Select
+                    value={String(currentYear)}
+                    onValueChange={(year) => setCurrentDate(new Date(parseInt(year), currentMonth))}
+                >
+                    <SelectTrigger className="w-full sm:w-[120px]">
+                        <SelectValue placeholder="Year" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {years.map(year => (
+                            <SelectItem key={year} value={String(year)}>{year}</SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
+                <Select
+                    value={String(currentMonth)}
+                    onValueChange={(month) => setCurrentDate(new Date(currentYear, parseInt(month)))}
+                >
+                    <SelectTrigger className="w-full sm:w-[160px]">
+                        <SelectValue placeholder="Month" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {months.map(month => (
+                            <SelectItem key={month.value} value={String(month.value)}>{month.label}</SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
+            </div>
+          </div>
         </CardHeader>
         <CardContent>
             <TooltipProvider>
@@ -95,13 +143,11 @@ export default function EmployeeAttendancePage() {
                         return (
                            <Tooltip key={day.toString()}>
                                 <TooltipTrigger asChild>
-                                    <div className="border-b border-r p-2 h-28 flex flex-col hover:bg-muted/50 cursor-pointer">
-                                        <span className="font-semibold text-sm">{getDate(day)}</span>
-                                        <div className="mt-1 flex-grow flex flex-col justify-between">
+                                    <div className={cn("border-b border-r p-2 h-28 flex flex-col hover:bg-muted/50 cursor-pointer",
+                                    isToday(day) && "bg-accent/50")}>
+                                        <span className={cn("font-semibold text-sm", isToday(day) && "text-primary")}>{getDate(day)}</span>
+                                        <div className="mt-1 flex-grow flex flex-col justify-start">
                                             <Badge variant="outline" className="text-xs w-min whitespace-nowrap">{status}</Badge>
-                                            <p className="text-xs text-muted-foreground mt-1 break-words truncate">
-                                                {details !== '---' ? details : ''}
-                                            </p>
                                         </div>
                                     </div>
                                 </TooltipTrigger>
