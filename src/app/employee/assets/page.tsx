@@ -58,10 +58,10 @@ export default function EmployeeAssetsPage() {
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Asset Name</TableHead>
-                      <TableHead>Category</TableHead>
-                      <TableHead>Serial Number</TableHead>
-                      <TableHead>Issue Date</TableHead>
+                      <TableHead>Asset</TableHead>
+                      <TableHead className="hidden sm:table-cell">Category</TableHead>
+                      <TableHead className="hidden md:table-cell">Serial</TableHead>
+                      <TableHead className="hidden md:table-cell">Issue Date</TableHead>
                       <TableHead className="text-right">Actions</TableHead>
                     </TableRow>
                   </TableHeader>
@@ -71,11 +71,11 @@ export default function EmployeeAssetsPage() {
                         <TableCell className="font-medium">
                           {asset.name}
                         </TableCell>
-                        <TableCell>{asset.category}</TableCell>
-                        <TableCell className="font-mono text-xs">
+                        <TableCell className="hidden sm:table-cell">{asset.category}</TableCell>
+                        <TableCell className="hidden md:table-cell font-mono text-xs">
                           {asset.serialNumber}
                         </TableCell>
-                        <TableCell>
+                        <TableCell className="hidden md:table-cell">
                           {format(asset.purchaseDate, 'MMM d, yyyy')}
                         </TableCell>
                         <TableCell className="text-right">
@@ -124,7 +124,7 @@ export default function EmployeeAssetsPage() {
                   All assigned assets are the property of Synergy Corp. and must be used for business purposes.
                 </p>
                 <p>
-                  You are responsible for the care and security of your assigned equipment. Please report any damage, loss, or theft immediately to the IT department.
+                  You are responsible for the care and security of your assigned equipment. Please report any damage, loss, or theft immediately.
                 </p>
                 <Button variant="outline" size="sm" className="w-full">
                     <HelpCircle className="mr-2 h-4 w-4" />

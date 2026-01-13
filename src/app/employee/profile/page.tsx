@@ -85,21 +85,21 @@ export default function EmployeeProfilePage() {
             <div className="grid flex-1 gap-1">
               <CardTitle className="text-3xl">{user.name}</CardTitle>
               <CardDescription>{user.role}</CardDescription>
-              <div className="mt-2 flex items-center gap-4">
+              <div className="mt-2 flex items-center justify-center md:justify-start gap-4">
                 <Progress value={80} className="w-full max-w-sm" />
-                <span className="text-sm text-muted-foreground">80% Complete</span>
+                <span className="text-sm text-muted-foreground whitespace-nowrap">80% Complete</span>
               </div>
             </div>
-             <Button variant="outline" onClick={() => setIsEditing(!isEditing)} disabled={isEditing}>
+             {!isEditing && <Button variant="outline" onClick={() => setIsEditing(true)}>
                 <Edit className="mr-2 h-4 w-4" /> Edit Profile
-            </Button>
+            </Button>}
           </CardHeader>
         </Card>
 
         <Tabs defaultValue="personal">
           <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="personal">Personal & Contact</TabsTrigger>
-            <TabsTrigger value="employment">Job & Employment</TabsTrigger>
+            <TabsTrigger value="personal">Personal</TabsTrigger>
+            <TabsTrigger value="employment">Job</TabsTrigger>
             <TabsTrigger value="documents">Documents</TabsTrigger>
           </TabsList>
 

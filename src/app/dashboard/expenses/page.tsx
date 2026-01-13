@@ -50,7 +50,7 @@ export default function ExpensesPage() {
     <div className="flex min-h-screen w-full flex-col">
       <Header title="Expenses & Claims" />
       <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
-        <div className="grid gap-4 md:grid-cols-3">
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Pending Claims</CardTitle>
@@ -88,8 +88,8 @@ export default function ExpensesPage() {
             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
               type="search"
-              placeholder="Search claims by employee or description..."
-              className="pl-8 w-full md:w-80"
+              placeholder="Search claims..."
+              className="pl-8 w-full md:w-64 lg:w-80"
             />
           </div>
           <div className="flex gap-2 w-full md:w-auto">
@@ -128,7 +128,7 @@ export default function ExpensesPage() {
               <TableHeader>
                 <TableRow>
                   <TableHead>Employee</TableHead>
-                  <TableHead className="hidden md:table-cell">Date</TableHead>
+                  <TableHead className="hidden sm:table-cell">Date</TableHead>
                   <TableHead className="hidden md:table-cell">Category</TableHead>
                   <TableHead>Amount</TableHead>
                   <TableHead>Status</TableHead>
@@ -140,7 +140,7 @@ export default function ExpensesPage() {
                   <TableRow key={claim.id}>
                     <TableCell>
                       <div className="flex items-center gap-3">
-                        <Avatar className="h-9 w-9">
+                        <Avatar className="h-9 w-9 hidden sm:flex">
                           <AvatarImage src={claim.employeeAvatar} alt="Avatar" />
                           <AvatarFallback>{claim.employeeName.charAt(0)}</AvatarFallback>
                         </Avatar>
@@ -150,7 +150,7 @@ export default function ExpensesPage() {
                         </div>
                       </div>
                     </TableCell>
-                    <TableCell className="hidden md:table-cell">
+                    <TableCell className="hidden sm:table-cell">
                       {format(claim.submissionDate, 'MMM d, yyyy')}
                     </TableCell>
                     <TableCell className="hidden md:table-cell">

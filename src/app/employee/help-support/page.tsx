@@ -62,7 +62,7 @@ export default function EmployeeHelpSupportPage() {
       <Header title="Help & Support" />
       <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
         <Tabs defaultValue="knowledge-base">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-1 sm:w-auto sm:grid-cols-3">
             <TabsTrigger value="knowledge-base">Knowledge Base</TabsTrigger>
             <TabsTrigger value="support-tickets">My Tickets</TabsTrigger>
             <TabsTrigger value="system-status">System Status</TabsTrigger>
@@ -95,14 +95,14 @@ export default function EmployeeHelpSupportPage() {
 
           <TabsContent value="support-tickets">
             <Card>
-              <CardHeader className="flex flex-row items-center">
+              <CardHeader className="flex flex-col sm:flex-row sm:items-center gap-2">
                 <div className="grid gap-2">
                     <CardTitle>My Support Tickets</CardTitle>
                     <CardDescription>
                     Track and manage your support requests.
                     </CardDescription>
                 </div>
-                <Button size="sm" className="ml-auto gap-1">
+                <Button size="sm" className="ml-auto gap-1 w-full sm:w-auto">
                     <PlusCircle className="h-3.5 w-3.5" />
                     New Ticket
                 </Button>
@@ -115,7 +115,7 @@ export default function EmployeeHelpSupportPage() {
                       <TableHead>Subject</TableHead>
                       <TableHead>Priority</TableHead>
                       <TableHead>Status</TableHead>
-                      <TableHead>Last Update</TableHead>
+                      <TableHead className="hidden sm:table-cell">Last Update</TableHead>
                       <TableHead className="text-right">Actions</TableHead>
                     </TableRow>
                   </TableHeader>
@@ -130,9 +130,9 @@ export default function EmployeeHelpSupportPage() {
                          <TableCell>
                           <Badge variant={ticket.status === 'Resolved' ? 'default' : 'secondary'}>{ticket.status}</Badge>
                         </TableCell>
-                        <TableCell>{format(ticket.lastUpdate, 'MMM d, yyyy')}</TableCell>
+                        <TableCell className="hidden sm:table-cell">{format(ticket.lastUpdate, 'MMM d, yyyy')}</TableCell>
                         <TableCell className="text-right">
-                           <Button variant="outline" size="sm">View Details</Button>
+                           <Button variant="outline" size="sm">View</Button>
                         </TableCell>
                       </TableRow>
                     ))}

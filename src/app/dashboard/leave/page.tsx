@@ -58,7 +58,7 @@ export default function LeavePage() {
                 </CardContent>
             </Card>
         </div>
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+        <div className="grid gap-4 md:grid-cols-1 lg:grid-cols-7">
           <Card className="lg:col-span-4">
             <CardHeader>
               <CardTitle>Pending Requests</CardTitle>
@@ -70,7 +70,7 @@ export default function LeavePage() {
                   <TableRow>
                     <TableHead>Employee</TableHead>
                     <TableHead>Dates</TableHead>
-                    <TableHead>Type</TableHead>
+                    <TableHead className="hidden sm:table-cell">Type</TableHead>
                     <TableHead className="text-right">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -79,7 +79,7 @@ export default function LeavePage() {
                     <TableRow key={request.id}>
                       <TableCell>
                         <div className="flex items-center gap-3">
-                          <Avatar className="h-9 w-9">
+                          <Avatar className="h-9 w-9 hidden sm:flex">
                             <AvatarImage src={request.employeeAvatar} alt="Avatar" />
                             <AvatarFallback>{request.employeeName.charAt(0)}</AvatarFallback>
                           </Avatar>
@@ -87,9 +87,9 @@ export default function LeavePage() {
                         </div>
                       </TableCell>
                       <TableCell>
-                        {format(request.startDate, 'MMM d')} - {format(request.endDate, 'MMM d, yyyy')}
+                        {format(request.startDate, 'MMM d')} - {format(request.endDate, 'MMM d')}
                       </TableCell>
-                      <TableCell>
+                      <TableCell className="hidden sm:table-cell">
                         <Badge variant="outline">{request.leaveType}</Badge>
                       </TableCell>
                       <TableCell className="text-right">
@@ -111,7 +111,7 @@ export default function LeavePage() {
               <CardTitle>Team Calendar</CardTitle>
               <CardDescription>View upcoming team absences.</CardDescription>
             </CardHeader>
-            <CardContent className="flex justify-center">
+            <CardContent className="flex justify-center p-0 sm:p-6">
               <Calendar
                 mode="multiple"
                 selected={[new Date(2024, 7, 10), new Date(2024, 7, 11), new Date(2024, 7, 12), new Date(2024, 7, 13), new Date(2024, 7, 14), new Date()]}

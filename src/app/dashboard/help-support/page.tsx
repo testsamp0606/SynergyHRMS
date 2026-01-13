@@ -62,7 +62,7 @@ export default function HelpSupportPage() {
       <Header title="Help & Support" />
       <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
         <Tabs defaultValue="knowledge-base">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-1 sm:w-auto sm:grid-cols-3">
             <TabsTrigger value="knowledge-base">Knowledge Base</TabsTrigger>
             <TabsTrigger value="support-tickets">Support Tickets</TabsTrigger>
             <TabsTrigger value="system-status">System Status</TabsTrigger>
@@ -95,14 +95,14 @@ export default function HelpSupportPage() {
 
           <TabsContent value="support-tickets">
             <Card>
-              <CardHeader className="flex flex-row items-center">
+              <CardHeader className="flex flex-col sm:flex-row sm:items-center gap-2">
                 <div className="grid gap-2">
                     <CardTitle>Support Tickets</CardTitle>
                     <CardDescription>
                     Manage and track all user-submitted support tickets.
                     </CardDescription>
                 </div>
-                <Button size="sm" className="ml-auto gap-1">
+                <Button size="sm" className="ml-auto gap-1 w-full sm:w-auto">
                     <PlusCircle className="h-3.5 w-3.5" />
                     New Ticket
                 </Button>
@@ -113,10 +113,10 @@ export default function HelpSupportPage() {
                     <TableRow>
                       <TableHead>Ticket ID</TableHead>
                       <TableHead>Subject</TableHead>
-                      <TableHead>Submitted By</TableHead>
+                      <TableHead className="hidden md:table-cell">Submitted By</TableHead>
                       <TableHead>Priority</TableHead>
                       <TableHead>Status</TableHead>
-                      <TableHead>Last Update</TableHead>
+                      <TableHead className="hidden lg:table-cell">Last Update</TableHead>
                       <TableHead className="text-right">Actions</TableHead>
                     </TableRow>
                   </TableHeader>
@@ -125,14 +125,14 @@ export default function HelpSupportPage() {
                       <TableRow key={ticket.id}>
                         <TableCell className="font-mono text-sm">{ticket.id}</TableCell>
                         <TableCell className="font-medium">{ticket.subject}</TableCell>
-                        <TableCell>{ticket.submittedBy}</TableCell>
+                        <TableCell className="hidden md:table-cell">{ticket.submittedBy}</TableCell>
                         <TableCell>
                           <Badge variant={ticket.priority === 'High' ? 'destructive' : ticket.priority === 'Medium' ? 'secondary' : 'outline'}>{ticket.priority}</Badge>
                         </TableCell>
                          <TableCell>
                           <Badge variant={ticket.status === 'Resolved' ? 'default' : 'secondary'}>{ticket.status}</Badge>
                         </TableCell>
-                        <TableCell>{format(ticket.lastUpdate, 'MMM d, yyyy')}</TableCell>
+                        <TableCell className="hidden lg:table-cell">{format(ticket.lastUpdate, 'MMM d, yyyy')}</TableCell>
                         <TableCell className="text-right">
                            <Button variant="outline" size="sm">View</Button>
                         </TableCell>

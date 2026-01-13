@@ -45,8 +45,8 @@ export default function DocumentsPage() {
             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
               type="search"
-              placeholder="Search documents by title..."
-              className="pl-8 w-full md:w-80"
+              placeholder="Search documents..."
+              className="pl-8 w-full md:w-64 lg:w-80"
             />
           </div>
           <div className="flex gap-2 w-full md:w-auto">
@@ -77,7 +77,7 @@ export default function DocumentsPage() {
                 <a href="#">
                   <PlusCircle className="h-3.5 w-3.5" />
                   <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                    Upload New Document
+                    Upload Document
                   </span>
                 </a>
               </Button>
@@ -89,8 +89,8 @@ export default function DocumentsPage() {
                 <TableRow>
                   <TableHead>Document Title</TableHead>
                   <TableHead className="hidden md:table-cell">Category</TableHead>
-                  <TableHead className="hidden md:table-cell">Version</TableHead>
-                  <TableHead className="hidden md:table-cell">Last Updated</TableHead>
+                  <TableHead className="hidden lg:table-cell">Version</TableHead>
+                  <TableHead className="hidden lg:table-cell">Last Updated</TableHead>
                   <TableHead>
                     <span className="sr-only">Actions</span>
                   </TableHead>
@@ -101,11 +101,11 @@ export default function DocumentsPage() {
                   <TableRow key={doc.id}>
                     <TableCell>
                       <div className="font-medium">{doc.title}</div>
-                      <div className="text-sm text-muted-foreground">Uploaded by {doc.uploadedBy}</div>
+                      <div className="text-sm text-muted-foreground md:hidden">{doc.category}</div>
                     </TableCell>
                     <TableCell className="hidden md:table-cell">{doc.category}</TableCell>
-                    <TableCell className="hidden md:table-cell">{doc.version}</TableCell>
-                    <TableCell className="hidden md:table-cell">
+                    <TableCell className="hidden lg:table-cell">{doc.version}</TableCell>
+                    <TableCell className="hidden lg:table-cell">
                       {format(doc.lastUpdated, 'MMM d, yyyy')}
                     </TableCell>
                     <TableCell className="text-right">

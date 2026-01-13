@@ -76,12 +76,12 @@ export default function AnnouncementsPage() {
             <div className="grid gap-4">
                 {announcements.map((announcement) => (
                     <Card key={announcement.id}>
-                        <CardHeader className="flex flex-row items-start gap-4">
-                            <Megaphone className="h-6 w-6 text-primary mt-1" />
+                        <CardHeader className="flex flex-col sm:flex-row items-start gap-4">
+                            <Megaphone className="h-6 w-6 text-primary mt-1 flex-shrink-0" />
                             <div className='w-full'>
-                                <div className="flex justify-between items-start">
+                                <div className="flex flex-col sm:flex-row justify-between items-start gap-2">
                                     <CardTitle>{announcement.title}</CardTitle>
-                                    <Badge variant="outline">{announcement.target}</Badge>
+                                    <Badge variant="outline" className="whitespace-nowrap">{announcement.target}</Badge>
                                 </div>
                                 <CardDescription>
                                     Sent by {announcement.author} on {format(announcement.date, 'MMMM d, yyyy')}
@@ -89,7 +89,7 @@ export default function AnnouncementsPage() {
                             </div>
                         </CardHeader>
                         <CardContent>
-                            <p className="text-sm text-muted-foreground">{announcement.content}</p>
+                            <p className="text-sm text-muted-foreground sm:pl-10">{announcement.content}</p>
                         </CardContent>
                     </Card>
                 ))}

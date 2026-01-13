@@ -70,7 +70,7 @@ export default function EmployeeExpensesPage() {
     <div className="flex min-h-screen w-full flex-col">
       <Header title="My Expenses" />
       <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
-        <div className="grid gap-4 md:grid-cols-3">
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Pending Claims</CardTitle>
@@ -105,7 +105,7 @@ export default function EmployeeExpensesPage() {
         </div>
 
         <Card>
-          <CardHeader className="flex flex-row items-center">
+          <CardHeader className="flex flex-col sm:flex-row sm:items-center gap-2">
             <div className="grid gap-2">
               <CardTitle>My Expense Claims</CardTitle>
               <CardDescription>
@@ -114,7 +114,7 @@ export default function EmployeeExpensesPage() {
             </div>
             <Dialog>
               <DialogTrigger asChild>
-                <Button size="sm" className="ml-auto gap-1">
+                <Button size="sm" className="ml-auto gap-1 w-full sm:w-auto">
                   <PlusCircle className="h-3.5 w-3.5" />
                   Submit New Claim
                 </Button>
@@ -193,8 +193,8 @@ export default function EmployeeExpensesPage() {
               <TableHeader>
                 <TableRow>
                   <TableHead>Description</TableHead>
-                  <TableHead>Category</TableHead>
-                  <TableHead>Date</TableHead>
+                  <TableHead className="hidden sm:table-cell">Category</TableHead>
+                  <TableHead className="hidden md:table-cell">Date</TableHead>
                   <TableHead>Amount</TableHead>
                   <TableHead className="text-right">Status</TableHead>
                 </TableRow>
@@ -203,10 +203,10 @@ export default function EmployeeExpensesPage() {
                 {expenseClaims.map((claim) => (
                   <TableRow key={claim.id}>
                     <TableCell className="font-medium">{claim.description}</TableCell>
-                    <TableCell>
+                    <TableCell className="hidden sm:table-cell">
                       <Badge variant="outline">{claim.category}</Badge>
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="hidden md:table-cell">
                       {format(claim.submissionDate, 'MMM d, yyyy')}
                     </TableCell>
                     <TableCell>{currencyFormatter.format(claim.amount)}</TableCell>

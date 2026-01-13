@@ -32,9 +32,9 @@ export default function EmployeeAnnouncementsPage() {
                   <div className="flex items-start gap-4">
                     <Megaphone className="h-6 w-6 text-primary mt-1 flex-shrink-0" />
                     <div className="flex-1">
-                      <div className="flex justify-between items-start">
+                      <div className="flex flex-col sm:flex-row justify-between items-start gap-2">
                         <CardTitle className="text-lg">{announcement.title}</CardTitle>
-                        <Badge variant="outline">{announcement.target}</Badge>
+                        <Badge variant="outline" className="whitespace-nowrap">{announcement.target}</Badge>
                       </div>
                       <CardDescription>
                         Posted by {announcement.author} on{' '}
@@ -44,7 +44,7 @@ export default function EmployeeAnnouncementsPage() {
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-sm text-muted-foreground ml-10">
+                  <p className="text-sm text-muted-foreground sm:ml-10">
                     {announcement.content}
                   </p>
                 </CardContent>

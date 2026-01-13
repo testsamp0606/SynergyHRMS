@@ -22,6 +22,7 @@ import { leaveRequests, departmentHeadcount } from '@/lib/data'
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { Header } from "@/components/layout/header"
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 
 export default function DashboardPage() {
   const pendingRequests = leaveRequests.filter(req => req.status === 'Pending');
@@ -118,7 +119,7 @@ export default function DashboardPage() {
             </CardContent>
         </Card>
 
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+        <div className="grid gap-4 md:grid-cols-1 lg:grid-cols-7">
           <Card className="lg:col-span-4">
             <CardHeader>
               <CardTitle>Headcount by Department</CardTitle>
@@ -127,29 +128,31 @@ export default function DashboardPage() {
               </CardDescription>
             </CardHeader>
             <CardContent className="pl-2">
-              <ResponsiveContainer width="100%" height={300}>
-                <BarChart data={departmentHeadcount}>
-                  <XAxis
-                    dataKey="department"
-                    stroke="#888888"
-                    fontSize={12}
-                    tickLine={false}
-                    axisLine={false}
-                  />
-                  <YAxis
-                    stroke="#888888"
-                    fontSize={12}
-                    tickLine={false}
-                    axisLine={false}
-                    tickFormatter={(value) => `${value}`}
-                  />
-                  <Tooltip
-                    cursor={{fill: 'hsl(var(--muted))'}}
-                    contentStyle={{backgroundColor: 'hsl(var(--background))', border: '1px solid hsl(var(--border))'}}
-                  />
-                  <Bar dataKey="count" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
-                </BarChart>
-              </ResponsiveContainer>
+              <ChartContainer config={{}} className="h-[300px] w-full">
+                <ResponsiveContainer width="100%" height={300}>
+                    <BarChart data={departmentHeadcount}>
+                    <XAxis
+                        dataKey="department"
+                        stroke="#888888"
+                        fontSize={12}
+                        tickLine={false}
+                        axisLine={false}
+                    />
+                    <YAxis
+                        stroke="#888888"
+                        fontSize={12}
+                        tickLine={false}
+                        axisLine={false}
+                        tickFormatter={(value) => `${value}`}
+                    />
+                    <ChartTooltip
+                        cursor={{fill: 'hsl(var(--muted))'}}
+                        content={<ChartTooltipContent />}
+                    />
+                    <Bar dataKey="count" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
+                    </BarChart>
+                </ResponsiveContainer>
+              </ChartContainer>
             </CardContent>
           </Card>
           <Card className="lg:col-span-3">

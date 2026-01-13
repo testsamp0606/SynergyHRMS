@@ -7,6 +7,7 @@ import { ThemeProvider } from '@/components/theme-provider';
 export const metadata: Metadata = {
   title: 'Synergy HR',
   description: 'A modern, scalable HRMS for small and medium-sized companies.',
+  viewport: 'width=device-width, initial-scale=1',
 };
 
 export default function RootLayout({

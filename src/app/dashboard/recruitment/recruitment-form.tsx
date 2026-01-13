@@ -91,8 +91,7 @@ export function RecruitmentForm() {
         <CardHeader>
           <CardTitle>AI-Powered Recruitment</CardTitle>
           <CardDescription>
-            Generate job descriptions and interview questions using AI. Just
-            provide a job title and key responsibilities.
+            Generate job descriptions and interview questions using AI.
           </CardDescription>
         </CardHeader>
         <Form {...form}>
@@ -122,7 +121,7 @@ export function RecruitmentForm() {
                     <FormLabel>Key Responsibilities</FormLabel>
                     <FormControl>
                       <Textarea
-                        placeholder="e.g., Develop and maintain web applications, collaborate with cross-functional teams, write clean and efficient code..."
+                        placeholder="e.g., Develop and maintain web applications, collaborate with cross-functional teams..."
                         className="min-h-[120px]"
                         {...field}
                       />

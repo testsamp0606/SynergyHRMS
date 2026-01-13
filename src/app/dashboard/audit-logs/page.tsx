@@ -43,17 +43,17 @@ export default function AuditLogsPage() {
             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
               type="search"
-              placeholder="Search logs by user or details..."
-              className="pl-8 w-full md:w-80"
+              placeholder="Search logs..."
+              className="pl-8 w-full md:w-64 lg:w-80"
             />
           </div>
-          <div className="flex gap-2 w-full md:w-auto">
+          <div className="flex gap-2 w-full flex-col sm:flex-row md:w-auto">
             <Popover>
               <PopoverTrigger asChild>
                 <Button
                   variant={'outline'}
                   className={cn(
-                    'w-[240px] justify-start text-left font-normal',
+                    'w-full sm:w-[240px] justify-start text-left font-normal',
                     !Date && 'text-muted-foreground'
                   )}
                 >
@@ -66,7 +66,7 @@ export default function AuditLogsPage() {
               </PopoverContent>
             </Popover>
             <Select>
-              <SelectTrigger className="w-full md:w-[180px]">
+              <SelectTrigger className="w-full sm:w-[180px]">
                 <SelectValue placeholder="Filter by Action" />
               </SelectTrigger>
               <SelectContent>
@@ -101,8 +101,8 @@ export default function AuditLogsPage() {
                   <TableHead>User</TableHead>
                   <TableHead>Action</TableHead>
                   <TableHead className="hidden md:table-cell">Details</TableHead>
-                  <TableHead className="hidden md:table-cell">Date</TableHead>
-                  <TableHead className="text-right">IP Address</TableHead>
+                  <TableHead className="hidden lg:table-cell">Date</TableHead>
+                  <TableHead className="text-right hidden sm:table-cell">IP Address</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -110,7 +110,7 @@ export default function AuditLogsPage() {
                   <TableRow key={log.id}>
                     <TableCell>
                       <div className="flex items-center gap-3">
-                        <Avatar className="h-9 w-9">
+                        <Avatar className="h-9 w-9 hidden sm:flex">
                           <AvatarImage src={log.userAvatar} alt="Avatar" />
                           <AvatarFallback>{log.user.charAt(0)}</AvatarFallback>
                         </Avatar>
@@ -121,10 +121,10 @@ export default function AuditLogsPage() {
                         <span className="font-mono text-sm">{log.action}</span>
                     </TableCell>
                     <TableCell className="hidden md:table-cell text-muted-foreground">{log.details}</TableCell>
-                    <TableCell className="hidden md:table-cell">
+                    <TableCell className="hidden lg:table-cell">
                       {format(log.date, 'MMM d, yyyy, hh:mm:ss a')}
                     </TableCell>
-                    <TableCell className="text-right font-mono text-sm">{log.ipAddress}</TableCell>
+                    <TableCell className="text-right font-mono text-sm hidden sm:table-cell">{log.ipAddress}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>

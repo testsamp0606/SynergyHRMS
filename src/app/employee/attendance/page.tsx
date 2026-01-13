@@ -115,7 +115,7 @@ export default function EmployeeAttendancePage() {
                         Status for {format(new Date(), "MMMM d, yyyy")}
                     </CardDescription>
                 </div>
-                 <div className="flex flex-wrap gap-2">
+                 <div className="flex flex-col sm:flex-row gap-2">
                      <Button
                         className="w-full sm:w-auto"
                         onClick={handlePunch}
@@ -132,13 +132,13 @@ export default function EmployeeAttendancePage() {
             </CardHeader>
         </Card>
 
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 md:grid-cols-1 lg:grid-cols-3">
           <Card className="lg:col-span-2">
             <CardHeader>
               <CardTitle>Attendance Calendar</CardTitle>
               <CardDescription>Select a date to view details. </CardDescription>
             </CardHeader>
-            <CardContent className="flex justify-center">
+            <CardContent className="flex justify-center p-0 sm:p-6">
               <Calendar
                 mode="single"
                 selected={date}

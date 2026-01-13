@@ -43,7 +43,7 @@ export default function TrainingPage() {
     <div className="flex min-h-screen w-full flex-col">
       <Header title="Training & Development" />
       <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
-        <div className="grid gap-4 md:grid-cols-3">
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Active Programs</CardTitle>
@@ -79,14 +79,14 @@ export default function TrainingPage() {
         </div>
 
         <Card>
-          <CardHeader className="flex flex-row items-center">
+          <CardHeader className="flex flex-col sm:flex-row sm:items-center gap-2">
             <div className="grid gap-2">
               <CardTitle>Training Programs</CardTitle>
               <CardDescription>
                 Manage and track all company training programs.
               </CardDescription>
             </div>
-            <Button asChild size="sm" className="ml-auto gap-1">
+            <Button asChild size="sm" className="ml-auto gap-1 w-full sm:w-auto">
               <a href="#">
                 <PlusCircle className="h-3.5 w-3.5" />
                 <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
@@ -102,8 +102,8 @@ export default function TrainingPage() {
                   <TableHead>Program Title</TableHead>
                   <TableHead className="hidden md:table-cell">Category</TableHead>
                   <TableHead>Status</TableHead>
-                  <TableHead className="hidden md:table-cell text-center">
-                    Assigned Users
+                  <TableHead className="hidden sm:table-cell text-center">
+                    Assigned
                   </TableHead>
                   <TableHead>Completion</TableHead>
                   <TableHead>
@@ -116,20 +116,20 @@ export default function TrainingPage() {
                   <TableRow key={program.id}>
                     <TableCell>
                       <div className="font-medium">{program.title}</div>
-                      <div className="hidden text-sm text-muted-foreground md:inline">
-                        {program.duration}
+                      <div className="text-sm text-muted-foreground md:hidden">
+                        {program.category}
                       </div>
                     </TableCell>
                     <TableCell className="hidden md:table-cell">{program.category}</TableCell>
                     <TableCell>
                       <Badge variant={statusVariant[program.status]}>{program.status}</Badge>
                     </TableCell>
-                    <TableCell className="hidden md:table-cell text-center">
+                    <TableCell className="hidden sm:table-cell text-center">
                       {program.assignedTo}
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-2">
-                        <Progress value={program.completionRate} className="h-2 w-24" />
+                        <Progress value={program.completionRate} className="h-2 w-16 sm:w-24" />
                         <span className="text-sm text-muted-foreground">
                           {program.completionRate}%
                         </span>

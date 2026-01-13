@@ -41,11 +41,11 @@ export default function EmployeesPage() {
                 <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                 <Input
                 type="search"
-                placeholder="Search employees by name or ID..."
-                className="pl-8 w-full md:w-80"
+                placeholder="Search employees..."
+                className="pl-8 w-full md:w-64 lg:w-80"
                 />
             </div>
-            <div className="flex gap-2 w-full md:w-auto">
+            <div className="flex gap-2 w-full flex-col sm:flex-row md:w-auto">
                 <Select>
                     <SelectTrigger className="w-full md:w-[180px]">
                         <SelectValue placeholder="Filter by Department" />
@@ -85,7 +85,7 @@ export default function EmployeesPage() {
                 </Button>
                  <Button variant="outline" size="sm">
                     <Download className="h-3.5 w-3.5 mr-2" />
-                    Export Data
+                    Export
                 </Button>
                 <Button asChild size="sm" className="gap-1">
                     <a href="#">
@@ -103,7 +103,7 @@ export default function EmployeesPage() {
                 <TableRow>
                   <TableHead>Name</TableHead>
                   <TableHead className="hidden md:table-cell">Department</TableHead>
-                  <TableHead className="hidden md:table-cell">Role</TableHead>
+                  <TableHead className="hidden lg:table-cell">Role</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead>
                     <span className="sr-only">Actions</span>
@@ -126,7 +126,7 @@ export default function EmployeesPage() {
                       </div>
                     </TableCell>
                     <TableCell className="hidden md:table-cell">{employee.department}</TableCell>
-                    <TableCell className="hidden md:table-cell">{employee.role}</TableCell>
+                    <TableCell className="hidden lg:table-cell">{employee.role}</TableCell>
                     <TableCell>
                       <Badge variant={employee.status === 'Active' ? 'secondary' : 'outline'}>
                         {employee.status}

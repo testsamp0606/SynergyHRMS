@@ -69,7 +69,7 @@ export default function EmployeeDashboardPage() {
           <CardHeader>
             <CardTitle>Quick Actions</CardTitle>
           </CardHeader>
-          <CardContent className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+          <CardContent className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
             <Button variant="outline" asChild>
               <Link href="/employee/leave">
                 Apply for Leave
@@ -82,7 +82,7 @@ export default function EmployeeDashboardPage() {
             </Button>
             <Button variant="outline" asChild>
               <Link href="/employee/payroll">
-                Download Payslip
+                View Payslip
               </Link>
             </Button>
             <Button variant="outline" asChild>
@@ -98,7 +98,7 @@ export default function EmployeeDashboardPage() {
           </CardContent>
         </Card>
 
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+        <div className="grid gap-4 md:grid-cols-1 lg:grid-cols-7">
           <Card className="lg:col-span-4">
             <CardHeader>
               <CardTitle>Recent Announcements</CardTitle>

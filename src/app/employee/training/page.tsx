@@ -46,12 +46,12 @@ export default function EmployeeTrainingPage() {
       <Header title="Training & Development" />
       <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
         <Tabs defaultValue="my-learning">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-1 sm:w-auto sm:grid-cols-3">
             <TabsTrigger value="my-learning">
               <BookMarked className="mr-2 h-4 w-4" /> My Learning
             </TabsTrigger>
             <TabsTrigger value="catalog">
-              <BookOpen className="mr-2 h-4 w-4" /> Course Catalog
+              <BookOpen className="mr-2 h-4 w-4" /> Catalog
             </TabsTrigger>
             <TabsTrigger value="skills">
               <Sparkles className="mr-2 h-4 w-4" /> My Skills
@@ -116,8 +116,8 @@ export default function EmployeeTrainingPage() {
                   <TableHeader>
                     <TableRow>
                       <TableHead>Program Title</TableHead>
-                      <TableHead>Category</TableHead>
-                      <TableHead>Duration</TableHead>
+                      <TableHead className="hidden sm:table-cell">Category</TableHead>
+                      <TableHead className="hidden md:table-cell">Duration</TableHead>
                       <TableHead className="text-right">Action</TableHead>
                     </TableRow>
                   </TableHeader>
@@ -125,10 +125,10 @@ export default function EmployeeTrainingPage() {
                     {allPrograms.map((program) => (
                       <TableRow key={program.id}>
                         <TableCell className="font-medium">{program.title}</TableCell>
-                        <TableCell>
+                        <TableCell className="hidden sm:table-cell">
                           <Badge variant="outline">{program.category}</Badge>
                         </TableCell>
-                        <TableCell>{program.duration}</TableCell>
+                        <TableCell className="hidden md:table-cell">{program.duration}</TableCell>
                         <TableCell className="text-right">
                           <Button variant="secondary" size="sm">Enroll</Button>
                         </TableCell>

@@ -91,7 +91,7 @@ export default function EmployeePayrollPage() {
       <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
         <div className="grid gap-4 lg:grid-cols-3">
           <Card className="lg:col-span-2">
-            <CardHeader className="flex-row items-center justify-between">
+            <CardHeader className="flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <CardTitle>My Payslips</CardTitle>
                 <CardDescription>
@@ -99,7 +99,7 @@ export default function EmployeePayrollPage() {
                 </CardDescription>
               </div>
               <Select defaultValue={selectedPeriod} onValueChange={setSelectedPeriod}>
-                <SelectTrigger className="w-[180px]">
+                <SelectTrigger className="w-full sm:w-[180px]">
                   <SelectValue placeholder="Select Period" />
                 </SelectTrigger>
                 <SelectContent>

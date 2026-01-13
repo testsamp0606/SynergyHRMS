@@ -95,7 +95,7 @@ export default function EmployeeLeavePage() {
         </div>
 
         <Card>
-          <CardHeader className="flex flex-row items-center">
+          <CardHeader className="flex flex-col sm:flex-row sm:items-center gap-2">
             <div className="grid gap-2">
               <CardTitle>My Leave History</CardTitle>
               <CardDescription>
@@ -104,12 +104,12 @@ export default function EmployeeLeavePage() {
             </div>
             <Dialog>
                 <DialogTrigger asChild>
-                    <Button size="sm" className="ml-auto gap-1">
+                    <Button size="sm" className="ml-auto gap-1 w-full sm:w-auto">
                         <PlusCircle className="h-3.5 w-3.5" />
                         New Leave Request
                     </Button>
                 </DialogTrigger>
-                <DialogContent className="sm:max-w-[425px]">
+                <DialogContent className="sm:max-w-lg">
                     <DialogHeader>
                         <DialogTitle>New Leave Request</DialogTitle>
                         <DialogDescription>
@@ -117,10 +117,10 @@ export default function EmployeeLeavePage() {
                         </DialogDescription>
                     </DialogHeader>
                     <div className="grid gap-4 py-4">
-                        <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="leave-type" className="text-right">Leave Type</Label>
+                        <div className="grid gap-2">
+                            <Label htmlFor="leave-type">Leave Type</Label>
                             <Select>
-                                <SelectTrigger className="col-span-3">
+                                <SelectTrigger>
                                     <SelectValue placeholder="Select a type" />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -130,15 +130,15 @@ export default function EmployeeLeavePage() {
                                 </SelectContent>
                             </Select>
                         </div>
-                        <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="date-range" className="text-right">Dates</Label>
+                        <div className="grid gap-2">
+                            <Label htmlFor="date-range">Dates</Label>
                              <Popover>
                                 <PopoverTrigger asChild>
                                 <Button
                                     id="date"
                                     variant={"outline"}
                                     className={cn(
-                                    "col-span-3 justify-start text-left font-normal",
+                                    "w-full justify-start text-left font-normal",
                                     !date && "text-muted-foreground"
                                     )}
                                 >
@@ -169,9 +169,9 @@ export default function EmployeeLeavePage() {
                                 </PopoverContent>
                             </Popover>
                         </div>
-                         <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="reason" className="text-right">Reason</Label>
-                            <Textarea id="reason" placeholder="Optional: Provide a reason for your leave" className="col-span-3" />
+                         <div className="grid gap-2">
+                            <Label htmlFor="reason">Reason</Label>
+                            <Textarea id="reason" placeholder="Optional: Provide a reason for your leave" />
                         </div>
                     </div>
                     <DialogFooter>
@@ -185,8 +185,8 @@ export default function EmployeeLeavePage() {
               <TableHeader>
                 <TableRow>
                   <TableHead>Leave Type</TableHead>
-                  <TableHead>Start Date</TableHead>
-                  <TableHead>End Date</TableHead>
+                  <TableHead className="hidden sm:table-cell">Start Date</TableHead>
+                  <TableHead className="hidden sm:table-cell">End Date</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
@@ -196,11 +196,12 @@ export default function EmployeeLeavePage() {
                   <TableRow key={request.id}>
                     <TableCell>
                       <Badge variant="outline">{request.leaveType}</Badge>
+                      <div className="text-muted-foreground text-sm sm:hidden mt-1">{format(request.startDate, 'MMM d')} - {format(request.endDate, 'MMM d')}</div>
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="hidden sm:table-cell">
                       {format(request.startDate, 'MMM d, yyyy')}
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="hidden sm:table-cell">
                       {format(request.endDate, 'MMM d, yyyy')}
                     </TableCell>
                     <TableCell>

@@ -40,12 +40,12 @@ export default function UsersRolesPage() {
 
         <section className="mb-8">
             <CardHeader className="px-0">
-                <div className="flex items-center justify-between">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                     <div>
                         <CardTitle>Roles Management</CardTitle>
                         <CardDescription>Define roles and their permissions.</CardDescription>
                     </div>
-                    <Button size="sm" className="gap-1">
+                    <Button size="sm" className="gap-1 w-full sm:w-auto">
                         <PlusCircle className="h-3.5 w-3.5" />
                         <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
                             Add New Role
@@ -127,7 +127,7 @@ export default function UsersRolesPage() {
                   <TableRow key={user.id}>
                     <TableCell>
                       <div className="flex items-center gap-3">
-                        <Avatar className="h-9 w-9">
+                        <Avatar className="h-9 w-9 hidden sm:flex">
                           <AvatarImage src={`https://picsum.photos/seed/${user.id}/100/100`} alt="Avatar" />
                           <AvatarFallback>{user.firstName.charAt(0)}{user.lastName.charAt(0)}</AvatarFallback>
                         </Avatar>

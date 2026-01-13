@@ -37,7 +37,7 @@ import { assets } from '@/lib/data';
 import { format } from 'date-fns';
 import { Header } from '@/components/layout/header';
 
-const statusVariant: { [key: string]: 'default' | 'secondary' | 'outline' } = {
+const statusVariant: { [key: string]: 'default' | 'secondary' | 'outline' | 'destructive' } = {
   Assigned: 'default',
   Unassigned: 'secondary',
   'In Repair': 'outline',
@@ -58,7 +58,7 @@ export default function AssetsPage() {
     <div className="flex min-h-screen w-full flex-col">
       <Header title="Assets Management" />
       <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
-        <div className="grid gap-4 md:grid-cols-3">
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Total Asset Value</CardTitle>
@@ -96,11 +96,11 @@ export default function AssetsPage() {
             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
               type="search"
-              placeholder="Search assets by name or serial..."
-              className="pl-8 w-full md:w-80"
+              placeholder="Search assets..."
+              className="pl-8 w-full md:w-64 lg:w-80"
             />
           </div>
-          <div className="flex gap-2 w-full md:w-auto">
+          <div className="flex gap-2 w-full flex-col sm:flex-row md:w-auto">
             <Select>
               <SelectTrigger className="w-full md:w-[180px]">
                 <SelectValue placeholder="Filter by Category" />
@@ -149,7 +149,7 @@ export default function AssetsPage() {
               <TableHeader>
                 <TableRow>
                   <TableHead>Asset</TableHead>
-                  <TableHead className="hidden md:table-cell">Category</TableHead>
+                  <TableHead className="hidden sm:table-cell">Category</TableHead>
                   <TableHead>Assigned To</TableHead>
                   <TableHead className="hidden md:table-cell">Purchase Date</TableHead>
                   <TableHead>Status</TableHead>
@@ -163,13 +163,13 @@ export default function AssetsPage() {
                   <TableRow key={asset.id}>
                     <TableCell>
                       <div className="font-medium">{asset.name}</div>
-                      <div className="text-sm text-muted-foreground">{asset.serialNumber}</div>
+                      <div className="text-sm text-muted-foreground md:hidden">{asset.serialNumber}</div>
                     </TableCell>
-                    <TableCell className="hidden md:table-cell">{asset.category}</TableCell>
+                    <TableCell className="hidden sm:table-cell">{asset.category}</TableCell>
                     <TableCell>
                       {asset.assignedTo ? (
                         <div className="flex items-center gap-2">
-                          <Avatar className="h-8 w-8">
+                          <Avatar className="h-8 w-8 hidden sm:flex">
                             <AvatarImage src={asset.assignedAvatar} alt="Avatar" />
                             <AvatarFallback>{asset.assignedTo.charAt(0)}</AvatarFallback>
                           </Avatar>
@@ -183,7 +183,7 @@ export default function AssetsPage() {
                       {format(asset.purchaseDate, 'MMM d, yyyy')}
                     </TableCell>
                     <TableCell>
-                      <Badge variant={statusVariant[asset.status]}>{asset.status}</Badge>
+                      <Badge variant={statusVariant[asset.status]} className="whitespace-nowrap">{asset.status}</Badge>
                     </TableCell>
                     <TableCell>
                       <DropdownMenu>

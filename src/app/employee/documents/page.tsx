@@ -57,8 +57,8 @@ export default function EmployeeDocumentsPage() {
                   <TableHeader>
                     <TableRow>
                       <TableHead>Document Title</TableHead>
-                      <TableHead>Category</TableHead>
-                      <TableHead>Date</TableHead>
+                      <TableHead className="hidden sm:table-cell">Category</TableHead>
+                      <TableHead className="hidden md:table-cell">Date</TableHead>
                       <TableHead className="text-right">Actions</TableHead>
                     </TableRow>
                   </TableHeader>
@@ -66,8 +66,8 @@ export default function EmployeeDocumentsPage() {
                     {personalDocs.map((doc) => (
                       <TableRow key={doc.id}>
                         <TableCell className="font-medium">{doc.title}</TableCell>
-                        <TableCell>{doc.category}</TableCell>
-                        <TableCell>{format(doc.lastUpdated, 'MMM d, yyyy')}</TableCell>
+                        <TableCell className="hidden sm:table-cell">{doc.category}</TableCell>
+                        <TableCell className="hidden md:table-cell">{format(doc.lastUpdated, 'MMM d, yyyy')}</TableCell>
                         <TableCell className="text-right">
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
@@ -106,8 +106,8 @@ export default function EmployeeDocumentsPage() {
                   <TableHeader>
                     <TableRow>
                       <TableHead>Document Title</TableHead>
-                      <TableHead>Version</TableHead>
-                      <TableHead>Last Updated</TableHead>
+                      <TableHead className="hidden sm:table-cell">Version</TableHead>
+                      <TableHead className="hidden md:table-cell">Last Updated</TableHead>
                       <TableHead className="text-right">Actions</TableHead>
                     </TableRow>
                   </TableHeader>
@@ -115,8 +115,8 @@ export default function EmployeeDocumentsPage() {
                     {policyDocs.map((doc) => (
                       <TableRow key={doc.id}>
                         <TableCell className="font-medium">{doc.title}</TableCell>
-                        <TableCell>{doc.version}</TableCell>
-                        <TableCell>{format(doc.lastUpdated, 'MMM d, yyyy')}</TableCell>
+                        <TableCell className="hidden sm:table-cell">{doc.version}</TableCell>
+                        <TableCell className="hidden md:table-cell">{format(doc.lastUpdated, 'MMM d, yyyy')}</TableCell>
                         <TableCell className="text-right">
                            <Button variant="outline" size="sm">
                              <Download className="mr-2 h-4 w-4" /> Download
