@@ -100,9 +100,9 @@ export default function EmployeeAttendancePage() {
 
 
         return (
-            <div className={cn('flex flex-col justify-between h-full relative p-1', cellClass, {'ring-2 ring-primary ring-inset': activeModifiers.selected })}>
+            <div className={cn('relative flex h-full flex-col p-1', cellClass, {'ring-2 ring-primary ring-inset': activeModifiers.selected })}>
                <div className="absolute top-1 left-1 text-xs font-semibold">{format(date, 'd')}</div>
-               {status && <div className="text-[10px] font-medium leading-tight mt-4 break-words">{status}</div>}
+               {status && <div className="mt-4 text-[10px] font-medium leading-tight break-words">{status}</div>}
             </div>
         );
     };
@@ -212,7 +212,7 @@ export default function EmployeeAttendancePage() {
                 </CardHeader>
                 <CardContent>
                     <ul className="space-y-2 text-sm">
-                        {holidays.filter(h => h.date > new Date()).slice(0, 2).map(h => (
+                        {holidays.filter(h => h.date > new Date()).slice(0, 3).map(h => (
                            <li key={h.name} className="flex justify-between">
                                <span>{h.name}</span>
                                <span className="text-muted-foreground">{format(h.date, 'MMM d')}</span>
