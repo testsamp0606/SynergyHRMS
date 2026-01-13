@@ -8,9 +8,9 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Badge } from '@/components/ui/badge';
-import { CalendarPlus, Briefcase, Sun } from 'lucide-react';
+import { CalendarPlus, Briefcase, Sun, Clock, LogIn, LogOut } from 'lucide-react';
 import { 
   format, 
   isSameDay, 
@@ -20,6 +20,8 @@ import {
   getDay,
   getDate,
   isToday,
+  isFuture,
+  intervalToDuration
 } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { attendanceData, holidays } from '@/lib/data';
@@ -79,7 +81,7 @@ export default function EmployeeAttendancePage() {
         case 'On Leave': return { status: 'On Leave', details: '---', variant: 'default' as const, className: 'bg-purple-500/10 text-purple-600' };
       }
     }
-    if (day > new Date()) return { status: 'Upcoming', details: '---', variant: 'outline' as const, className: '' };
+    if (isFuture(day) && !isToday(day)) return { status: 'Upcoming', details: '---', variant: 'outline' as const, className: 'opacity-50' };
     return { status: 'N/A', details: '---', variant: 'outline' as const, className: '' };
   }
 
@@ -138,16 +140,28 @@ export default function EmployeeAttendancePage() {
                     ))}
                     {daysInMonth.map((day) => {
                         const { status, details, className: statusClassName, variant } = getDayStatus(day);
+                        const isFutureDate = isFuture(day) && !isToday(day);
+
+                        const dayCell = (
+                           <div className={cn("border-b border-r p-2 flex flex-col aspect-square",
+                            isToday(day) && "bg-primary/20", 
+                            !isFutureDate && 'hover:bg-accent/50 cursor-pointer',
+                            statusClassName)}>
+                                <span className={cn("font-semibold text-sm", isToday(day) && "text-primary")}>{getDate(day)}</span>
+                                <div className="mt-1 flex-grow flex flex-col justify-start">
+                                    <Badge variant={variant} className="text-xs w-min whitespace-nowrap">{status}</Badge>
+                                </div>
+                            </div>
+                        );
+
+                        if (isFutureDate) {
+                            return <div key={day.toString()}>{dayCell}</div>;
+                        }
+
                         return (
                            <Tooltip key={day.toString()}>
                                 <TooltipTrigger asChild>
-                                    <div className={cn("border-b border-r p-2 flex flex-col hover:bg-accent/50 cursor-pointer aspect-square",
-                                    isToday(day) && "bg-primary/20", statusClassName)}>
-                                        <span className={cn("font-semibold text-sm", isToday(day) && "text-primary")}>{getDate(day)}</span>
-                                        <div className="mt-1 flex-grow flex flex-col justify-start">
-                                            <Badge variant={variant} className="text-xs w-min whitespace-nowrap">{status}</Badge>
-                                        </div>
-                                    </div>
+                                    {dayCell}
                                 </TooltipTrigger>
                                 <TooltipContent>
                                     <p className='font-bold'>{format(day, 'MMMM d, yyyy')}</p>
