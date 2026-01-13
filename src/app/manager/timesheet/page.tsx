@@ -36,11 +36,17 @@ import {
   isSameMonth,
   parse,
   subMonths,
+  eachDayOfInterval,
+  getDay,
+  getDate,
+  isToday,
 } from 'date-fns';
 import { timesheetData, employees } from '@/lib/data';
 import type { TimesheetEntry } from '@/lib/types';
-import { Save, Send, Check, X } from 'lucide-react';
+import { Save, Send, Check, X, Eye } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from '@/components/ui/dialog';
+import { cn } from '@/lib/utils';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 const teamMemberIds = ['EMP006', 'EMP005', 'EMP004', 'EMP003'];
 const teamMembers = employees.filter((emp) => teamMemberIds.includes(emp.id));
@@ -78,6 +84,7 @@ export default function ManagerTimesheetPage() {
   const [weeks, setWeeks] = useState(getWeeksForMonth(selectedMonth));
   const [selectedWeek, setSelectedWeek] = useState<number>(weeks[0]?.value);
   const [entries, setEntries] = useState<TimesheetEntry[]>(timesheetData);
+  const [viewingSubmission, setViewingSubmission] = useState<any | null>(null);
 
   useEffect(() => {
     const newWeeks = getWeeksForMonth(selectedMonth);
@@ -124,11 +131,27 @@ export default function ManagerTimesheetPage() {
     isSameMonth(entry.date, selectedMonth) && getWeekNumber(entry.date) === selectedWeek
   );
   
-  const submissions = teamMembers.map(tm => ({...tm, week: 'Week 3 (Aug 12)', totalHours: 40, status: 'Pending' as const}));
+  const submissions = teamMembers.map(tm => ({...tm, week: 'Week 3 (Aug 12)', totalHours: 40, status: 'Pending' as const, date: new Date()}));
+
+  // Calendar view logic
+  const calendarMonth = viewingSubmission ? viewingSubmission.date : new Date();
+  const daysInCalendarMonth = eachDayOfInterval({
+    start: startOfMonth(calendarMonth),
+    end: endOfMonth(calendarMonth),
+  });
+  const startingDayIndex = (getDay(startOfMonth(calendarMonth)) + 6) % 7;
+  const daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+
+  const employeeTimesheetForMonth = viewingSubmission
+    ? entries.filter(entry =>
+        isSameMonth(entry.date, calendarMonth) &&
+        employees.find(e => e.id === viewingSubmission.id)?.name === timesheetData.find(td => td.id === entry.id)
+      )
+    : [];
 
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
-    <Dialog>
+    
         <Card>
             <CardHeader className="flex flex-col md:flex-row md:items-center gap-4">
                 <div className="grid gap-2">
@@ -156,6 +179,10 @@ export default function ManagerTimesheetPage() {
                             <TableCell><Badge variant="secondary">{sub.status}</Badge></TableCell>
                             <TableCell className="text-right">
                             <div className="flex gap-2 justify-end">
+                                <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setViewingSubmission(sub)}>
+                                    <Eye className="h-4 w-4" />
+                                    <span className="sr-only">View</span>
+                                </Button>
                                 <Button variant="outline" size="icon" className="h-8 w-8">
                                     <Check className="h-4 w-4 text-green-500" />
                                     <span className="sr-only">Approve</span>
@@ -263,7 +290,75 @@ export default function ManagerTimesheetPage() {
                 <Button><Send className="mr-2 h-4 w-4" /> Submit for Admin Approval</Button>
             </CardFooter>
         </Card>
-      </Dialog>
+
+        <Dialog open={!!viewingSubmission} onOpenChange={(isOpen) => !isOpen && setViewingSubmission(null)}>
+            <DialogContent className="max-w-4xl">
+                {viewingSubmission && (
+                <>
+                <DialogHeader>
+                    <DialogTitle>Timesheet for {viewingSubmission.name}</DialogTitle>
+                    <DialogDescription>
+                        Full month view for {format(viewingSubmission.date, 'MMMM yyyy')}
+                    </DialogDescription>
+                </DialogHeader>
+                 <TooltipProvider>
+                    <div className="grid grid-cols-7 border-t border-l mt-4">
+                        {daysOfWeek.map(day => (
+                            <div key={day} className="text-center font-semibold p-2 border-b border-r text-xs text-muted-foreground bg-muted">
+                                {day}
+                            </div>
+                        ))}
+                        {Array.from({ length: startingDayIndex }).map((_, index) => (
+                            <div key={`empty-${index}`} className="border-b border-r aspect-square bg-muted/50" />
+                        ))}
+                        {daysInCalendarMonth.map((day) => {
+                            const entry = entries.find(e => format(e.date, 'yyyy-MM-dd') === format(day, 'yyyy-MM-dd'));
+                             const dayOfWeek = getDay(day);
+                             const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+
+                            const dayCell = (
+                               <div className={cn("border-b border-r p-1 flex flex-col aspect-square text-xs", isToday(day) && "bg-primary/10", isWeekend && "bg-muted/50")}>
+                                    <span className={cn("font-semibold", isToday(day) && "text-primary")}>{getDate(day)}</span>
+                                    {entry && !isWeekend ? (
+                                        <div className="mt-1 flex-grow flex flex-col justify-start gap-0.5">
+                                            <p>{entry.loginTime} - {entry.logoutTime}</p>
+                                            <p className="font-bold">{entry.totalHours}</p>
+                                            <Badge variant={statusVariant[entry.status]} className="text-xs w-min whitespace-nowrap mt-auto">{entry.status}</Badge>
+                                        </div>
+                                    ) : isWeekend ? (
+                                        <div className="flex items-center justify-center h-full text-muted-foreground">Weekend</div>
+                                    ) : null}
+                                </div>
+                            );
+
+                            return (
+                               <Tooltip key={day.toString()}>
+                                    <TooltipTrigger asChild>
+                                        {dayCell}
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                        <p className='font-bold'>{format(day, 'MMMM d, yyyy')}</p>
+                                        {entry ? (
+                                            <>
+                                            <p>Status: {entry.status}</p>
+                                            <p>Hours: {entry.totalHours}</p>
+                                            </>
+                                        ) : isWeekend ? <p>Weekend</p> : <p>No entry</p>}
+                                    </TooltipContent>
+                                </Tooltip>
+                            )
+                        })}
+                        {Array.from({ length: (7 - (daysInCalendarMonth.length + startingDayIndex) % 7) % 7 }).map((_, index) => (
+                            <div key={`empty-end-${index}`} className="border-b border-r aspect-square bg-muted/50" />
+                        ))}
+                    </div>
+                </TooltipProvider>
+                </>
+                )}
+            </DialogContent>
+        </Dialog>
     </main>
   );
 }
+
+    
