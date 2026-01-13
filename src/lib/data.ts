@@ -1,6 +1,7 @@
 
 
-import { addDays, format, subDays, subMonths, startOfWeek, endOfWeek } from 'date-fns';
+
+import { addDays, format, subDays, subMonths, startOfWeek, endOfWeek, eachDayOfInterval, startOfMonth, endOfMonth } from 'date-fns';
 import type { Employee, LeaveRequest, PerformanceReview, PayrollRun, TrainingProgram, Asset, ExpenseClaim, Document, Announcement, UserProfile, Role, AuditLog, EmployeeDashboardSummary, RecentAnnouncement, EmployeeTask, PerformanceCycle, PerformanceGoal, HistoricalPerformanceReview, AttendanceData, Holiday, RegularizationRequest, TimesheetEntry } from '@/lib/types';
 
 export const employees: Employee[] = [
