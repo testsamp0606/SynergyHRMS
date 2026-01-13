@@ -23,6 +23,7 @@ import {
   FileText,
   Megaphone,
   LifeBuoy,
+  Clock,
 } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from 'next/navigation'
@@ -31,6 +32,7 @@ const navItems = [
   { href: "/employee/dashboard", icon: LayoutDashboard, label: "Dashboard" },
   { href: "/employee/profile", icon: User, label: "My Profile" },
   { href: "/employee/attendance", icon: CalendarCheck, label: "Attendance" },
+  { href: "/employee/timesheet", icon: Clock, label: "Timesheet" },
   { href: "/employee/leave", icon: CalendarClock, label: "Leave" },
   { href: "/employee/payroll", icon: Wallet, label: "Payroll" },
   { href: "/employee/expenses", icon: Receipt, label: "Expenses" },
@@ -70,10 +72,10 @@ export function EmployeeSidebar() {
             <SidebarMenuItem key={item.href}>
               <SidebarMenuButton
                 asChild
-                variant={pathname === item.href ? "secondary" : "ghost"}
+                variant={pathname.startsWith(item.href) && (item.href !== '/employee/dashboard' || pathname === '/employee/dashboard') ? "secondary" : "ghost"}
                 className="w-full justify-start"
                 tooltip={item.label}
-                isActive={pathname === item.href}
+                isActive={pathname.startsWith(item.href) && (item.href !== '/employee/dashboard' || pathname === '/employee/dashboard')}
               >
                 <Link href={item.href}>
                   <item.icon />

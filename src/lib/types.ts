@@ -4,6 +4,7 @@
 
 
 
+
 export type Employee = {
   id: string;
   name: string;
@@ -221,4 +222,13 @@ export type RegularizationRequest = {
     reason: string;
     status: 'Submitted' | 'Approved by Manager' | 'Approved' | 'Rejected';
     remarks?: string;
+}
+
+export type TimesheetEntry = {
+    id: string;
+    date: Date;
+    loginTime: string;
+    logoutTime: string;
+    totalHours: string;
+    status: 'Draft' | 'Pending' | 'Approved' | 'Rejected';
 }

@@ -1,7 +1,7 @@
 
 
-import { addDays, format, subDays, subMonths } from 'date-fns';
-import type { Employee, LeaveRequest, PerformanceReview, PayrollRun, TrainingProgram, Asset, ExpenseClaim, Document, Announcement, UserProfile, Role, AuditLog, EmployeeDashboardSummary, RecentAnnouncement, EmployeeTask, PerformanceCycle, PerformanceGoal, HistoricalPerformanceReview, AttendanceData, Holiday, RegularizationRequest } from '@/lib/types';
+import { addDays, format, subDays, subMonths, startOfWeek, endOfWeek } from 'date-fns';
+import type { Employee, LeaveRequest, PerformanceReview, PayrollRun, TrainingProgram, Asset, ExpenseClaim, Document, Announcement, UserProfile, Role, AuditLog, EmployeeDashboardSummary, RecentAnnouncement, EmployeeTask, PerformanceCycle, PerformanceGoal, HistoricalPerformanceReview, AttendanceData, Holiday, RegularizationRequest, TimesheetEntry } from '@/lib/types';
 
 export const employees: Employee[] = [
   { id: 'EMP001', name: 'Alice Johnson', email: 'alice.j@example.com', avatar: 'https://picsum.photos/seed/1/100/100', department: 'Engineering', role: 'Senior Software Engineer', status: 'Active' },
@@ -296,6 +296,20 @@ export const regularizationRequests: RegularizationRequest[] = [
     { id: 'REG002', date: subDays(new Date(), 2), reason: 'Late Login', status: 'Submitted' },
     { id: 'REG003', date: subDays(new Date(), 10), reason: 'Overtime', status: 'Rejected', remarks: 'Overtime not pre-approved.' },
 ];
+
+const currentMonthDays = eachDayOfInterval({
+  start: startOfMonth(new Date()),
+  end: endOfMonth(new Date())
+});
+
+export const timesheetData: TimesheetEntry[] = currentMonthDays.map((day, i) => ({
+    id: `TS-${format(day, 'yyyy-MM-dd')}`,
+    date: day,
+    loginTime: '09:00',
+    logoutTime: '17:00',
+    totalHours: '8h 0m',
+    status: i < 7 ? 'Approved' : (i < 14 ? 'Pending' : 'Draft'),
+}));
 
 
 export { type Employee };
