@@ -131,7 +131,7 @@ export default function HrTimesheetPage() {
             </CardDescription>
           </div>
            <div className="flex gap-2 w-full md:w-auto">
-            <Select onValueChange={setSelectedEmployee} defaultValue={selectedEmployee}>
+            <Select onValueChange={setSelectedEmployee} value={selectedEmployee}>
                 <SelectTrigger className="w-full md:w-[200px]">
                     <SelectValue placeholder="Select an employee" />
                 </SelectTrigger>
@@ -141,7 +141,7 @@ export default function HrTimesheetPage() {
                     ))}
                 </SelectContent>
             </Select>
-            <Select onValueChange={(value) => setSelectedMonth(new Date(value))} defaultValue={selectedMonth.toISOString()}>
+            <Select onValueChange={(value) => setSelectedMonth(new Date(value))} value={selectedMonth.toISOString()}>
                 <SelectTrigger className="w-full md:w-[200px]">
                     <SelectValue placeholder="Select a month" />
                 </SelectTrigger>

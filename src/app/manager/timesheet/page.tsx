@@ -209,7 +209,7 @@ export default function ManagerTimesheetPage() {
                 </CardDescription>
             </div>
             <div className="flex gap-2 w-full md:w-auto">
-                <Select onValueChange={setSelectedEmployee} defaultValue={selectedEmployee}>
+                <Select onValueChange={setSelectedEmployee} value={selectedEmployee}>
                     <SelectTrigger className="w-full md:w-[200px]">
                         <SelectValue placeholder="Select a team member" />
                     </SelectTrigger>
@@ -219,7 +219,7 @@ export default function ManagerTimesheetPage() {
                         ))}
                     </SelectContent>
                 </Select>
-                <Select onValueChange={(value) => setSelectedMonth(new Date(value))} defaultValue={selectedMonth.toISOString()}>
+                <Select onValueChange={(value) => setSelectedMonth(new Date(value))} value={selectedMonth.toISOString()}>
                     <SelectTrigger className="w-full md:w-[200px]">
                         <SelectValue placeholder="Select a month" />
                     </SelectTrigger>
@@ -301,7 +301,7 @@ export default function ManagerTimesheetPage() {
                         Full month view for {format(viewingSubmission.date, 'MMMM yyyy')}
                     </DialogDescription>
                 </DialogHeader>
-                <div className="flex-grow overflow-y-auto">
+                <div className="flex-grow overflow-y-auto pr-6">
                  <TooltipProvider>
                     <div className="grid grid-cols-7 border-t border-l mt-4">
                         {daysOfWeek.map(day => (
