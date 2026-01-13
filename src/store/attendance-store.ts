@@ -1,5 +1,7 @@
+
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
+import { isSameDay } from 'date-fns';
 
 interface AttendanceState {
   punchInTime: Date | null;
@@ -11,10 +13,19 @@ interface AttendanceState {
 
 const createAttendanceStore = (name: string) => create<AttendanceState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       punchInTime: null,
       punchOutTime: null,
-      punchIn: () => set({ punchInTime: new Date(), punchOutTime: null }),
+      punchIn: () => {
+        const { punchInTime } = get();
+        const now = new Date();
+        // Reset if the last punch-in was not today
+        if (punchInTime && !isSameDay(punchInTime, now)) {
+          set({ punchInTime: now, punchOutTime: null });
+        } else {
+          set({ punchInTime: now, punchOutTime: null });
+        }
+      },
       punchOut: () => set({ punchOutTime: new Date() }),
       reset: () => set({ punchInTime: null, punchOutTime: null }),
     }),
