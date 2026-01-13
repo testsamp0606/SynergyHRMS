@@ -21,6 +21,7 @@ import { usePathname } from "next/navigation"
 import { useState, useEffect } from "react"
 import { format } from "date-fns"
 import { Badge } from "@/components/ui/badge"
+import Link from "next/link"
 
 function getTitleFromPathname(pathname: string): string {
     const segments = pathname.split('/').filter(Boolean);
@@ -51,19 +52,22 @@ const notifications = [
         icon: <CircleCheck className="h-4 w-4 text-green-500" />,
         title: "Leave Approved",
         description: "Your leave request for Dec 20-22 has been approved.",
-        time: "5 minutes ago"
+        time: "5 minutes ago",
+        href: "/employee/leave"
     },
     {
         icon: <MessageSquareWarning className="h-4 w-4 text-yellow-500" />,
         title: "Performance Review",
         description: "Your self-appraisal for H2 2024 is due in 3 days.",
-        time: "1 hour ago"
+        time: "1 hour ago",
+        href: "/employee/performance"
     },
     {
         icon: <CircleAlert className="h-4 w-4 text-red-500" />,
         title: "Payroll Processed",
         description: "The payroll for August 2024 has been processed.",
-        time: "2 days ago"
+        time: "2 days ago",
+        href: "/employee/payroll"
     },
 ]
 
@@ -110,14 +114,16 @@ export function Header() {
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
                     {notifications.map((notification, index) => (
-                        <DropdownMenuItem key={index} className="flex items-start gap-3">
-                            {notification.icon}
-                            <div className="flex-1">
-                                <p className="text-sm font-medium">{notification.title}</p>
-                                <p className="text-xs text-muted-foreground">{notification.description}</p>
-                                <p className="text-xs text-muted-foreground mt-1">{notification.time}</p>
-                            </div>
-                        </DropdownMenuItem>
+                         <Link href={notification.href} key={index}>
+                            <DropdownMenuItem className="flex items-start gap-3 cursor-pointer">
+                                {notification.icon}
+                                <div className="flex-1">
+                                    <p className="text-sm font-medium">{notification.title}</p>
+                                    <p className="text-xs text-muted-foreground">{notification.description}</p>
+                                    <p className="text-xs text-muted-foreground mt-1">{notification.time}</p>
+                                </div>
+                            </DropdownMenuItem>
+                        </Link>
                     ))}
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
