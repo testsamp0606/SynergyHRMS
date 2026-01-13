@@ -1,3 +1,4 @@
+
 "use client"
 
 import {
@@ -15,8 +16,36 @@ import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { LogOut, Settings, User } from "lucide-react"
 import { ThemeToggle } from "../theme-toggle"
+import { usePathname } from "next/navigation"
 
-export function Header({ title }: { title: string }) {
+function getTitleFromPathname(pathname: string): string {
+    const segments = pathname.split('/').filter(Boolean);
+    if (segments.length === 0) return "Dashboard";
+
+    const lastSegment = segments[segments.length - 1];
+
+    if (lastSegment === 'dashboard') {
+        if (segments.length > 1) {
+            const role = segments[0];
+            if (role === 'hr') return "HR Dashboard";
+            if (role === 'manager') return "Manager Dashboard";
+            if (role === 'employee') return "Employee Dashboard";
+        }
+        return "Admin Dashboard";
+    }
+
+    // Convert camelCase or kebab-case to Title Case
+    return lastSegment
+        .replace(/([A-Z])/g, ' $1')
+        .replace(/[-_]/g, ' ')
+        .replace(/\b\w/g, char => char.toUpperCase())
+        .trim();
+}
+
+
+export function Header() {
+  const pathname = usePathname();
+  const title = getTitleFromPathname(pathname);
   
   return (
     <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-background/80 px-4 backdrop-blur-sm md:px-6">
