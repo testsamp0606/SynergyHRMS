@@ -10,7 +10,7 @@ export default function EmployeeDashboardLayout({ children }: { children: ReactN
       <EmployeeSidebar />
       <SidebarInset>
         <div className="flex flex-col flex-1">
-          <Header title="Employee" />
+          <Header />
           <main className="flex-1">
             {children}
           </main>

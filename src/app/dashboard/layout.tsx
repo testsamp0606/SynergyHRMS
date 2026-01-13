@@ -10,7 +10,7 @@ export default function AdminDashboardLayout({ children }: { children: ReactNode
       <AdminSidebar />
       <SidebarInset>
         <div className="flex flex-col flex-1">
-          <Header title="Admin" />
+          <Header />
           <main className="flex-1">
             {children}
           </main>

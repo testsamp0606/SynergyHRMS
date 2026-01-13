@@ -10,7 +10,7 @@ export default function ManagerDashboardLayout({ children }: { children: ReactNo
       <ManagerSidebar />
       <SidebarInset>
         <div className="flex flex-col flex-1">
-          <Header title="Manager" />
+          <Header />
           <main className="flex-1">
             {children}
           </main>

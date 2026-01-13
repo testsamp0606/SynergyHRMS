@@ -10,7 +10,7 @@ export default function HrDashboardLayout({ children }: { children: ReactNode })
       <HrSidebar />
       <SidebarInset>
         <div className="flex flex-col flex-1">
-          <Header title="HR" />
+          <Header />
           <main className="flex-1">
               {children}
           </main>
