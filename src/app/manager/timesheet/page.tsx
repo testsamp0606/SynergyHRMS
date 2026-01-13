@@ -292,7 +292,7 @@ export default function ManagerTimesheetPage() {
         </Card>
 
         <Dialog open={!!viewingSubmission} onOpenChange={(isOpen) => !isOpen && setViewingSubmission(null)}>
-            <DialogContent className="max-w-4xl">
+            <DialogContent className="max-w-4xl max-h-[90vh] flex flex-col">
                 {viewingSubmission && (
                 <>
                 <DialogHeader>
@@ -301,6 +301,7 @@ export default function ManagerTimesheetPage() {
                         Full month view for {format(viewingSubmission.date, 'MMMM yyyy')}
                     </DialogDescription>
                 </DialogHeader>
+                <div className="flex-grow overflow-y-auto">
                  <TooltipProvider>
                     <div className="grid grid-cols-7 border-t border-l mt-4">
                         {daysOfWeek.map(day => (
@@ -353,6 +354,7 @@ export default function ManagerTimesheetPage() {
                         ))}
                     </div>
                 </TooltipProvider>
+                </div>
                 </>
                 )}
             </DialogContent>
@@ -360,5 +362,3 @@ export default function ManagerTimesheetPage() {
     </main>
   );
 }
-
-    
