@@ -21,12 +21,26 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { employees } from '@/lib/data';
-import { Search, Mail, Phone, User, Briefcase, CalendarClock, ChevronsRight } from 'lucide-react';
+import { Search, Mail, Phone, User } from 'lucide-react';
+import React, { useState } from 'react';
+import Link from 'next/link';
 
 const teamMemberIds = ['EMP006', 'EMP005', 'EMP004', 'EMP003'];
 const teamMembers = employees.filter((emp) => teamMemberIds.includes(emp.id));
 
+// Get unique roles for the filter dropdown
+const uniqueRoles = [...new Set(teamMembers.map(member => member.role))];
+
 export default function MyTeamPage() {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedRole, setSelectedRole] = useState('all');
+
+  const filteredTeamMembers = teamMembers.filter(member => {
+    const matchesSearch = member.name.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesRole = selectedRole === 'all' || member.role === selectedRole;
+    return matchesSearch && matchesRole;
+  });
+
   return (
     <div className="flex min-h-screen w-full flex-col">
       <Header title="My Team" />
@@ -46,25 +60,27 @@ export default function MyTeamPage() {
                   type="search"
                   placeholder="Search team members..."
                   className="pl-8 w-full md:w-80"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
                 />
               </div>
               <div className="flex gap-2 w-full md:w-auto">
-                <Select>
-                  <SelectTrigger className="w-full md:w-[180px]">
+                <Select value={selectedRole} onValueChange={setSelectedRole}>
+                  <SelectTrigger className="w-full md:w-[220px]">
                     <SelectValue placeholder="Filter by Role" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="frontend-developer">Frontend Developer</SelectItem>
-                    <SelectItem value="ui-ux-designer">UI/UX Designer</SelectItem>
-                    <SelectItem value="sales-executive">Sales Executive</SelectItem>
-                    <SelectItem value="marketing-lead">Marketing Lead</SelectItem>
+                    <SelectItem value="all">All Roles</SelectItem>
+                    {uniqueRoles.map(role => (
+                        <SelectItem key={role} value={role}>{role}</SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>
             </div>
 
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {teamMembers.map((member) => (
+              {filteredTeamMembers.map((member) => (
                 <Card key={member.id}>
                   <CardHeader className="flex-row items-center gap-4">
                     <Avatar className="h-16 w-16">
@@ -93,13 +109,20 @@ export default function MyTeamPage() {
                     </div>
                   </CardContent>
                    <CardFooter>
-                      <Button variant="outline" className="w-full">
-                        <User className="mr-2 h-4 w-4" /> View Profile
+                      <Button variant="outline" className="w-full" asChild>
+                        <Link href={`/employee/profile`}>
+                          <User className="mr-2 h-4 w-4" /> View Profile
+                        </Link>
                       </Button>
                   </CardFooter>
                 </Card>
               ))}
             </div>
+             {filteredTeamMembers.length === 0 && (
+                <div className="text-center text-muted-foreground py-12">
+                    No team members match your criteria.
+                </div>
+            )}
           </CardContent>
         </Card>
       </main>
