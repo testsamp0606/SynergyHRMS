@@ -1,51 +1,25 @@
 
 'use client';
 import { useState, useEffect } from 'react';
-import { format, intervalToDuration, formatDuration } from 'date-fns';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { format } from 'date-fns';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Clock, LogIn, LogOut, CircleCheck, ArrowRight } from 'lucide-react';
+import { Clock, LogIn, LogOut, ArrowRight } from 'lucide-react';
 import { useAttendanceStore } from '@/store/attendance-store';
 import Link from 'next/link';
 
 export function AttendanceCard() {
   const { punchInTime, punchOutTime, punchIn, punchOut } = useAttendanceStore();
   const [time, setTime] = useState(new Date());
-  const [elapsedTime, setElapsedTime] = useState('0h 0m 0s');
 
   const isPunchedIn = punchInTime && !punchOutTime;
 
   useEffect(() => {
     const timerId = setInterval(() => setTime(new Date()), 1000);
-
-    let elapsedTimerId: NodeJS.Timeout | undefined;
-    if (isPunchedIn) {
-      elapsedTimerId = setInterval(() => {
-        if (punchInTime) {
-          const duration = intervalToDuration({ start: punchInTime, end: new Date() });
-          const formatted =
-            formatDuration(duration, { format: ['hours', 'minutes', 'seconds'] })
-              .replace(' seconds', 's')
-              .replace(' minutes', 'm')
-              .replace(' hours', 'h') || '0s';
-          setElapsedTime(formatted);
-        }
-      }, 1000);
-    } else {
-        if (punchInTime && punchOutTime) {
-            const duration = intervalToDuration({ start: punchInTime, end: punchOutTime });
-            const formatted = formatDuration(duration, { format: ['hours', 'minutes'] });
-            setElapsedTime(formatted);
-        } else {
-            setElapsedTime('0h 0m 0s');
-        }
-    }
-
     return () => {
       clearInterval(timerId);
-      if (elapsedTimerId) clearInterval(elapsedTimerId);
     };
-  }, [isPunchedIn, punchInTime, punchOutTime]);
+  }, []);
 
   const handlePunch = () => {
     if (!isPunchedIn) {
@@ -73,12 +47,6 @@ export function AttendanceCard() {
             </div>
         </div>
         <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
-           {punchInTime && (
-                <div className="text-center">
-                    <p className="text-sm font-medium text-muted-foreground">Total Hours</p>
-                    <p className="text-2xl font-bold">{elapsedTime}</p>
-                </div>
-            )}
            <div className="flex gap-2 w-full sm:w-auto">
              <Button
                 className="w-full"

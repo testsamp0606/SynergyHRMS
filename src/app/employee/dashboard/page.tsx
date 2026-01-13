@@ -22,7 +22,6 @@ import {
 import { employeeDashboardSummary, recentAnnouncements, employeeTasks } from '@/lib/data';
 import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
-import { AttendanceCard } from '@/app/employee/dashboard/attendance-card';
 
 export default function EmployeeDashboardPage() {
   const { leaveBalance, upcomingPayslip, pendingExpenses } = employeeDashboardSummary;

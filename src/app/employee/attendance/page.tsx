@@ -41,7 +41,10 @@ export default function EmployeeAttendancePage() {
             }, 1000);
         } else if (punchInTime && punchOutTime) {
             const duration = intervalToDuration({ start: punchInTime, end: punchOutTime });
-            const formatted = formatDuration(duration, { format: ['hours', 'minutes'] });
+            const formatted = formatDuration(duration, { format: ['hours', 'minutes', 'seconds'] })
+                .replace(' seconds', 's')
+                .replace(' minutes', 'm')
+                .replace(' hours', 'h');
             setElapsedTime(formatted);
         }
 
