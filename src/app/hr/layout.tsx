@@ -2,7 +2,7 @@
 import type { ReactNode } from "react"
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar"
 import { HrSidebar } from "@/components/layout/hr-sidebar"
-import { AttendanceCard } from "../employee/dashboard/attendance-card"
+import { HrAttendanceCard } from "./dashboard/hr-attendance-card"
 import { Header } from "@/components/layout/header"
 
 export default function HrDashboardLayout({ children }: { children: ReactNode }) {
@@ -13,7 +13,7 @@ export default function HrDashboardLayout({ children }: { children: ReactNode })
         <div className="flex flex-col flex-1">
           <Header title="HR" />
           <div className="p-4 md:p-8 md:pb-0">
-               <AttendanceCard />
+               <HrAttendanceCard />
           </div>
           <main className="flex-1">
               {children}
