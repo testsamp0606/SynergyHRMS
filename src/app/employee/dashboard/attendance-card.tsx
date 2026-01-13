@@ -4,8 +4,9 @@ import { useState, useEffect } from 'react';
 import { format, intervalToDuration, formatDuration } from 'date-fns';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Clock, LogIn, LogOut, CircleCheck } from 'lucide-react';
+import { Clock, LogIn, LogOut, CircleCheck, ArrowRight } from 'lucide-react';
 import { useAttendanceStore } from '@/store/attendance-store';
+import Link from 'next/link';
 
 export function AttendanceCard() {
   const { punchInTime, punchOutTime, punchIn, punchOut } = useAttendanceStore();
@@ -31,14 +32,20 @@ export function AttendanceCard() {
         }
       }, 1000);
     } else {
-        setElapsedTime('0h 0m 0s');
+        if (punchInTime && punchOutTime) {
+            const duration = intervalToDuration({ start: punchInTime, end: punchOutTime });
+            const formatted = formatDuration(duration, { format: ['hours', 'minutes'] });
+            setElapsedTime(formatted);
+        } else {
+            setElapsedTime('0h 0m 0s');
+        }
     }
 
     return () => {
       clearInterval(timerId);
       if (elapsedTimerId) clearInterval(elapsedTimerId);
     };
-  }, [isPunchedIn, punchInTime]);
+  }, [isPunchedIn, punchInTime, punchOutTime]);
 
   const handlePunch = () => {
     if (!isPunchedIn) {
@@ -49,43 +56,46 @@ export function AttendanceCard() {
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Today's Attendance</CardTitle>
-        <CardDescription className="flex items-center gap-2 pt-1">
-          <Clock className="h-4 w-4" />
-          <span>{time.toLocaleTimeString()}</span>
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        {punchOutTime ? (
-          <div className="flex items-center justify-center rounded-md border border-green-500 bg-green-50 p-4 text-green-700 dark:bg-green-900/20 dark:text-green-300">
-            <CircleCheck className="mr-2 h-5 w-5" />
-            <span className="font-medium">Present</span>
-          </div>
-        ) : (
-          <Button
-            className="w-full"
-            onClick={handlePunch}
-            disabled={!!punchOutTime}
-            variant={isPunchedIn ? 'outline' : 'default'}
-          >
-            {isPunchedIn ? <LogOut className="mr-2 h-4 w-4" /> : <LogIn className="mr-2 h-4 w-4" />}
-            {isPunchedIn ? 'Punch Out' : 'Punch In'}
-          </Button>
-        )}
-        {punchInTime && !punchOutTime && (
-          <div className="text-sm text-muted-foreground space-y-2">
-            <div className="flex justify-between">
-              <span>Punched In:</span>
-              <span className="font-medium text-foreground">{format(punchInTime, 'hh:mm:ss a')}</span>
+    <Card className="w-full">
+      <CardContent className="flex flex-col sm:flex-row items-center justify-between p-4 gap-4">
+        <div className="flex items-center gap-4">
+             <div className="text-center sm:text-left">
+                <p className="text-sm font-medium text-muted-foreground">Today's Attendance</p>
+                <p className="text-2xl font-bold">{format(new Date(), "MMMM d, yyyy")}</p>
             </div>
-            <div className="flex justify-between">
-              <span>Time Elapsed:</span>
-              <span className="font-medium text-foreground">{elapsedTime}</span>
+            <div className="w-px h-10 bg-border hidden sm:block"/>
+            <div className="text-center sm:text-left">
+                 <p className="text-sm font-medium text-muted-foreground flex items-center gap-1">
+                    <Clock className="h-4 w-4" />
+                    Current Time
+                </p>
+                <p className="text-2xl font-bold">{time.toLocaleTimeString()}</p>
             </div>
-          </div>
-        )}
+        </div>
+        <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
+           {punchInTime && (
+                <div className="text-center">
+                    <p className="text-sm font-medium text-muted-foreground">Total Hours</p>
+                    <p className="text-2xl font-bold">{elapsedTime}</p>
+                </div>
+            )}
+           <div className="flex gap-2 w-full sm:w-auto">
+             <Button
+                className="w-full"
+                onClick={handlePunch}
+                disabled={!!punchOutTime}
+                variant={isPunchedIn ? 'outline' : 'default'}
+                >
+                {isPunchedIn ? <LogOut className="mr-2 h-4 w-4" /> : <LogIn className="mr-2 h-4 w-4" />}
+                {isPunchedIn ? 'Punch Out' : 'Punch In'}
+            </Button>
+             <Button variant="outline" asChild>
+                <Link href="/employee/attendance">
+                    View Calendar <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+             </Button>
+           </div>
+        </div>
       </CardContent>
     </Card>
   );

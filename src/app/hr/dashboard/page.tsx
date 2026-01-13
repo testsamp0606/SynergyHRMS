@@ -19,12 +19,11 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip, Line, LineChart, CartesianGrid } from 'recharts'
 import { ArrowUpRight, Users, CalendarClock, Briefcase, UserPlus, FileText, Megaphone, PlayCircle, AlertTriangle, CheckCircle } from 'lucide-react'
-import { leaveRequests, departmentHeadcount, leaveTrends, latestPayroll, complianceAlerts } from '@/lib/data'
+import { leaveRequests, departmentHeadcount, leaveTrends, latestPayroll, complianceAlerts } from "@/lib/data"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { Header } from "@/components/layout/header"
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
-import { HrAttendanceCard } from "./hr-attendance-card"
 
 export default function DashboardPage() {
   const pendingRequests = leaveRequests.filter(req => req.status === 'Pending');
@@ -34,7 +33,6 @@ export default function DashboardPage() {
        <Header title="HR Dashboard" />
       <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          <HrAttendanceCard />
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">

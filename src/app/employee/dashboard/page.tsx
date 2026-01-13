@@ -22,7 +22,7 @@ import {
 import { employeeDashboardSummary, recentAnnouncements, employeeTasks } from '@/lib/data';
 import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
-import { AttendanceCard } from './attendance-card';
+import { AttendanceCard } from '@/app/employee/dashboard/attendance-card';
 
 export default function EmployeeDashboardPage() {
   const { leaveBalance, upcomingPayslip, pendingExpenses } = employeeDashboardSummary;
@@ -32,7 +32,6 @@ export default function EmployeeDashboardPage() {
       <Header title="My Dashboard" />
       <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-            <AttendanceCard />
              <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Leave Balance</CardTitle>

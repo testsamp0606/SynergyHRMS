@@ -9,7 +9,7 @@ interface AttendanceState {
   reset: () => void;
 }
 
-export const useAttendanceStore = create<AttendanceState>()(
+const createAttendanceStore = (name: string) => create<AttendanceState>()(
   persist(
     (set) => ({
       punchInTime: null,
@@ -19,9 +19,8 @@ export const useAttendanceStore = create<AttendanceState>()(
       reset: () => set({ punchInTime: null, punchOutTime: null }),
     }),
     {
-      name: 'attendance-storage', // name of the item in the storage (must be unique)
+      name: `${name}-attendance-storage`,
       storage: createJSONStorage(() => localStorage, {
-        // Custom reviver to restore Date objects
         reviver: (key, value) => {
           if (key === 'punchInTime' || key === 'punchOutTime') {
             return value ? new Date(value as string) : null;
@@ -33,6 +32,11 @@ export const useAttendanceStore = create<AttendanceState>()(
   )
 );
 
+export const useAttendanceStore = createAttendanceStore('employee');
+export const useHrAttendanceStore = createAttendanceStore('hr');
+export const useManagerAttendanceStore = createAttendanceStore('manager');
+
+
 // This is a simple daily reset logic. 
 // In a real app, you might want a more robust solution, maybe server-driven.
 const today = new Date().toLocaleDateString();
@@ -40,5 +44,7 @@ const lastResetDay = localStorage.getItem('last-attendance-reset-day');
 
 if (today !== lastResetDay) {
   useAttendanceStore.getState().reset();
+  useHrAttendanceStore.getState().reset();
+  useManagerAttendanceStore.getState().reset();
   localStorage.setItem('last-attendance-reset-day', today);
 }

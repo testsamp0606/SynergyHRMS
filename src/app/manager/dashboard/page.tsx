@@ -25,7 +25,6 @@ import { Header } from '@/components/layout/header';
 import { employees, leaveRequests } from '@/lib/data';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
-import { ManagerAttendanceCard } from './manager-attendance-card';
 
 // Mock data for manager's team
 const teamMemberIds = ['EMP006', 'EMP005', 'EMP004', 'EMP003'];
@@ -54,7 +53,6 @@ export default function ManagerDashboardPage() {
       <Header title="Manager Dashboard" />
       <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          <ManagerAttendanceCard />
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">On Leave Today</CardTitle>
