@@ -14,9 +14,10 @@ import {
 } from "@/components/ui/sidebar"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { LogOut, Settings, User } from "lucide-react"
+import { LogOut, Settings, User, Clock } from "lucide-react"
 import { ThemeToggle } from "../theme-toggle"
 import { usePathname } from "next/navigation"
+import { useState, useEffect } from "react"
 
 function getTitleFromPathname(pathname: string): string {
     const segments = pathname.split('/').filter(Boolean);
@@ -46,6 +47,14 @@ function getTitleFromPathname(pathname: string): string {
 export function Header() {
   const pathname = usePathname();
   const title = getTitleFromPathname(pathname);
+  const [time, setTime] = useState(new Date());
+
+   useEffect(() => {
+    const timerId = setInterval(() => setTime(new Date()), 1000);
+    return () => {
+      clearInterval(timerId);
+    };
+  }, []);
   
   return (
     <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-background/80 px-4 backdrop-blur-sm md:px-6">
@@ -54,6 +63,10 @@ export function Header() {
         <h1 className="text-xl font-semibold tracking-tight">{title}</h1>
       </div>
       <div className="ml-auto flex items-center gap-2 md:gap-4">
+        <div className="hidden sm:flex items-center gap-2 text-sm font-medium">
+          <Clock className="h-4 w-4 text-muted-foreground" />
+          <span>{time.toLocaleTimeString()}</span>
+        </div>
         <ThemeToggle />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
