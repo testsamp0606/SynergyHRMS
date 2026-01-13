@@ -19,12 +19,15 @@ const createAttendanceStore = (name: string) => create<AttendanceState>()(
       punchIn: () => {
         const { punchInTime } = get();
         const now = new Date();
-        // Reset if the last punch-in was not today
+
         if (punchInTime && !isSameDay(punchInTime, now)) {
+          // If the last punch-in was on a different day, reset for a new day.
           set({ punchInTime: now, punchOutTime: null });
-        } else {
+        } else if (!punchInTime) {
+          // If there's no punch-in time at all, set it.
           set({ punchInTime: now, punchOutTime: null });
         }
+        // If already punched in today, do nothing.
       },
       punchOut: () => set({ punchOutTime: new Date() }),
       reset: () => set({ punchInTime: null, punchOutTime: null }),
