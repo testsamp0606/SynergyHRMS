@@ -34,12 +34,9 @@ import { Input } from '@/components/ui/input';
 import { MoreHorizontal, PlusCircle, Search, Download, Share2, Trash2, Eye } from 'lucide-react';
 import { documents } from '@/lib/data';
 import { format } from 'date-fns';
-import { Header } from '@/components/layout/header';
 
 export default function DocumentsPage() {
   return (
-    <div className="flex min-h-screen w-full flex-col">
-      <Header title="Documents Management" />
       <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
         <div className="flex flex-col md:flex-row items-center gap-4">
           <div className="relative w-full md:w-auto md:flex-grow">
@@ -145,6 +142,5 @@ export default function DocumentsPage() {
           </CardContent>
         </Card>
       </main>
-    </div>
   );
 }

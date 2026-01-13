@@ -15,12 +15,9 @@ import {
 } from "@/components/ui/chart"
 import { employeeGrowthData, diversityData } from "@/lib/data"
 import { Line, LineChart, Pie, PieChart, ResponsiveContainer, XAxis, YAxis, CartesianGrid, LabelList } from "recharts"
-import { Header } from "@/components/layout/header"
 
 export default function ReportsPage() {
   return (
-    <div className="flex min-h-screen w-full flex-col">
-       <Header title="Reports & Analytics" />
       <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
              <Card>
@@ -102,6 +99,5 @@ export default function ReportsPage() {
           </Card>
         </div>
       </main>
-    </div>
   )
 }

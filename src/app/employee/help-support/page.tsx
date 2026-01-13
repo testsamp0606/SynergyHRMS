@@ -8,7 +8,6 @@ import {
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Header } from '@/components/layout/header';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Search, PlusCircle, LifeBuoy, ShieldCheck, Server, AlertTriangle } from 'lucide-react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
@@ -58,8 +57,6 @@ const systemStatus = [
 
 export default function EmployeeHelpSupportPage() {
   return (
-    <div className="flex min-h-screen w-full flex-col">
-      <Header title="Help & Support" />
       <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
         <Tabs defaultValue="knowledge-base">
           <TabsList className="grid w-full grid-cols-1 sm:w-auto sm:grid-cols-3">
@@ -178,6 +175,5 @@ export default function EmployeeHelpSupportPage() {
           </TabsContent>
         </Tabs>
       </main>
-    </div>
   );
 }

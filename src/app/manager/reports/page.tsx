@@ -14,13 +14,10 @@ import {
   ChartTooltipContent,
 } from '@/components/ui/chart';
 import { Bar, BarChart, Line, LineChart, ResponsiveContainer, XAxis, YAxis, CartesianGrid } from 'recharts';
-import { Header } from '@/components/layout/header';
 import { leaveTrends, departmentHeadcount } from '@/lib/data';
 
 export default function ManagerReportsPage() {
   return (
-    <div className="flex min-h-screen w-full flex-col">
-      <Header title="Team Reports" />
       <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
          <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
           <Card>
@@ -81,6 +78,5 @@ export default function ManagerReportsPage() {
           </Card>
         </div>
       </main>
-    </div>
   );
 }

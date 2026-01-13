@@ -27,7 +27,6 @@ import {
 import { Progress } from '@/components/ui/progress';
 import { MoreHorizontal, PlusCircle, BookOpen, Users, CheckCircle } from 'lucide-react';
 import { trainingPrograms } from '@/lib/data';
-import { Header } from '@/components/layout/header';
 
 const statusVariant: { [key: string]: 'default' | 'secondary' | 'outline' } = {
   Active: 'default',
@@ -41,8 +40,6 @@ export default function TrainingPage() {
     trainingPrograms.reduce((sum, p) => sum + p.completionRate, 0) / trainingPrograms.length;
 
   return (
-    <div className="flex min-h-screen w-full flex-col">
-      <Header title="Training & Development" />
       <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
         <div className="grid gap-4 md:grid-cols-3">
           <Card>
@@ -160,6 +157,5 @@ export default function TrainingPage() {
           </CardContent>
         </Card>
       </main>
-    </div>
   );
 }

@@ -29,7 +29,6 @@ import { Input } from '@/components/ui/input';
 import { MoreHorizontal, PlusCircle, Search, Check, X, CircleDollarSign, HandCoins, Ban } from 'lucide-react';
 import { expenseClaims } from '@/lib/data';
 import { format } from 'date-fns';
-import { Header } from '@/components/layout/header';
 
 const statusVariant: { [key: string]: 'default' | 'secondary' | 'outline' | 'destructive' } = {
   Approved: 'default',
@@ -48,8 +47,6 @@ export default function ExpensesPage() {
   });
 
   return (
-    <div className="flex min-h-screen w-full flex-col">
-      <Header title="Expenses & Claims" />
       <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
         <div className="grid gap-4 md:grid-cols-3">
           <Card>
@@ -186,6 +183,5 @@ export default function ExpensesPage() {
           </CardContent>
         </Card>
       </main>
-    </div>
   );
 }

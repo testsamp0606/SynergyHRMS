@@ -1,5 +1,4 @@
 'use client';
-import { Header } from '@/components/layout/header';
 import {
   Card,
   CardContent,
@@ -35,8 +34,6 @@ const policyDocs = documents.filter(doc => doc.category === 'HR Policies');
 
 export default function EmployeeDocumentsPage() {
   return (
-    <div className="flex min-h-screen w-full flex-col">
-      <Header title="My Documents" />
       <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
         <Tabs defaultValue="personal">
           <TabsList className="grid w-full grid-cols-2">
@@ -132,6 +129,5 @@ export default function EmployeeDocumentsPage() {
 
         </Tabs>
       </main>
-    </div>
   );
 }

@@ -1,5 +1,4 @@
 'use client';
-import { Header } from '@/components/layout/header';
 import {
   Card,
   CardContent,
@@ -86,8 +85,6 @@ export default function EmployeePayrollPage() {
   };
 
   return (
-    <div className="flex min-h-screen w-full flex-col">
-      <Header title="Payroll" />
       <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
         <div className="grid gap-4 lg:grid-cols-3">
           <Card className="lg:col-span-2">
@@ -227,6 +224,5 @@ export default function EmployeePayrollPage() {
           </div>
         </div>
       </main>
-    </div>
   );
 }

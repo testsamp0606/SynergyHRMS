@@ -36,7 +36,6 @@ import { Input } from '@/components/ui/input';
 import { MoreHorizontal, PlusCircle, Search, DollarSign, Laptop, Users } from 'lucide-react';
 import { assets } from '@/lib/data';
 import { format } from 'date-fns';
-import { Header } from '@/components/layout/header';
 
 const statusVariant: { [key: string]: 'default' | 'secondary' | 'outline' | 'destructive' } = {
   Assigned: 'default',
@@ -56,8 +55,6 @@ export default function AssetsPage() {
   });
 
   return (
-    <div className="flex min-h-screen w-full flex-col">
-      <Header title="Assets Management" />
       <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
         <div className="grid gap-4 md:grid-cols-3">
           <Card>
@@ -210,6 +207,5 @@ export default function AssetsPage() {
           </CardContent>
         </Card>
       </main>
-    </div>
   );
 }

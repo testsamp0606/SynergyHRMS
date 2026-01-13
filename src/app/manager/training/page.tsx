@@ -20,14 +20,11 @@ import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { PlusCircle, BookOpen, Users, CheckCircle } from 'lucide-react';
 import { trainingPrograms } from '@/lib/data';
-import { Header } from '@/components/layout/header';
 
 export default function ManagerTrainingPage() {
   const teamPrograms = trainingPrograms.slice(0, 3); 
 
   return (
-    <div className="flex min-h-screen w-full flex-col">
-      <Header title="Team Training" />
       <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
         <Card>
           <CardHeader className="flex flex-row items-center">
@@ -86,6 +83,5 @@ export default function ManagerTrainingPage() {
           </CardContent>
         </Card>
       </main>
-    </div>
   );
 }

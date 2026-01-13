@@ -18,7 +18,6 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-import { Header } from '@/components/layout/header';
 import { announcements } from '@/lib/data';
 import { format } from 'date-fns';
 import { Megaphone, Send } from 'lucide-react';
@@ -26,8 +25,6 @@ import { Badge } from '@/components/ui/badge';
 
 export default function AnnouncementsPage() {
   return (
-    <div className="flex min-h-screen w-full flex-col">
-      <Header title="Announcements" />
       <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
         <Card>
           <CardHeader>
@@ -97,6 +94,5 @@ export default function AnnouncementsPage() {
             </div>
         </div>
       </main>
-    </div>
   );
 }

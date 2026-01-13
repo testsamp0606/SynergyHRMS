@@ -19,7 +19,6 @@ import { Button } from "@/components/ui/button"
 import { payrollRuns } from "@/lib/data"
 import { format } from "date-fns"
 import { PlayCircle, Download } from "lucide-react"
-import { Header } from "@/components/layout/header"
 
 export default function PayrollPage() {
   const currencyFormatter = new Intl.NumberFormat('en-US', {
@@ -28,8 +27,6 @@ export default function PayrollPage() {
   });
 
   return (
-    <div className="flex min-h-screen w-full flex-col">
-      <Header title="Payroll & Compliance" />
       <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
         <Card className="lg:col-span-4">
             <CardHeader className="flex flex-row items-center">
@@ -86,6 +83,5 @@ export default function PayrollPage() {
           </CardContent>
         </Card>
       </main>
-    </div>
   )
 }

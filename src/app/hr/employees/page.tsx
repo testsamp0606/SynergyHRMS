@@ -28,13 +28,10 @@ import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { MoreHorizontal, PlusCircle, Search, Upload, Download } from "lucide-react"
 import { employees } from "@/lib/data"
-import { Header } from "@/components/layout/header"
 import { Input } from "@/components/ui/input"
 
 export default function EmployeesPage() {
   return (
-    <div className="flex min-h-screen w-full flex-col">
-       <Header title="Employee Management" />
       <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
         <div className="flex flex-col md:flex-row items-center gap-4">
             <div className="relative w-full md:w-auto md:flex-grow">
@@ -156,6 +153,5 @@ export default function EmployeesPage() {
           </CardContent>
         </Card>
       </main>
-    </div>
   )
 }

@@ -1,6 +1,5 @@
 
 'use client';
-import { Header } from '@/components/layout/header';
 import {
   Card,
   CardContent,
@@ -50,8 +49,6 @@ export default function MyTeamPage() {
   });
 
   return (
-    <div className="flex min-h-screen w-full flex-col">
-      <Header title="My Team" />
       <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
         <Card>
           <CardHeader>
@@ -148,15 +145,15 @@ export default function MyTeamPage() {
                             <Separator />
                              <div className="grid grid-cols-2 gap-4 text-sm">
                                 <div className="space-y-1">
-                                    <p className="text-muted-foreground">Department</p>
-                                    <p className="font-medium flex items-center gap-2"><Building className="h-4 w-4" /> {selectedMember.department}</p>
+                                    <div className="text-muted-foreground">Department</div>
+                                    <div className="font-medium flex items-center gap-2"><Building className="h-4 w-4" /> {selectedMember.department}</div>
                                 </div>
                                  <div className="space-y-1">
-                                    <p className="text-muted-foreground">Role</p>
-                                    <p className="font-medium flex items-center gap-2"><Briefcase className="h-4 w-4" /> {selectedMember.role}</p>
+                                    <div className="text-muted-foreground">Role</div>
+                                    <div className="font-medium flex items-center gap-2"><Briefcase className="h-4 w-4" /> {selectedMember.role}</div>
                                 </div>
                                 <div className="space-y-1">
-                                    <p className="text-muted-foreground">Status</p>
+                                    <div className="text-muted-foreground">Status</div>
                                     <div className="font-medium">
                                         <Badge variant={selectedMember.status === 'Active' ? 'secondary' : 'outline'}>
                                             {selectedMember.status}
@@ -164,8 +161,8 @@ export default function MyTeamPage() {
                                     </div>
                                 </div>
                                  <div className="space-y-1">
-                                    <p className="text-muted-foreground">Phone</p>
-                                    <p className="font-medium flex items-center gap-2"><Phone className="h-4 w-4" /> +1-202-555-0186</p>
+                                    <div className="text-muted-foreground">Phone</div>
+                                    <div className="font-medium flex items-center gap-2"><Phone className="h-4 w-4" /> +1-202-555-0186</div>
                                 </div>
                             </div>
                         </div>
@@ -174,6 +171,5 @@ export default function MyTeamPage() {
             </DialogContent>
         </Dialog>
       </main>
-    </div>
   );
 }

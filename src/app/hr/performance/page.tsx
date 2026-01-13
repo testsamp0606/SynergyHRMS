@@ -21,7 +21,6 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { MoreHorizontal, PlusCircle } from "lucide-react"
 import { performanceReviews } from "@/lib/data"
 import { format } from "date-fns"
-import { Header } from "@/components/layout/header"
 
 const statusVariant: { [key: string]: "default" | "secondary" | "outline" } = {
   "Completed": "default",
@@ -32,8 +31,6 @@ const statusVariant: { [key: string]: "default" | "secondary" | "outline" } = {
 
 export default function PerformancePage() {
   return (
-    <div className="flex min-h-screen w-full flex-col">
-       <Header title="Performance Management" />
       <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
         <Card>
           <CardHeader className="flex flex-row items-center">
@@ -105,6 +102,5 @@ export default function PerformancePage() {
           </CardContent>
         </Card>
       </main>
-    </div>
   )
 }

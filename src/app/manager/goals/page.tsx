@@ -1,6 +1,5 @@
 
 'use client';
-import { Header } from '@/components/layout/header';
 import {
   Card,
   CardContent,
@@ -24,8 +23,6 @@ import { currentPerformanceCycle } from '@/lib/data';
 
 export default function ManagerGoalsPage() {
   return (
-    <div className="flex min-h-screen w-full flex-col">
-      <Header title="Team Goals" />
       <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
         <Card>
           <CardHeader className="flex flex-row items-center">
@@ -73,6 +70,5 @@ export default function ManagerGoalsPage() {
           </CardContent>
         </Card>
       </main>
-    </div>
   );
 }
