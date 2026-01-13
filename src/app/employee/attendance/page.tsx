@@ -78,7 +78,10 @@ export default function EmployeeAttendancePage() {
         let status = dayData?.status;
         let cellClass = '';
         
-        if (holiday) {
+        if (isSameDay(date, new Date()) && punchInTime) {
+          status = punchOutTime ? 'Present' : 'Clocked In';
+          cellClass = 'bg-green-50 dark:bg-green-900/20 text-green-700';
+        } else if (holiday) {
             status = holiday.name;
             cellClass = 'bg-blue-50 dark:bg-blue-900/20 text-blue-600';
         } else if (dayData) {

@@ -63,9 +63,7 @@ export default function EmployeeDashboardPage() {
 
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
-      <div className="p-4 md:p-8 md:pb-0">
-        <AttendanceCard />
-      </div>
+      <AttendanceCard />
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
          <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -206,19 +204,21 @@ export default function EmployeeDashboardPage() {
         <CardContent>
           <div className="space-y-4">
             {recentAnnouncements.map((announcement) => (
-              <div key={announcement.id} className="flex items-start gap-4">
-                <Megaphone className="h-5 w-5 text-primary mt-1" />
-                <div className="flex-1">
-                  <div className="flex justify-between items-start">
-                    <p className="font-medium text-sm">{announcement.title}</p>
-                    <Badge variant="outline">{announcement.target}</Badge>
+              <Link href="/employee/announcements" key={announcement.id}>
+                <div  className="flex items-start gap-4 hover:bg-muted/50 p-2 rounded-lg">
+                  <Megaphone className="h-5 w-5 text-primary mt-1" />
+                  <div className="flex-1">
+                    <div className="flex justify-between items-start">
+                      <p className="font-medium text-sm">{announcement.title}</p>
+                      <Badge variant="outline">{announcement.target}</Badge>
+                    </div>
+                    <p className="text-xs text-muted-foreground">{announcement.date}</p>
                   </div>
-                  <p className="text-xs text-muted-foreground">{announcement.date}</p>
+                  <Button variant="ghost" size="icon" className="h-8 w-8">
+                    <ChevronRight className="h-4 w-4" />
+                  </Button>
                 </div>
-                 <Button variant="ghost" size="icon" className="h-8 w-8">
-                   <ChevronRight className="h-4 w-4" />
-                 </Button>
-              </div>
+              </Link>
             ))}
           </div>
         </CardContent>
