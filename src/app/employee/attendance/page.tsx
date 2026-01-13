@@ -23,6 +23,12 @@ import {
 import { cn } from '@/lib/utils';
 import { attendanceData, holidays } from '@/lib/data';
 import { AttendanceCard } from '../dashboard/attendance-card';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 
 
 export default function EmployeeAttendancePage() {
@@ -40,6 +46,8 @@ export default function EmployeeAttendancePage() {
   const startingDayIndex = (getDay(firstDayOfMonth) + 6) % 7;
   
   const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+
+  const totalCells = Math.ceil((startingDayIndex + daysInMonth.length) / 7) * 7;
 
 
   const getDayStatus = (day: Date) => {
@@ -72,31 +80,44 @@ export default function EmployeeAttendancePage() {
           <CardDescription>A summary of your attendance for the current month.</CardDescription>
         </CardHeader>
         <CardContent>
-            <div className="grid grid-cols-7 border-t border-l">
-                {daysOfWeek.map(day => (
-                    <div key={day} className="text-center font-semibold p-2 border-b border-r text-sm text-muted-foreground">
-                        {day}
-                    </div>
-                ))}
-                {Array.from({ length: startingDayIndex }).map((_, index) => (
-                    <div key={`empty-${index}`} className="border-b border-r h-24 bg-muted/50" />
-                ))}
-                {daysInMonth.map((day) => {
-                    const { status, details } = getDayStatus(day);
-                    return (
-                        <div key={day.toString()} className="border-b border-r p-2 h-28 flex flex-col">
-                            <span className="font-semibold text-sm">{getDate(day)}</span>
-                            <div className="mt-1 flex-grow flex flex-col justify-between">
-                                <Badge variant="outline" className="text-xs w-min whitespace-nowrap">{status}</Badge>
-                                <p className="text-xs text-muted-foreground mt-1 break-words">{details !== '---' ? details : ''}</p>
-                            </div>
+            <TooltipProvider>
+                <div className="grid grid-cols-7 border-t border-l">
+                    {daysOfWeek.map(day => (
+                        <div key={day} className="text-center font-semibold p-2 border-b border-r text-sm text-muted-foreground">
+                            {day}
                         </div>
-                    )
-                })}
-                 {Array.from({ length: 42 - daysInMonth.length - startingDayIndex }).map((_, index) => (
-                    <div key={`empty-end-${index}`} className="border-b border-r h-28 bg-muted/50" />
-                ))}
-            </div>
+                    ))}
+                    {Array.from({ length: startingDayIndex }).map((_, index) => (
+                        <div key={`empty-${index}`} className="border-b border-r h-28 bg-muted/50" />
+                    ))}
+                    {daysInMonth.map((day) => {
+                        const { status, details } = getDayStatus(day);
+                        return (
+                           <Tooltip key={day.toString()}>
+                                <TooltipTrigger asChild>
+                                    <div className="border-b border-r p-2 h-28 flex flex-col hover:bg-muted/50 cursor-pointer">
+                                        <span className="font-semibold text-sm">{getDate(day)}</span>
+                                        <div className="mt-1 flex-grow flex flex-col justify-between">
+                                            <Badge variant="outline" className="text-xs w-min whitespace-nowrap">{status}</Badge>
+                                            <p className="text-xs text-muted-foreground mt-1 break-words truncate">
+                                                {details !== '---' ? details : ''}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                    <p className='font-bold'>{format(day, 'MMMM d, yyyy')}</p>
+                                    <p>Status: {status}</p>
+                                    {details !== '---' && <p>Details: {details}</p>}
+                                </TooltipContent>
+                            </Tooltip>
+                        )
+                    })}
+                    {Array.from({ length: totalCells - daysInMonth.length - startingDayIndex }).map((_, index) => (
+                        <div key={`empty-end-${index}`} className="border-b border-r h-28 bg-muted/50" />
+                    ))}
+                </div>
+            </TooltipProvider>
         </CardContent>
       </Card>
       <div className="space-y-4">
