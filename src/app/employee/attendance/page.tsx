@@ -68,7 +68,13 @@ export default function EmployeeAttendancePage() {
   const getDayStatus = (day: Date) => {
     const dateStr = format(day, 'yyyy-MM-dd');
     const dayData = attendanceData[dateStr];
-    const holiday = holidays.find(h => isSameDay(new Date(h.date), day));
+    // The holiday date strings from data.ts are like 'YYYY-MM-DD'. To avoid timezone issues,
+    // we create a new Date object from the string components.
+    const holiday = holidays.find(h => {
+        const [year, month, dayOfMonth] = h.date.split('-').map(Number);
+        const holidayDate = new Date(year, month - 1, dayOfMonth);
+        return isSameDay(holidayDate, day);
+    });
     const dayOfWeek = getDay(day);
 
     if (holiday) return { status: 'Holiday', details: holiday.name, variant: 'default' as const, className: 'bg-blue-500/10 text-blue-600' };
@@ -155,7 +161,7 @@ export default function EmployeeAttendancePage() {
                         );
 
                         if (isFutureDate) {
-                            return <div key={day.toString()}>{dayCell}</div>;
+                            return <div key={day.toString()} className="opacity-50">{dayCell}</div>;
                         }
 
                         return (
