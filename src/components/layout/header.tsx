@@ -7,7 +7,6 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuTrigger,
   DropdownMenuGroup,
 } from "@/components/ui/dropdown-menu"
 import {
@@ -20,6 +19,7 @@ import { ThemeToggle } from "../theme-toggle"
 import { usePathname } from "next/navigation"
 import { useState, useEffect } from "react"
 import { format } from "date-fns"
+import { Badge } from "@/components/ui/badge"
 
 function getTitleFromPathname(pathname: string): string {
     const segments = pathname.split('/').filter(Boolean);
