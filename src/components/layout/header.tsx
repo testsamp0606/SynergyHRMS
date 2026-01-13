@@ -26,21 +26,21 @@ import Link from "next/link"
 
 const initialNotifications = [
     {
-        icon: <CircleCheck className="h-4 w-4 text-green-500" />,
+        icon: <CircleCheck className="h-4 w-4" />,
         title: "Leave Approved",
         description: "Your leave request for Dec 20-22 has been approved.",
         time: "5 minutes ago",
         href: "/employee/leave"
     },
     {
-        icon: <MessageSquareWarning className="h-4 w-4 text-yellow-500" />,
+        icon: <MessageSquareWarning className="h-4 w-4" />,
         title: "Performance Review",
         description: "Your self-appraisal for H2 2024 is due in 3 days.",
         time: "1 hour ago",
         href: "/employee/performance"
     },
     {
-        icon: <CircleAlert className="h-4 w-4 text-red-500" />,
+        icon: <CircleAlert className="h-4 w-4" />,
         title: "Payroll Processed",
         description: "The payroll for August 2024 has been processed.",
         time: "2 days ago",
