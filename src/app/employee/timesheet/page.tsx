@@ -36,10 +36,12 @@ import {
   isSameDay,
   eachDayOfInterval,
   parse,
+  subMonths,
+  isSameMonth,
 } from 'date-fns';
 import { timesheetData } from '@/lib/data';
 import type { TimesheetEntry } from '@/lib/types';
-import { Save, Send, Clock } from 'lucide-react';
+import { Save, Send, Clock, Upload } from 'lucide-react';
 
 const statusVariant: { [key in TimesheetEntry['status']]: 'default' | 'secondary' | 'outline' | 'destructive' } = {
   'Approved': 'default',
@@ -52,30 +54,33 @@ const getWeeksForMonth = (date: Date) => {
   const start = startOfMonth(date);
   const end = endOfMonth(date);
   const weeks = eachWeekOfInterval({ start, end }, { weekStartsOn: 1 });
-  return weeks.map((weekStart, index) => ({
-    label: `Week ${index + 1} (${format(weekStart, 'MMM d')})`,
+  return weeks.map((weekStart) => ({
+    label: `Week ${getWeek(weekStart, { weekStartsOn: 1 })} (${format(weekStart, 'MMM d')})`,
     value: getWeek(weekStart, { weekStartsOn: 1 }),
   }));
 };
 
+const getMonthsForSelection = () => {
+    const today = new Date();
+    return [
+        { label: format(today, 'MMMM yyyy'), value: today.toISOString() },
+        { label: format(subMonths(today, 1), 'MMMM yyyy'), value: subMonths(today, 1).toISOString() },
+        { label: format(subMonths(today, 2), 'MMMM yyyy'), value: subMonths(today, 2).toISOString() },
+    ];
+};
+
 export default function TimesheetPage() {
-  const [currentDate] = useState(new Date());
-  const [weeks, setWeeks] = useState(getWeeksForMonth(currentDate));
+  const [selectedMonth, setSelectedMonth] = useState(new Date());
+  const [weeks, setWeeks] = useState(getWeeksForMonth(selectedMonth));
   const [selectedWeek, setSelectedWeek] = useState<number>(weeks[0]?.value);
   const [entries, setEntries] = useState<TimesheetEntry[]>(timesheetData);
-  const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
-    setWeeks(getWeeksForMonth(currentDate));
-  }, [currentDate]);
+    setWeeks(getWeeksForMonth(selectedMonth));
+    setSelectedWeek(getWeeksForMonth(selectedMonth)[0]?.value);
+  }, [selectedMonth]);
 
-  useEffect(() => {
-    setIsEditing(selectedWeek !== undefined);
-  }, [selectedWeek]);
-
-  const handleWeekChange = (value: string) => {
-    setSelectedWeek(Number(value));
-  };
+  const isCurrentMonth = isSameMonth(selectedMonth, new Date());
 
   const handleTimeChange = (id: string, field: 'loginTime' | 'logoutTime', value: string) => {
     setEntries(prevEntries => {
@@ -104,6 +109,8 @@ export default function TimesheetPage() {
   
   const getWeekNumber = (date: Date) => getWeek(date, { weekStartsOn: 1 });
 
+  const monthOptions = getMonthsForSelection();
+
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
       <Card>
@@ -111,21 +118,33 @@ export default function TimesheetPage() {
           <div>
             <CardTitle>My Timesheet</CardTitle>
             <CardDescription>
-              Submit your weekly hours for {format(currentDate, 'MMMM yyyy')}.
+              Submit your weekly hours. You can edit the current month and view the last two months.
             </CardDescription>
           </div>
-          <Select onValueChange={handleWeekChange} defaultValue={String(selectedWeek)}>
-            <SelectTrigger className="w-full md:w-[280px]">
-              <SelectValue placeholder="Select a week" />
-            </SelectTrigger>
-            <SelectContent>
-              {weeks.map(week => (
-                <SelectItem key={week.value} value={String(week.value)}>
-                  {week.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+           <div className="flex gap-2 w-full md:w-auto">
+            <Select onValueChange={(value) => setSelectedMonth(new Date(value))} defaultValue={selectedMonth.toISOString()}>
+                <SelectTrigger className="w-full md:w-[200px]">
+                    <SelectValue placeholder="Select a month" />
+                </SelectTrigger>
+                <SelectContent>
+                    {monthOptions.map(month => (
+                        <SelectItem key={month.value} value={month.value}>{month.label}</SelectItem>
+                    ))}
+                </SelectContent>
+            </Select>
+            <Select onValueChange={(value) => setSelectedWeek(Number(value))} value={String(selectedWeek)}>
+                <SelectTrigger className="w-full md:w-[280px]">
+                <SelectValue placeholder="Select a week" />
+                </SelectTrigger>
+                <SelectContent>
+                {weeks.map(week => (
+                    <SelectItem key={week.value} value={String(week.value)}>
+                    {week.label}
+                    </SelectItem>
+                ))}
+                </SelectContent>
+            </Select>
+          </div>
         </CardHeader>
         <CardContent>
           <Table>
@@ -140,12 +159,12 @@ export default function TimesheetPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {entries.filter(entry => getWeekNumber(entry.date) === selectedWeek).map((entry) => (
+              {entries.filter(entry => getWeekNumber(entry.date) === selectedWeek && isSameMonth(entry.date, selectedMonth)).map((entry) => (
                 <TableRow key={entry.id}>
                   <TableCell className="font-medium">{format(entry.date, 'MMM d, yyyy')}</TableCell>
                   <TableCell>{format(entry.date, 'EEEE')}</TableCell>
                   <TableCell>
-                    {isEditing && entry.status === 'Draft' ? (
+                    {isCurrentMonth && entry.status === 'Draft' ? (
                       <Input
                         type="time"
                         value={entry.loginTime}
@@ -157,7 +176,7 @@ export default function TimesheetPage() {
                     )}
                   </TableCell>
                   <TableCell>
-                     {isEditing && entry.status === 'Draft' ? (
+                     {isCurrentMonth && entry.status === 'Draft' ? (
                       <Input
                         type="time"
                         value={entry.logoutTime}
@@ -177,10 +196,13 @@ export default function TimesheetPage() {
             </TableBody>
           </Table>
         </CardContent>
-        <CardFooter className="justify-end gap-2">
-            <Button variant="outline"><Save className="mr-2 h-4 w-4" /> Save as Draft</Button>
-            <Button><Send className="mr-2 h-4 w-4" /> Submit for Approval</Button>
-        </CardFooter>
+        {isCurrentMonth && (
+            <CardFooter className="justify-end gap-2">
+                <Button variant="outline"><Upload className="mr-2 h-4 w-4" /> Submit Sitesheet</Button>
+                <Button variant="outline"><Save className="mr-2 h-4 w-4" /> Save as Draft</Button>
+                <Button><Send className="mr-2 h-4 w-4" /> Submit for Approval</Button>
+            </CardFooter>
+        )}
       </Card>
     </main>
   );

@@ -1,3 +1,4 @@
+
 "use client"
 
 import {
@@ -24,6 +25,7 @@ import {
   Megaphone,
   BarChart3,
   LifeBuoy,
+  Clock,
 } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from 'next/navigation'
@@ -32,6 +34,7 @@ const navItems = [
   { href: "/hr/dashboard", icon: LayoutDashboard, label: "Dashboard" },
   { href: "/hr/employees", icon: Users, label: "Employee Management" },
   { href: "/hr/leave", icon: CalendarCheck, label: "Attendance & Leave" },
+  { href: "/hr/timesheet", icon: Clock, label: "Timesheet" },
   { href: "/hr/payroll", icon: Wallet, label: "Payroll" },
   { href: "/hr/recruitment", icon: UserPlus, label: "Recruitment" },
   { href: "/hr/performance", icon: TrendingUp, label: "Performance Management" },
