@@ -73,16 +73,16 @@ export default function EmployeeAttendancePage() {
     const dayOfWeek = getDay(day);
 
     if (holiday) return { status: 'Holiday', details: holiday.name, variant: 'default' as const, className: 'bg-blue-500/10 text-blue-600' };
-    if (dayOfWeek === 0 || dayOfWeek === 6) return { status: 'Week Off', details: '---', variant: 'outline' as const, className: 'text-muted-foreground'};
+    if (dayOfWeek === 0 || dayOfWeek === 6) return { status: 'Week Off', details: '---', variant: 'outline' as const, className: 'bg-muted/50 text-muted-foreground'};
     if (dayData) {
       switch(dayData.status) {
-        case 'Present': return { status: 'Present', details: `In: ${dayData.checkIn}, Out: ${dayData.checkOut}`, variant: 'secondary' as const, className: 'text-green-600' };
-        case 'Half Day': return { status: 'Half Day', details: `In: ${dayData.checkIn}, Out: ${dayData.checkOut}`, variant: 'secondary' as const, className: 'text-yellow-600' };
-        case 'Absent': return { status: 'Absent', details: '---', variant: 'destructive' as const };
-        case 'On Leave': return { status: 'On Leave', details: '---', variant: 'default' as const, className: 'bg-yellow-500/10 text-yellow-600' };
+        case 'Present': return { status: 'Present', details: `In: ${dayData.checkIn}, Out: ${dayData.checkOut}`, variant: 'secondary' as const, className: 'bg-green-500/10 text-green-600' };
+        case 'Half Day': return { status: 'Half Day', details: `In: ${dayData.checkIn}, Out: ${dayData.checkOut}`, variant: 'secondary' as const, className: 'bg-yellow-500/10 text-yellow-600' };
+        case 'Absent': return { status: 'Absent', details: '---', variant: 'destructive' as const, className: 'bg-red-500/10' };
+        case 'On Leave': return { status: 'On Leave', details: '---', variant: 'default' as const, className: 'bg-purple-500/10 text-purple-600' };
       }
     }
-    return { status: 'N/A', details: '---', variant: 'outline' as const };
+    return { status: 'N/A', details: '---', variant: 'outline' as const, className: '' };
   }
 
   return (
@@ -139,15 +139,15 @@ export default function EmployeeAttendancePage() {
                         <div key={`empty-${index}`} className="border-b border-r h-28 bg-muted/50" />
                     ))}
                     {daysInMonth.map((day) => {
-                        const { status, details } = getDayStatus(day);
+                        const { status, details, className: statusClassName, variant } = getDayStatus(day);
                         return (
                            <Tooltip key={day.toString()}>
                                 <TooltipTrigger asChild>
-                                    <div className={cn("border-b border-r p-2 h-28 flex flex-col hover:bg-muted/50 cursor-pointer",
-                                    isToday(day) && "bg-accent/50")}>
+                                    <div className={cn("border-b border-r p-2 h-28 flex flex-col hover:bg-accent/50 cursor-pointer",
+                                    isToday(day) && "bg-primary/20", statusClassName)}>
                                         <span className={cn("font-semibold text-sm", isToday(day) && "text-primary")}>{getDate(day)}</span>
                                         <div className="mt-1 flex-grow flex flex-col justify-start">
-                                            <Badge variant="outline" className="text-xs w-min whitespace-nowrap">{status}</Badge>
+                                            <Badge variant={variant} className="text-xs w-min whitespace-nowrap">{status}</Badge>
                                         </div>
                                     </div>
                                 </TooltipTrigger>

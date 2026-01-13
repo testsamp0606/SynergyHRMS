@@ -257,13 +257,13 @@ export const attendanceData: AttendanceData = {
 };
 
 export const holidays = [
+    { date: new Date(2024, 0, 26), name: 'Republic Day' },
+    { date: new Date(2024, 2, 25), name: 'Holi' },
     { date: new Date(2024, 7, 15), name: 'Independence Day' },
-    { date: new Date(2024, 9, 31), name: 'Diwali' },
-    { date: new Date(2026, 0, 1), name: "New Year's Day" },
-    { date: new Date(2026, 0, 19), name: 'Martin Luther King, Jr. Day' },
-    { date: new Date(2026, 4, 25), name: 'Memorial Day'},
-    { date: new Date(2026, 6, 3), name: 'Independence Day'},
-    { date: new Date(2026, 8, 7), name: 'Labor Day'},
+    { date: new Date(2024, 9, 2), name: 'Gandhi Jayanti' },
+    { date: new Date(2024, 10, 1), name: 'Diwali' },
+    { date: new Date(2024, 11, 25), name: 'Christmas' },
+    { date: new Date(2025, 0, 1), name: "New Year's Day" },
 ];
 
 export const leaveTrends = [
