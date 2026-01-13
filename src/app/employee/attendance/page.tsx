@@ -21,7 +21,8 @@ import {
   getDate,
   isToday,
   isFuture,
-  intervalToDuration
+  intervalToDuration,
+  startOfToday
 } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { attendanceData, holidays } from '@/lib/data';
@@ -91,6 +92,16 @@ export default function EmployeeAttendancePage() {
     if (isFuture(day) && !isToday(day)) return { status: 'Upcoming', details: '---', variant: 'outline' as const, className: 'opacity-50' };
     return { status: 'N/A', details: '---', variant: 'outline' as const, className: '' };
   }
+  
+  const today = startOfToday();
+  const upcomingHolidays = holidays
+    .map(h => {
+        const [year, month, dayOfMonth] = h.date.split('-').map(Number);
+        return { ...h, dateObj: new Date(year, month - 1, dayOfMonth) };
+    })
+    .filter(h => h.dateObj >= today)
+    .slice(0, 3);
+
 
   return (
     <div className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
@@ -201,10 +212,10 @@ export default function EmployeeAttendancePage() {
             </CardHeader>
             <CardContent>
                 <ul className="space-y-2 text-sm">
-                    {holidays.filter(h => new Date(h.date) > new Date()).slice(0, 3).map(h => (
+                    {upcomingHolidays.map(h => (
                        <li key={h.name} className="flex justify-between">
                            <span>{h.name}</span>
-                           <span className="text-muted-foreground">{format(new Date(h.date), 'MMM d')}</span>
+                           <span className="text-muted-foreground">{format(h.dateObj, 'MMM d')}</span>
                         </li>
                     ))}
                 </ul>
