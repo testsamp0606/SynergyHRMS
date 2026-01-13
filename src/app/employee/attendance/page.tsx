@@ -63,13 +63,10 @@ export default function EmployeeAttendancePage() {
   
   const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
-  const totalCells = Math.ceil((startingDayIndex + daysInMonth.length) / 7) * 7;
-
-
   const getDayStatus = (day: Date) => {
     const dateStr = format(day, 'yyyy-MM-dd');
     const dayData = attendanceData[dateStr];
-    const holiday = holidays.find(h => isSameDay(h.date, day));
+    const holiday = holidays.find(h => isSameDay(new Date(h.date), day));
     const dayOfWeek = getDay(day);
 
     if (holiday) return { status: 'Holiday', details: holiday.name, variant: 'default' as const, className: 'bg-blue-500/10 text-blue-600' };
@@ -82,6 +79,7 @@ export default function EmployeeAttendancePage() {
         case 'On Leave': return { status: 'On Leave', details: '---', variant: 'default' as const, className: 'bg-purple-500/10 text-purple-600' };
       }
     }
+    if (day > new Date()) return { status: 'Upcoming', details: '---', variant: 'outline' as const, className: '' };
     return { status: 'N/A', details: '---', variant: 'outline' as const, className: '' };
   }
 
@@ -136,14 +134,14 @@ export default function EmployeeAttendancePage() {
                         </div>
                     ))}
                     {Array.from({ length: startingDayIndex }).map((_, index) => (
-                        <div key={`empty-${index}`} className="border-b border-r h-28 bg-muted/50" />
+                        <div key={`empty-${index}`} className="border-b border-r aspect-square bg-muted/50" />
                     ))}
                     {daysInMonth.map((day) => {
                         const { status, details, className: statusClassName, variant } = getDayStatus(day);
                         return (
                            <Tooltip key={day.toString()}>
                                 <TooltipTrigger asChild>
-                                    <div className={cn("border-b border-r p-2 h-28 flex flex-col hover:bg-accent/50 cursor-pointer",
+                                    <div className={cn("border-b border-r p-2 flex flex-col hover:bg-accent/50 cursor-pointer aspect-square",
                                     isToday(day) && "bg-primary/20", statusClassName)}>
                                         <span className={cn("font-semibold text-sm", isToday(day) && "text-primary")}>{getDate(day)}</span>
                                         <div className="mt-1 flex-grow flex flex-col justify-start">
@@ -159,8 +157,8 @@ export default function EmployeeAttendancePage() {
                             </Tooltip>
                         )
                     })}
-                    {Array.from({ length: totalCells - daysInMonth.length - startingDayIndex }).map((_, index) => (
-                        <div key={`empty-end-${index}`} className="border-b border-r h-28 bg-muted/50" />
+                    {Array.from({ length: (7 - (daysInMonth.length + startingDayIndex) % 7) % 7 }).map((_, index) => (
+                        <div key={`empty-end-${index}`} className="border-b border-r aspect-square bg-muted/50" />
                     ))}
                 </div>
             </TooltipProvider>
@@ -182,10 +180,10 @@ export default function EmployeeAttendancePage() {
             </CardHeader>
             <CardContent>
                 <ul className="space-y-2 text-sm">
-                    {holidays.filter(h => h.date > new Date()).slice(0, 3).map(h => (
+                    {holidays.filter(h => new Date(h.date) > new Date()).slice(0, 3).map(h => (
                        <li key={h.name} className="flex justify-between">
                            <span>{h.name}</span>
-                           <span className="text-muted-foreground">{format(h.date, 'MMM d')}</span>
+                           <span className="text-muted-foreground">{format(new Date(h.date), 'MMM d')}</span>
                         </li>
                     ))}
                 </ul>

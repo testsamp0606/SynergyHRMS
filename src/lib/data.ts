@@ -1,6 +1,6 @@
 
 import { addDays, format, subDays, subMonths } from 'date-fns';
-import type { Employee, LeaveRequest, PerformanceReview, PayrollRun, TrainingProgram, Asset, ExpenseClaim, Document, Announcement, UserProfile, Role, AuditLog, EmployeeDashboardSummary, RecentAnnouncement, EmployeeTask, PerformanceCycle, PerformanceGoal, HistoricalPerformanceReview, AttendanceData } from '@/lib/types';
+import type { Employee, LeaveRequest, PerformanceReview, PayrollRun, TrainingProgram, Asset, ExpenseClaim, Document, Announcement, UserProfile, Role, AuditLog, EmployeeDashboardSummary, RecentAnnouncement, EmployeeTask, PerformanceCycle, PerformanceGoal, HistoricalPerformanceReview, AttendanceData, Holiday } from '@/lib/types';
 
 export const employees: Employee[] = [
   { id: 'EMP001', name: 'Alice Johnson', email: 'alice.j@example.com', avatar: 'https://picsum.photos/seed/1/100/100', department: 'Engineering', role: 'Senior Software Engineer', status: 'Active' },
@@ -256,14 +256,14 @@ export const attendanceData: AttendanceData = {
   [format(addDays(new Date(), -11), 'yyyy-MM-dd')]: { status: 'Week Off' },
 };
 
-export const holidays = [
-    { date: new Date(2024, 0, 26), name: 'Republic Day' },
-    { date: new Date(2024, 2, 25), name: 'Holi' },
-    { date: new Date(2024, 7, 15), name: 'Independence Day' },
-    { date: new Date(2024, 9, 2), name: 'Gandhi Jayanti' },
-    { date: new Date(2024, 10, 1), name: 'Diwali' },
-    { date: new Date(2024, 11, 25), name: 'Christmas' },
-    { date: new Date(2025, 0, 1), name: "New Year's Day" },
+export const holidays: Holiday[] = [
+    { date: '2024-01-26', name: 'Republic Day' },
+    { date: '2024-03-25', name: 'Holi' },
+    { date: '2024-08-15', name: 'Independence Day' },
+    { date: '2024-10-02', name: 'Gandhi Jayanti' },
+    { date: '2024-11-01', name: 'Diwali' },
+    { date: '2024-12-25', name: 'Christmas' },
+    { date: '2025-01-01', name: "New Year's Day" },
 ];
 
 export const leaveTrends = [
