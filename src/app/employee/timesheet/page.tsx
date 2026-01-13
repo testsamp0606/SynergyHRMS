@@ -83,28 +83,32 @@ export default function TimesheetPage() {
 
   const handleTimeChange = (id: string, field: 'loginTime' | 'logoutTime', value: string) => {
     setEntries(prevEntries => {
-      const newEntries = prevEntries.map(entry => {
+      return prevEntries.map(entry => {
         if (entry.id === id) {
           const updatedEntry = { ...entry, [field]: value, status: 'Draft' as const };
+          
           if (updatedEntry.loginTime && updatedEntry.logoutTime) {
             try {
               const login = parse(updatedEntry.loginTime, 'HH:mm', new Date());
               const logout = parse(updatedEntry.logoutTime, 'HH:mm', new Date());
-              if (logout > login) {
+              
+              if (!isNaN(login.getTime()) && !isNaN(logout.getTime()) && logout > login) {
                 const diff = (logout.getTime() - login.getTime()) / (1000 * 60 * 60);
-                updatedEntry.totalHours = `${diff.toFixed(2)}h`;
+                const hours = Math.floor(diff);
+                const minutes = Math.round((diff - hours) * 60);
+                updatedEntry.totalHours = `${hours}h ${minutes}m`;
               } else {
-                updatedEntry.totalHours = '0h';
+                updatedEntry.totalHours = '0h 0m';
               }
             } catch (e) {
-                // handle invalid time format
+                console.error("Error parsing time", e);
+                updatedEntry.totalHours = '0h 0m';
             }
           }
           return updatedEntry;
         }
         return entry;
       });
-      return newEntries;
     });
   };
   
