@@ -285,4 +285,9 @@ export const complianceAlerts = [
   { id: 'CMP02', title: 'Form I-9 Reverification for 3 employees', dueDate: 'Aug 31, 2024' },
 ];
 
+export const upcomingEvents = [
+    { date: '2024-09-02', name: 'Labor Day' },
+    { date: '2024-09-12', name: 'Marketing Offsite' },
+];
+
 export { type Employee };

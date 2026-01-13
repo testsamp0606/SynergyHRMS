@@ -8,13 +8,14 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
+  DropdownMenuGroup,
 } from "@/components/ui/dropdown-menu"
 import {
   SidebarTrigger
 } from "@/components/ui/sidebar"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { LogOut, Settings, User, Clock, Bell } from "lucide-react"
+import { LogOut, Settings, User, Clock, Bell, CircleCheck, MessageSquareWarning, CircleAlert } from "lucide-react"
 import { ThemeToggle } from "../theme-toggle"
 import { usePathname } from "next/navigation"
 import { useState, useEffect } from "react"
@@ -44,6 +45,26 @@ function getTitleFromPathname(pathname: string): string {
         .trim();
 }
 
+const notifications = [
+    {
+        icon: <CircleCheck className="h-4 w-4 text-green-500" />,
+        title: "Leave Approved",
+        description: "Your leave request for Dec 20-22 has been approved.",
+        time: "5 minutes ago"
+    },
+    {
+        icon: <MessageSquareWarning className="h-4 w-4 text-yellow-500" />,
+        title: "Performance Review",
+        description: "Your self-appraisal for H2 2024 is due in 3 days.",
+        time: "1 hour ago"
+    },
+    {
+        icon: <CircleAlert className="h-4 w-4 text-red-500" />,
+        title: "Payroll Processed",
+        description: "The payroll for August 2024 has been processed.",
+        time: "2 days ago"
+    },
+]
 
 export function Header() {
   const pathname = usePathname();
@@ -69,10 +90,41 @@ export function Header() {
           <span>{time.toLocaleTimeString()}</span>
         </div>
         <ThemeToggle />
-        <Button variant="ghost" size="icon" className="h-9 w-9">
-            <Bell className="h-5 w-5" />
-            <span className="sr-only">Notifications</span>
-        </Button>
+         <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+                 <Button variant="ghost" size="icon" className="h-9 w-9">
+                    <Bell className="h-5 w-5" />
+                    <span className="sr-only">Notifications</span>
+                     <span className="absolute top-1.5 right-1.5 flex h-2.5 w-2.5">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+                    </span>
+                </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-80" align="end">
+                <DropdownMenuLabel className="flex items-center justify-between">
+                    <span>Notifications</span>
+                    <Badge variant="secondary">{notifications.length}</Badge>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuGroup>
+                    {notifications.map((notification, index) => (
+                        <DropdownMenuItem key={index} className="flex items-start gap-3">
+                            {notification.icon}
+                            <div className="flex-1">
+                                <p className="text-sm font-medium">{notification.title}</p>
+                                <p className="text-xs text-muted-foreground">{notification.description}</p>
+                                <p className="text-xs text-muted-foreground mt-1">{notification.time}</p>
+                            </div>
+                        </DropdownMenuItem>
+                    ))}
+                </DropdownMenuGroup>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem className="justify-center text-sm text-muted-foreground">
+                    Mark all as read
+                </DropdownMenuItem>
+            </DropdownMenuContent>
+        </DropdownMenu>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="relative h-9 w-9 rounded-full">

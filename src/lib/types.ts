@@ -1,6 +1,7 @@
 
 
 
+
 export type Employee = {
   id: string;
   name: string;
@@ -200,4 +201,9 @@ export type AttendanceRecord = {
 
 export type AttendanceData = {
     [key: string]: AttendanceRecord;
+}
+
+export type UpcomingEvent = {
+    date: string;
+    name: string;
 }
