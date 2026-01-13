@@ -18,18 +18,53 @@ import {
   ChevronRight,
   Megaphone,
   CheckCircle,
+  BarChart,
+  LineChart as LineChartIcon,
+  PieChart as PieChartIcon
 } from 'lucide-react';
+import {
+  ResponsiveContainer,
+  Bar,
+  BarChart as RechartsBarChart,
+  Line,
+  LineChart as RechartsLineChart,
+  Pie,
+  PieChart as RechartsPieChart,
+  XAxis,
+  YAxis,
+  Tooltip,
+  Cell,
+} from 'recharts';
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
+
 import { employeeDashboardSummary, recentAnnouncements, employeeTasks } from '@/lib/data';
 import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
 import { AttendanceCard } from './attendance-card';
 
+const COLORS = ['hsl(var(--chart-1))', 'hsl(var(--chart-2))', 'hsl(var(--chart-3))'];
+
+
 export default function EmployeeDashboardPage() {
-  const { leaveBalance, upcomingPayslip, pendingExpenses } = employeeDashboardSummary;
+  const { leaveBalance, upcomingPayslip, pendingExpenses, attendanceSummary, leaveBreakdown, performanceTrend } = employeeDashboardSummary;
+
+   const leaveBreakdownData = [
+    { name: 'Vacation', value: leaveBreakdown.vacation, fill: 'hsl(var(--chart-1))' },
+    { name: 'Sick', value: leaveBreakdown.sick, fill: 'hsl(var(--chart-2))' },
+    { name: 'Personal', value: leaveBreakdown.personal, fill: 'hsl(var(--chart-3))' },
+  ];
+
+   const attendanceSummaryData = [
+    { name: 'Present', value: attendanceSummary.present, fill: 'hsl(var(--chart-1))' },
+    { name: 'Absent', value: attendanceSummary.absent, fill: 'hsl(var(--chart-2))' },
+    { name: 'On Leave', value: attendanceSummary.onLeave, fill: 'hsl(var(--chart-3))' },
+  ];
 
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
-      <AttendanceCard />
+      <div className="p-4 md:p-8 md:pb-0">
+        <AttendanceCard />
+      </div>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
          <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -59,6 +94,62 @@ export default function EmployeeDashboardPage() {
             <CardContent>
             <div className="text-2xl font-bold">{pendingExpenses.count} claims</div>
             <p className="text-xs text-muted-foreground">Totaling {pendingExpenses.totalAmount}</p>
+            </CardContent>
+        </Card>
+    </div>
+
+    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <Card>
+            <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-base"><PieChartIcon className="h-5 w-5"/>Leave Breakdown</CardTitle>
+            </CardHeader>
+            <CardContent>
+                <ChartContainer config={{}} className="h-[200px] w-full">
+                    <ResponsiveContainer width="100%" height="100%">
+                        <RechartsPieChart>
+                        <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
+                        <Pie data={leaveBreakdownData} dataKey="value" nameKey="name" innerRadius={50} outerRadius={80} paddingAngle={2}>
+                            {leaveBreakdownData.map((entry, index) => (
+                                <Cell key={`cell-${index}`} fill={entry.fill} />
+                            ))}
+                        </Pie>
+                        </RechartsPieChart>
+                    </ResponsiveContainer>
+                </ChartContainer>
+            </CardContent>
+        </Card>
+        <Card>
+            <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-base"><LineChartIcon className="h-5 w-5"/>Performance Trend</CardTitle>
+            </CardHeader>
+            <CardContent>
+                <ChartContainer config={{}} className="h-[200px] w-full">
+                    <ResponsiveContainer width="100%" height="100%">
+                        <RechartsLineChart data={performanceTrend} margin={{ left: -20, right: 10 }}>
+                             <XAxis dataKey="cycle" stroke="hsl(var(--muted-foreground))" fontSize={12} tickLine={false} axisLine={false} />
+                             <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} domain={[0, 5]} tickLine={false} axisLine={false} />
+                             <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
+                             <Line type="monotone" dataKey="rating" stroke="hsl(var(--primary))" strokeWidth={2} dot={false} />
+                        </RechartsLineChart>
+                    </ResponsiveContainer>
+                </ChartContainer>
+            </CardContent>
+        </Card>
+         <Card>
+            <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-base"><BarChart className="h-5 w-5"/>Attendance This Month</CardTitle>
+            </CardHeader>
+            <CardContent>
+                <ChartContainer config={{}} className="h-[200px] w-full">
+                    <ResponsiveContainer width="100%" height="100%">
+                        <RechartsBarChart data={attendanceSummaryData} margin={{ left: -20 }}>
+                            <XAxis dataKey="name" stroke="hsl(var(--muted-foreground))" fontSize={12} tickLine={false} axisLine={false} />
+                            <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} tickLine={false} axisLine={false} />
+                            <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
+                            <Bar dataKey="value" radius={4} />
+                        </RechartsBarChart>
+                    </ResponsiveContainer>
+                </ChartContainer>
             </CardContent>
         </Card>
     </div>

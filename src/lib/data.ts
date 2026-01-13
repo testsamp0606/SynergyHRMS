@@ -131,7 +131,22 @@ export const employeeDashboardSummary: EmployeeDashboardSummary = {
   pendingExpenses: {
     count: 2,
     totalAmount: '$130.80',
-  }
+  },
+  attendanceSummary: {
+    present: 18,
+    absent: 1,
+    onLeave: 2,
+  },
+  leaveBreakdown: {
+    vacation: 5,
+    sick: 2,
+    personal: 1,
+  },
+  performanceTrend: [
+    { cycle: 'H1 2023', rating: 4.0 },
+    { cycle: 'H2 2023', rating: 4.2 },
+    { cycle: 'H1 2024', rating: 4.5 },
+  ],
 };
 
 export const recentAnnouncements: RecentAnnouncement[] = [

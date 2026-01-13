@@ -1,5 +1,6 @@
 
 
+
 export type Employee = {
   id: string;
   name: string;
@@ -135,6 +136,20 @@ export type EmployeeDashboardSummary = {
     count: number;
     totalAmount: string;
   };
+  attendanceSummary: {
+    present: number;
+    absent: number;
+    onLeave: number;
+  };
+  leaveBreakdown: {
+    vacation: number;
+    sick: number;
+    personal: number;
+  };
+  performanceTrend: {
+    cycle: string;
+    rating: number;
+  }[];
 };
 
 export type RecentAnnouncement = {
