@@ -89,9 +89,6 @@ export default function ManagerTimesheetPage() {
   useEffect(() => {
     const newWeeks = getWeeksForMonth(selectedMonth);
     setWeeks(newWeeks);
-    if (newWeeks.length > 0) {
-        setSelectedWeek(newWeeks[0].value);
-    }
   }, [selectedMonth]);
 
   const handleTimeChange = (id: string, field: 'loginTime' | 'logoutTime', value: string) => {

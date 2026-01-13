@@ -77,9 +77,6 @@ export default function TimesheetPage() {
   useEffect(() => {
     const newWeeks = getWeeksForMonth(selectedMonth);
     setWeeks(newWeeks);
-    if (newWeeks.length > 0) {
-      setSelectedWeek(newWeeks[0].value);
-    }
   }, [selectedMonth]);
   
   const isCurrentMonth = isSameMonth(selectedMonth, new Date());
