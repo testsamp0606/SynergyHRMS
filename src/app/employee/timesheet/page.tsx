@@ -39,7 +39,7 @@ import {
 } from 'date-fns';
 import { timesheetData } from '@/lib/data';
 import type { TimesheetEntry } from '@/lib/types';
-import { Save, Send, Upload } from 'lucide-react';
+import { Save, Send } from 'lucide-react';
 
 const statusVariant: { [key in TimesheetEntry['status']]: 'default' | 'secondary' | 'outline' | 'destructive' } = {
   'Approved': 'default',
@@ -77,7 +77,9 @@ export default function TimesheetPage() {
   useEffect(() => {
     const newWeeks = getWeeksForMonth(selectedMonth);
     setWeeks(newWeeks);
-    setSelectedWeek(newWeeks[0]?.value);
+    if (newWeeks.length > 0) {
+      setSelectedWeek(newWeeks[0].value);
+    }
   }, [selectedMonth]);
   
   const isCurrentMonth = isSameMonth(selectedMonth, new Date());
