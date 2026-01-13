@@ -31,11 +31,3 @@ export const useManagerAttendanceStore = create<AttendanceState>()(
     }
   )
 );
-
-const today = new Date().toLocaleDateString();
-const lastResetDay = localStorage.getItem('last-manager-attendance-reset-day');
-
-if (today !== lastResetDay) {
-  useManagerAttendanceStore.getState().reset();
-  localStorage.setItem('last-manager-attendance-reset-day', today);
-}

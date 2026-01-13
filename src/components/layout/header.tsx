@@ -14,10 +14,11 @@ import {
 } from "@/components/ui/sidebar"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { LogOut, Settings, User, Clock } from "lucide-react"
+import { LogOut, Settings, User, Clock, Bell } from "lucide-react"
 import { ThemeToggle } from "../theme-toggle"
 import { usePathname } from "next/navigation"
 import { useState, useEffect } from "react"
+import { format } from "date-fns"
 
 function getTitleFromPathname(pathname: string): string {
     const segments = pathname.split('/').filter(Boolean);
@@ -68,6 +69,10 @@ export function Header() {
           <span>{time.toLocaleTimeString()}</span>
         </div>
         <ThemeToggle />
+        <Button variant="ghost" size="icon" className="h-9 w-9">
+            <Bell className="h-5 w-5" />
+            <span className="sr-only">Notifications</span>
+        </Button>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="relative h-9 w-9 rounded-full">
@@ -85,6 +90,11 @@ export function Header() {
                   user@synergy.com
                 </p>
               </div>
+            </DropdownMenuLabel>
+             <DropdownMenuLabel className="font-normal pt-0">
+                <p className="text-xs text-muted-foreground">
+                    Last login: {format(new Date(), "MMM d, yyyy 'at' hh:mm a")}
+                </p>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem>

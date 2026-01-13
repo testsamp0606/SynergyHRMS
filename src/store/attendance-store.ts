@@ -35,16 +35,3 @@ const createAttendanceStore = (name: string) => create<AttendanceState>()(
 export const useAttendanceStore = createAttendanceStore('employee');
 export const useHrAttendanceStore = createAttendanceStore('hr');
 export const useManagerAttendanceStore = createAttendanceStore('manager');
-
-
-// This is a simple daily reset logic. 
-// In a real app, you might want a more robust solution, maybe server-driven.
-const today = new Date().toLocaleDateString();
-const lastResetDay = localStorage.getItem('last-attendance-reset-day');
-
-if (today !== lastResetDay) {
-  useAttendanceStore.getState().reset();
-  useHrAttendanceStore.getState().reset();
-  useManagerAttendanceStore.getState().reset();
-  localStorage.setItem('last-attendance-reset-day', today);
-}

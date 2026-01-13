@@ -31,11 +31,3 @@ export const useHrAttendanceStore = create<AttendanceState>()(
     }
   )
 );
-
-const today = new Date().toLocaleDateString();
-const lastResetDay = localStorage.getItem('last-hr-attendance-reset-day');
-
-if (today !== lastResetDay) {
-  useHrAttendanceStore.getState().reset();
-  localStorage.setItem('last-hr-attendance-reset-day', today);
-}
