@@ -125,7 +125,6 @@ export function Header() {
                         notifications.map((notification, index) => (
                             <Link href={notification.href} key={index}>
                                 <DropdownMenuItem className="flex items-start gap-3 cursor-pointer">
-                                    {notification.icon}
                                     <div className="flex-1">
                                         <p className="text-sm font-medium">{notification.title}</p>
                                         <p className="text-xs text-muted-foreground">{notification.description}</p>
