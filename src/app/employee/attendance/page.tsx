@@ -1,3 +1,4 @@
+
 'use client';
 import {
   Card,
@@ -7,15 +8,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { CalendarPlus, Briefcase, Sun } from 'lucide-react';
 import { 
@@ -26,8 +19,6 @@ import {
   eachDayOfInterval,
   getDay,
   getDate,
-  startOfWeek,
-  addDays,
 } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { attendanceData, holidays } from '@/lib/data';
@@ -45,9 +36,10 @@ export default function EmployeeAttendancePage() {
     end: lastDayOfMonth,
   });
 
-  const startingDayIndex = getDay(firstDayOfMonth);
+  // Adjust for Monday start: 0 (Sun) -> 6, 1 (Mon) -> 0, etc.
+  const startingDayIndex = (getDay(firstDayOfMonth) + 6) % 7;
   
-  const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
 
   const getDayStatus = (day: Date) => {
@@ -87,22 +79,22 @@ export default function EmployeeAttendancePage() {
                     </div>
                 ))}
                 {Array.from({ length: startingDayIndex }).map((_, index) => (
-                    <div key={`empty-${index}`} className="border-b border-r h-24" />
+                    <div key={`empty-${index}`} className="border-b border-r h-24 bg-muted/50" />
                 ))}
                 {daysInMonth.map((day) => {
-                    const { status, details, variant, className } = getDayStatus(day);
+                    const { status, details } = getDayStatus(day);
                     return (
-                        <div key={day.toString()} className="border-b border-r p-2 h-24 flex flex-col">
+                        <div key={day.toString()} className="border-b border-r p-2 h-28 flex flex-col">
                             <span className="font-semibold text-sm">{getDate(day)}</span>
-                            <div className="mt-1 flex-grow">
-                                <Badge variant={variant} className={cn("text-xs", className)}>{status}</Badge>
-                                <p className="text-xs text-muted-foreground mt-1">{details !== '---' ? details : ''}</p>
+                            <div className="mt-1 flex-grow flex flex-col justify-between">
+                                <Badge variant="outline" className="text-xs w-min whitespace-nowrap">{status}</Badge>
+                                <p className="text-xs text-muted-foreground mt-1 break-words">{details !== '---' ? details : ''}</p>
                             </div>
                         </div>
                     )
                 })}
                  {Array.from({ length: 42 - daysInMonth.length - startingDayIndex }).map((_, index) => (
-                    <div key={`empty-end-${index}`} className="border-b border-r h-24 bg-muted/50" />
+                    <div key={`empty-end-${index}`} className="border-b border-r h-28 bg-muted/50" />
                 ))}
             </div>
         </CardContent>
