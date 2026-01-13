@@ -93,7 +93,7 @@ export function Header() {
         <ThemeToggle />
          <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                 <Button variant="ghost" size="icon" className="h-9 w-9">
+                 <Button variant="ghost" size="icon" className="h-9 w-9 relative">
                     <Bell className="h-5 w-5" />
                     <span className="sr-only">Notifications</span>
                      <span className="absolute top-1.5 right-1.5 flex h-2.5 w-2.5">
