@@ -1,6 +1,5 @@
 
 'use client';
-import { Header } from '@/components/layout/header';
 import {
   Card,
   CardContent,
@@ -18,6 +17,7 @@ import { DayProps, DayContent, DayContentProps } from 'react-day-picker';
 import { cn } from '@/lib/utils';
 import { attendanceData, holidays } from '@/lib/data';
 import { useAttendanceStore } from '@/store/attendance-store';
+import { AttendanceCard } from '../dashboard/attendance-card';
 
 
 export default function EmployeeAttendancePage() {
@@ -114,6 +114,7 @@ export default function EmployeeAttendancePage() {
 
   return (
     <div className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
+      <AttendanceCard />
     <Card>
         <CardHeader className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>

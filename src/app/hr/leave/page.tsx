@@ -22,6 +22,7 @@ import { leaveRequests } from "@/lib/data"
 import { format } from "date-fns"
 import { Check, X, PlusCircle } from "lucide-react"
 import { Header } from "@/components/layout/header"
+import { HrAttendanceCard } from "../dashboard/hr-attendance-card"
 
 
 export default function LeavePage() {
@@ -29,6 +30,7 @@ export default function LeavePage() {
     <div className="flex min-h-screen w-full flex-col">
        <Header title="Attendance & Leave" />
       <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
+        <HrAttendanceCard />
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
