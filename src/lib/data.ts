@@ -12,10 +12,10 @@ export const employees: Employee[] = [
 ];
 
 export const leaveRequests: LeaveRequest[] = [
-  { id: 'LR001', employeeName: 'Diana Miller', employeeAvatar: 'https://picsum.photos/seed/4/100/100', leaveType: 'Vacation', startDate: new Date('2024-08-10'), endDate: new Date('2024-08-20'), status: 'Admin Approved' },
+  { id: 'LR001', employeeName: 'Diana Miller', employeeAvatar: 'https://picsum.photos/seed/4/100/100', leaveType: 'Vacation', startDate: new Date('2024-08-10'), endDate: new Date('2024-08-20'), status: 'Approved' },
   { id: 'LR002', employeeName: 'Ethan Davis', employeeAvatar: 'https://picsum.photos/seed/5/100/100', leaveType: 'Sick', startDate: new Date(), endDate: new Date(), status: 'Pending Manager Approval' },
-  { id: 'LR003', employeeName: 'Charlie Brown', employeeAvatar: 'https://picsum.photos/seed/3/100/100', leaveType: 'Personal', startDate: new Date(new Date().setDate(new Date().getDate() + 5)), endDate: new Date(new Date().setDate(new Date().getDate() + 7)), status: 'Pending Manager Approval' },
-  { id: 'LR004', employeeName: 'Fiona Garcia', employeeAvatar: 'https://picsum.photos/seed/6/100/100', leaveType: 'Vacation', startDate: new Date(new Date().setDate(new Date().getDate() + 2)), endDate: new Date(new Date().setDate(new Date().getDate() + 8)), status: 'Manager Approved' },
+  { id: 'LR003', employeeName: 'Charlie Brown', employeeAvatar: 'https://picsum.photos/seed/3/100/100', leaveType: 'Personal', startDate: new Date(new Date().setDate(new Date().getDate() + 5)), endDate: new Date(new Date().setDate(new Date().getDate() + 7)), status: 'Pending Admin Approval' },
+  { id: 'LR004', employeeName: 'Fiona Garcia', employeeAvatar: 'https://picsum.photos/seed/6/100/100', leaveType: 'Vacation', startDate: new Date(new Date().setDate(new Date().getDate() + 2)), endDate: new Date(new Date().setDate(new Date().getDate() + 8)), status: 'Pending Manager Approval' },
 ];
 
 export const performanceReviews: PerformanceReview[] = [
@@ -196,4 +196,4 @@ export const complianceAlerts = [
   { id: 'CMP02', title: 'Form I-9 Reverification for 3 employees', dueDate: 'Aug 31, 2024' },
 ];
 
-export { Employee };
+export { type Employee };

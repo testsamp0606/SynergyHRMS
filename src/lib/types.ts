@@ -1,4 +1,5 @@
 
+
 export type Employee = {
   id: string;
   name: string;
@@ -11,8 +12,8 @@ export type Employee = {
 
 export type LeaveRequestStatus = 
   | 'Pending Manager Approval'
-  | 'Manager Approved'
-  | 'Admin Approved'
+  | 'Pending Admin Approval'
+  | 'Approved'
   | 'Rejected'
   | 'Cancelled';
 
