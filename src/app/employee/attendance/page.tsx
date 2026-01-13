@@ -1,4 +1,5 @@
 
+
 'use client';
 import {
   Card,
@@ -40,6 +41,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import Link from 'next/link';
 
 const years = Array.from({ length: 5 }, (_, i) => new Date().getFullYear() - i);
 const months = Array.from({ length: 12 }, (_, i) => ({
@@ -227,8 +229,10 @@ export default function EmployeeAttendancePage() {
                 <CardDescription>Correct a missed punch-in or punch-out.</CardDescription>
             </CardHeader>
             <CardContent>
-                 <Button variant="outline" className="w-full">
-                    <CalendarPlus className="mr-2 h-4 w-4" /> New Request
+                 <Button variant="outline" className="w-full" asChild>
+                    <Link href="/employee/attendance/regularization">
+                        <CalendarPlus className="mr-2 h-4 w-4" /> New Request
+                    </Link>
                 </Button>
             </CardContent>
         </Card>

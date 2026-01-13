@@ -1,6 +1,7 @@
 
+
 import { addDays, format, subDays, subMonths } from 'date-fns';
-import type { Employee, LeaveRequest, PerformanceReview, PayrollRun, TrainingProgram, Asset, ExpenseClaim, Document, Announcement, UserProfile, Role, AuditLog, EmployeeDashboardSummary, RecentAnnouncement, EmployeeTask, PerformanceCycle, PerformanceGoal, HistoricalPerformanceReview, AttendanceData, Holiday } from '@/lib/types';
+import type { Employee, LeaveRequest, PerformanceReview, PayrollRun, TrainingProgram, Asset, ExpenseClaim, Document, Announcement, UserProfile, Role, AuditLog, EmployeeDashboardSummary, RecentAnnouncement, EmployeeTask, PerformanceCycle, PerformanceGoal, HistoricalPerformanceReview, AttendanceData, Holiday, RegularizationRequest } from '@/lib/types';
 
 export const employees: Employee[] = [
   { id: 'EMP001', name: 'Alice Johnson', email: 'alice.j@example.com', avatar: 'https://picsum.photos/seed/1/100/100', department: 'Engineering', role: 'Senior Software Engineer', status: 'Active' },
@@ -289,5 +290,12 @@ export const upcomingEvents = [
     { date: '2024-09-02', name: 'Labor Day' },
     { date: '2024-09-12', name: 'Marketing Offsite' },
 ];
+
+export const regularizationRequests: RegularizationRequest[] = [
+    { id: 'REG001', date: subDays(new Date(), 5), reason: 'Missed Punch', status: 'Approved', remarks: 'Approved by Manager' },
+    { id: 'REG002', date: subDays(new Date(), 2), reason: 'Late Login', status: 'Submitted' },
+    { id: 'REG003', date: subDays(new Date(), 10), reason: 'Overtime', status: 'Rejected', remarks: 'Overtime not pre-approved.' },
+];
+
 
 export { type Employee };

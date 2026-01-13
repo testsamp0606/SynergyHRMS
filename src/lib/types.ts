@@ -3,6 +3,7 @@
 
 
 
+
 export type Employee = {
   id: string;
   name: string;
@@ -212,4 +213,12 @@ export type Holiday = {
 export type UpcomingEvent = {
     date: string;
     name: string;
+}
+
+export type RegularizationRequest = {
+    id: string;
+    date: Date;
+    reason: string;
+    status: 'Submitted' | 'Approved by Manager' | 'Approved' | 'Rejected';
+    remarks?: string;
 }
