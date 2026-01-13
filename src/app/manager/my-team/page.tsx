@@ -157,11 +157,11 @@ export default function MyTeamPage() {
                                 </div>
                                 <div className="space-y-1">
                                     <p className="text-muted-foreground">Status</p>
-                                    <p className="font-medium">
+                                    <div className="font-medium">
                                         <Badge variant={selectedMember.status === 'Active' ? 'secondary' : 'outline'}>
                                             {selectedMember.status}
                                         </Badge>
-                                    </p>
+                                    </div>
                                 </div>
                                  <div className="space-y-1">
                                     <p className="text-muted-foreground">Phone</p>
