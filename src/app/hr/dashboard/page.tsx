@@ -24,6 +24,7 @@ import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { Header } from "@/components/layout/header"
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
+import { HrAttendanceCard } from "./hr-attendance-card"
 
 export default function DashboardPage() {
   const pendingRequests = leaveRequests.filter(req => req.status === 'Pending');
@@ -33,20 +34,7 @@ export default function DashboardPage() {
        <Header title="HR Dashboard" />
       <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">
-                Total Employees
-              </CardTitle>
-              <Users className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">50</div>
-              <p className="text-xs text-muted-foreground">
-                +2 since last month
-              </p>
-            </CardContent>
-          </Card>
+          <HrAttendanceCard />
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">
