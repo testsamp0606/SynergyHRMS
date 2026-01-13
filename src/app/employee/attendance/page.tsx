@@ -1,4 +1,3 @@
-
 'use client';
 import {
   Card,
@@ -8,112 +7,56 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Calendar } from '@/components/ui/calendar';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
 import { useState, useEffect } from 'react';
 import { Badge } from '@/components/ui/badge';
-import { Clock, LogIn, LogOut, CalendarPlus, Briefcase, Sun } from 'lucide-react';
-import { addDays, format, isSameDay, isValid, intervalToDuration, formatDuration, getDay } from 'date-fns';
-import { DayProps, DayContent, DayContentProps } from 'react-day-picker';
+import { CalendarPlus, Briefcase, Sun } from 'lucide-react';
+import { 
+  format, 
+  isSameDay, 
+  startOfMonth, 
+  endOfMonth, 
+  eachDayOfInterval,
+  getDay,
+} from 'date-fns';
 import { cn } from '@/lib/utils';
 import { attendanceData, holidays } from '@/lib/data';
-import { useAttendanceStore } from '@/store/attendance-store';
 import { AttendanceCard } from '../dashboard/attendance-card';
 
 
 export default function EmployeeAttendancePage() {
-  const [date, setDate] = useState<Date | undefined>(new Date());
-  const { punchInTime, punchOutTime, punchIn, punchOut } = useAttendanceStore();
-  const [elapsedTime, setElapsedTime] = useState("0h 0m 0s");
+  const [currentMonth, setCurrentMonth] = useState(new Date());
 
-  const isPunchedIn = punchInTime && !punchOutTime;
-    
-    useEffect(() => {
-        let elapsedTimerId: NodeJS.Timeout | undefined;
-        if (isPunchedIn) {
-            elapsedTimerId = setInterval(() => {
-                if (punchInTime) {
-                    const duration = intervalToDuration({ start: punchInTime, end: new Date() });
-                    const formatted = formatDuration(duration, { format: ['hours', 'minutes', 'seconds'] })
-                        .replace(' seconds', 's')
-                        .replace(' minutes', 'm')
-                        .replace(' hours', 'h');
-                    setElapsedTime(formatted || "0s");
-                }
-            }, 1000);
-        } else if (punchInTime && punchOutTime) {
-            const duration = intervalToDuration({ start: punchInTime, end: punchOutTime });
-            const formatted = formatDuration(duration, { format: ['hours', 'minutes', 'seconds'] })
-                .replace(' seconds', 's')
-                .replace(' minutes', 'm')
-                .replace(' hours', 'h');
-            setElapsedTime(formatted);
-        }
+  const monthDays = eachDayOfInterval({
+    start: startOfMonth(currentMonth),
+    end: endOfMonth(currentMonth),
+  });
 
+  const getDayStatus = (day: Date) => {
+    const dateStr = format(day, 'yyyy-MM-dd');
+    const dayData = attendanceData[dateStr];
+    const holiday = holidays.find(h => isSameDay(h.date, day));
+    const dayOfWeek = getDay(day);
 
-        return () => {
-            if (elapsedTimerId) clearInterval(elapsedTimerId);
-        };
-    }, [isPunchedIn, punchInTime, punchOutTime]);
-
-
-  const selectedDayData = date ? attendanceData[format(date, 'yyyy-MM-dd')] : null;
-  const selectedHoliday = date ? holidays.find(h => isSameDay(h.date, date)) : null;
-
-  const handlePunch = () => {
-    if (!isPunchedIn) {
-      punchIn();
-    } else {
-      punchOut();
+    if (holiday) return { status: 'Holiday', details: holiday.name, variant: 'default' as const, className: 'bg-blue-500/10 text-blue-600' };
+    if (dayOfWeek === 0 || dayOfWeek === 6) return { status: 'Week Off', details: '---', variant: 'outline' as const, className: 'text-muted-foreground'};
+    if (dayData) {
+      switch(dayData.status) {
+        case 'Present': return { status: 'Present', details: `In: ${dayData.checkIn}, Out: ${dayData.checkOut}, Total: ${dayData.totalHours}`, variant: 'secondary' as const, className: 'text-green-600' };
+        case 'Half Day': return { status: 'Half Day', details: `In: ${dayData.checkIn}, Out: ${dayData.checkOut}, Total: ${dayData.totalHours}`, variant: 'secondary' as const, className: 'text-yellow-600' };
+        case 'Absent': return { status: 'Absent', details: '---', variant: 'destructive' as const };
+        case 'On Leave': return { status: 'On Leave', details: '---', variant: 'default' as const, className: 'bg-yellow-500/10 text-yellow-600' };
+      }
     }
-  };
-
-
-    const CustomDay = (props: DayContentProps) => {
-        const { date, activeModifiers } = props;
-        const dateStr = format(date, 'yyyy-MM-dd');
-        const dayData = attendanceData[dateStr];
-        const holiday = holidays.find(h => isSameDay(h.date, date));
-        const dayOfWeek = getDay(date);
-        
-        let status = dayData?.status;
-        let cellClass = '';
-        
-        if (isSameDay(date, new Date()) && punchInTime) {
-          status = punchOutTime ? 'Present' : 'Clocked In';
-          cellClass = 'bg-green-50 dark:bg-green-900/20 text-green-700';
-        } else if (holiday) {
-            status = holiday.name;
-            cellClass = 'bg-blue-50 dark:bg-blue-900/20 text-blue-600';
-        } else if (dayData) {
-             switch (dayData.status) {
-                case 'Present':
-                case 'Half Day':
-                    cellClass = 'bg-green-50 dark:bg-green-900/20 text-green-700';
-                    break;
-                case 'Absent':
-                    cellClass = 'bg-red-50 dark:bg-red-900/20 text-red-700';
-                    break;
-                case 'On Leave':
-                    cellClass = 'bg-yellow-50 dark:bg-yellow-900/20 text-yellow-700';
-                    break;
-                 case 'Week Off':
-                     cellClass = 'bg-gray-100 dark:bg-gray-800 text-gray-500';
-                     break;
-            }
-        } else if (dayOfWeek === 0 || dayOfWeek === 6) {
-             status = "Week Off";
-             cellClass = 'bg-gray-100 dark:bg-gray-800 text-gray-500';
-        }
-
-
-        return (
-            <div className={cn('relative flex h-full w-full flex-col p-1', cellClass, {'ring-2 ring-primary ring-inset': activeModifiers.selected })}>
-               <div className="absolute top-1 left-1 text-xs font-semibold">{format(date, 'd')}</div>
-               {status && <div className="m-auto text-center text-[10px] font-medium leading-tight break-words">{status}</div>}
-            </div>
-        );
-    };
-
+    return { status: 'N/A', details: '---', variant: 'outline' as const };
+  }
 
   return (
     <div className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
@@ -137,65 +80,36 @@ export default function EmployeeAttendancePage() {
     <div className="grid gap-4 md:grid-cols-1 lg:grid-cols-3">
       <Card className="lg:col-span-2">
         <CardHeader>
-          <CardTitle>Attendance Calendar</CardTitle>
-          <CardDescription>Select a date to view details. </CardDescription>
+          <CardTitle>Attendance for {format(currentMonth, 'MMMM yyyy')}</CardTitle>
+          <CardDescription>A summary of your attendance for the current month.</CardDescription>
         </CardHeader>
-        <CardContent className="flex justify-center p-0 sm:p-6">
-          <Calendar
-            mode="single"
-            selected={date}
-            onSelect={setDate}
-            className="rounded-md border"
-            components={{
-              DayContent: CustomDay
-            }}
-          />
+        <CardContent>
+            <Table>
+                <TableHeader>
+                    <TableRow>
+                        <TableHead>Date</TableHead>
+                        <TableHead>Status</TableHead>
+                        <TableHead className="hidden sm:table-cell">Details</TableHead>
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
+                    {monthDays.map(day => {
+                        const { status, details, variant, className } = getDayStatus(day);
+                        return (
+                            <TableRow key={day.toString()}>
+                                <TableCell className="font-medium">{format(day, 'MMM d, EEE')}</TableCell>
+                                <TableCell>
+                                    <Badge variant={variant} className={className}>{status}</Badge>
+                                </TableCell>
+                                <TableCell className="hidden sm:table-cell text-muted-foreground text-xs">{details}</TableCell>
+                            </TableRow>
+                        )
+                    })}
+                </TableBody>
+            </Table>
         </CardContent>
       </Card>
       <div className="space-y-4">
-        <Card>
-            <CardHeader>
-                <CardTitle>Details for {date ? format(date, "MMMM d") : 'selected date'}</CardTitle>
-            </CardHeader>
-            <CardContent>
-                {date && isSameDay(date, new Date()) && punchInTime ? (
-                     <div>
-                        <Badge className={cn('bg-green-500', { 'bg-secondary': !punchOutTime })}>
-                            {punchOutTime ? 'Present' : 'Clocked In'}
-                        </Badge>
-                         <div className="mt-4 space-y-2 text-sm">
-                            <div className="flex justify-between"><span>Check-in:</span> <span>{punchInTime ? format(punchInTime, 'hh:mm a') : '-'}</span></div>
-                            <div className="flex justify-between"><span>Check-out:</span> <span>{punchOutTime ? format(punchOutTime, 'hh:mm a') : 'Pending'}</span></div>
-                            <div className="flex justify-between font-semibold"><span>Total Hours:</span> <span>{elapsedTime}</span></div>
-                         </div>
-                    </div>
-                ) : selectedDayData ? (
-                    <div>
-                         <Badge variant={selectedDayData.status === 'Present' ? 'default' : 'destructive'} className={cn(
-                            {'bg-green-500': selectedDayData.status === 'Present'},
-                            {'bg-yellow-500': selectedDayData.status === 'On Leave'},
-                            {'bg-red-500': selectedDayData.status === 'Absent'}
-                            )}>
-                            {selectedDayData.status}
-                         </Badge>
-                         {selectedDayData.checkIn && (
-                             <div className="mt-4 space-y-2 text-sm">
-                                <div className="flex justify-between"><span>Check-in:</span> <span>{selectedDayData.checkIn}</span></div>
-                                <div className="flex justify-between"><span>Check-out:</span> <span>{selectedDayData.checkOut}</span></div>
-                                <div className="flex justify-between font-semibold"><span>Total Hours:</span> <span>{selectedDayData.totalHours}</span></div>
-                             </div>
-                         )}
-                    </div>
-                ) : selectedHoliday ? (
-                    <div>
-                        <Badge className="bg-purple-500">Holiday</Badge>
-                        <p className="mt-4 text-sm">{selectedHoliday.name}</p>
-                    </div>
-                ) : (
-                    <p className="text-sm text-muted-foreground">No data for this day.</p>
-                )}
-            </CardContent>
-        </Card>
         <Card>
             <CardHeader>
                 <CardTitle className="flex items-center gap-2"><Briefcase className="h-5 w-5" /> My Shift</CardTitle>
