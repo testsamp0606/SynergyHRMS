@@ -20,10 +20,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { employees } from '@/lib/data';
-import { Search, Mail, Phone, User } from 'lucide-react';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from '@/components/ui/dialog';
+import { employees, Employee } from '@/lib/data';
+import { Search, Mail, Phone, User, Building, Briefcase } from 'lucide-react';
 import React, { useState } from 'react';
-import Link from 'next/link';
+import { Separator } from '@/components/ui/separator';
 
 const teamMemberIds = ['EMP006', 'EMP005', 'EMP004', 'EMP003'];
 const teamMembers = employees.filter((emp) => teamMemberIds.includes(emp.id));
@@ -34,6 +41,7 @@ const uniqueRoles = [...new Set(teamMembers.map(member => member.role))];
 export default function MyTeamPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedRole, setSelectedRole] = useState('all');
+  const [selectedMember, setSelectedMember] = useState<Employee | null>(null);
 
   const filteredTeamMembers = teamMembers.filter(member => {
     const matchesSearch = member.name.toLowerCase().includes(searchTerm.toLowerCase());
@@ -109,10 +117,8 @@ export default function MyTeamPage() {
                     </div>
                   </CardContent>
                    <CardFooter>
-                      <Button variant="outline" className="w-full" asChild>
-                        <Link href={`/employee/profile`}>
-                          <User className="mr-2 h-4 w-4" /> View Profile
-                        </Link>
+                      <Button variant="outline" className="w-full" onClick={() => setSelectedMember(member)}>
+                        <User className="mr-2 h-4 w-4" /> View Profile
                       </Button>
                   </CardFooter>
                 </Card>
@@ -125,6 +131,48 @@ export default function MyTeamPage() {
             )}
           </CardContent>
         </Card>
+
+        <Dialog open={!!selectedMember} onOpenChange={(isOpen) => !isOpen && setSelectedMember(null)}>
+            <DialogContent className="sm:max-w-md">
+                {selectedMember && (
+                    <>
+                        <DialogHeader className="items-center text-center">
+                             <Avatar className="h-20 w-20">
+                                <AvatarImage src={selectedMember.avatar} alt={selectedMember.name} />
+                                <AvatarFallback>{selectedMember.name.charAt(0)}</AvatarFallback>
+                            </Avatar>
+                            <DialogTitle className="text-2xl">{selectedMember.name}</DialogTitle>
+                            <DialogDescription>{selectedMember.email}</DialogDescription>
+                        </DialogHeader>
+                        <div className="py-4 space-y-4">
+                            <Separator />
+                             <div className="grid grid-cols-2 gap-4 text-sm">
+                                <div className="space-y-1">
+                                    <p className="text-muted-foreground">Department</p>
+                                    <p className="font-medium flex items-center gap-2"><Building className="h-4 w-4" /> {selectedMember.department}</p>
+                                </div>
+                                 <div className="space-y-1">
+                                    <p className="text-muted-foreground">Role</p>
+                                    <p className="font-medium flex items-center gap-2"><Briefcase className="h-4 w-4" /> {selectedMember.role}</p>
+                                </div>
+                                <div className="space-y-1">
+                                    <p className="text-muted-foreground">Status</p>
+                                    <p className="font-medium">
+                                        <Badge variant={selectedMember.status === 'Active' ? 'secondary' : 'outline'}>
+                                            {selectedMember.status}
+                                        </Badge>
+                                    </p>
+                                </div>
+                                 <div className="space-y-1">
+                                    <p className="text-muted-foreground">Phone</p>
+                                    <p className="font-medium flex items-center gap-2"><Phone className="h-4 w-4" /> +1-202-555-0186</p>
+                                </div>
+                            </div>
+                        </div>
+                    </>
+                )}
+            </DialogContent>
+        </Dialog>
       </main>
     </div>
   );

@@ -194,3 +194,5 @@ export const complianceAlerts = [
   { id: 'CMP01', title: 'Annual Anti-Harassment Training', dueDate: 'Sep 30, 2024' },
   { id: 'CMP02', title: 'Form I-9 Reverification for 3 employees', dueDate: 'Aug 31, 2024' },
 ];
+
+export { Employee };
