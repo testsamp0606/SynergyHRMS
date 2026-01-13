@@ -1,4 +1,5 @@
 
+
 "use client"
 
 import {
@@ -22,6 +23,30 @@ import { useState, useEffect } from "react"
 import { format } from "date-fns"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
+
+const initialNotifications = [
+    {
+        icon: <CircleCheck className="h-4 w-4 text-green-500" />,
+        title: "Leave Approved",
+        description: "Your leave request for Dec 20-22 has been approved.",
+        time: "5 minutes ago",
+        href: "/employee/leave"
+    },
+    {
+        icon: <MessageSquareWarning className="h-4 w-4 text-yellow-500" />,
+        title: "Performance Review",
+        description: "Your self-appraisal for H2 2024 is due in 3 days.",
+        time: "1 hour ago",
+        href: "/employee/performance"
+    },
+    {
+        icon: <CircleAlert className="h-4 w-4 text-red-500" />,
+        title: "Payroll Processed",
+        description: "The payroll for August 2024 has been processed.",
+        time: "2 days ago",
+        href: "/employee/payroll"
+    },
+]
 
 function getTitleFromPathname(pathname: string): string {
     const segments = pathname.split('/').filter(Boolean);
@@ -47,34 +72,11 @@ function getTitleFromPathname(pathname: string): string {
         .trim();
 }
 
-const notifications = [
-    {
-        icon: <CircleCheck className="h-4 w-4 text-green-500" />,
-        title: "Leave Approved",
-        description: "Your leave request for Dec 20-22 has been approved.",
-        time: "5 minutes ago",
-        href: "/employee/leave"
-    },
-    {
-        icon: <MessageSquareWarning className="h-4 w-4 text-yellow-500" />,
-        title: "Performance Review",
-        description: "Your self-appraisal for H2 2024 is due in 3 days.",
-        time: "1 hour ago",
-        href: "/employee/performance"
-    },
-    {
-        icon: <CircleAlert className="h-4 w-4 text-red-500" />,
-        title: "Payroll Processed",
-        description: "The payroll for August 2024 has been processed.",
-        time: "2 days ago",
-        href: "/employee/payroll"
-    },
-]
-
 export function Header() {
   const pathname = usePathname();
   const title = getTitleFromPathname(pathname);
   const [time, setTime] = useState(new Date());
+  const [notifications, setNotifications] = useState(initialNotifications);
 
    useEffect(() => {
     const timerId = setInterval(() => setTime(new Date()), 1000);
@@ -82,6 +84,10 @@ export function Header() {
       clearInterval(timerId);
     };
   }, []);
+
+  const handleMarkAllAsRead = () => {
+    setNotifications([]);
+  };
   
   return (
     <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-background/80 px-4 backdrop-blur-sm md:px-6">
@@ -100,34 +106,46 @@ export function Header() {
                  <Button variant="ghost" size="icon" className="h-9 w-9 relative">
                     <Bell className="h-5 w-5" />
                     <span className="sr-only">Notifications</span>
+                    {notifications.length > 0 && (
                      <span className="absolute top-1.5 right-1.5 flex h-2.5 w-2.5">
                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
                         <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
                     </span>
+                    )}
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-80" align="end">
                 <DropdownMenuLabel className="flex items-center justify-between">
                     <span>Notifications</span>
-                    <Badge variant="secondary">{notifications.length}</Badge>
+                    {notifications.length > 0 && <Badge variant="secondary">{notifications.length}</Badge>}
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
-                    {notifications.map((notification, index) => (
-                         <Link href={notification.href} key={index}>
-                            <DropdownMenuItem className="flex items-start gap-3 cursor-pointer">
-                                {notification.icon}
-                                <div className="flex-1">
-                                    <p className="text-sm font-medium">{notification.title}</p>
-                                    <p className="text-xs text-muted-foreground">{notification.description}</p>
-                                    <p className="text-xs text-muted-foreground mt-1">{notification.time}</p>
-                                </div>
-                            </DropdownMenuItem>
-                        </Link>
-                    ))}
+                    {notifications.length > 0 ? (
+                        notifications.map((notification, index) => (
+                            <Link href={notification.href} key={index}>
+                                <DropdownMenuItem className="flex items-start gap-3 cursor-pointer">
+                                    {notification.icon}
+                                    <div className="flex-1">
+                                        <p className="text-sm font-medium">{notification.title}</p>
+                                        <p className="text-xs text-muted-foreground">{notification.description}</p>
+                                        <p className="text-xs text-muted-foreground mt-1">{notification.time}</p>
+                                    </div>
+                                </DropdownMenuItem>
+                            </Link>
+                        ))
+                    ) : (
+                        <div className="py-4 text-center text-sm text-muted-foreground">
+                            No new notifications
+                        </div>
+                    )}
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem className="justify-center text-sm text-muted-foreground">
+                <DropdownMenuItem 
+                    className="justify-center text-sm text-muted-foreground cursor-pointer"
+                    onClick={handleMarkAllAsRead}
+                    disabled={notifications.length === 0}
+                >
                     Mark all as read
                 </DropdownMenuItem>
             </DropdownMenuContent>
